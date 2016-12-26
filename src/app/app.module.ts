@@ -4,6 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { ButtonsModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { TabsModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+//import { AccordionModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 @NgModule({
   declarations: [
@@ -12,7 +18,12 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AlertModule,
+    ButtonsModule,
+    TabsModule,
+    ProgressbarModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

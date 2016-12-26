@@ -1,3 +1,326 @@
-<h1>
-  {{title}}
-</h1>
+  <script src="node_modules/chart.js/src/chart.js"></script>
+
+<div *ngIf="resultBackFromGettingPlayers == true && experiencedProblemWithGettingPlayers == true">
+  <div class="alert alert-danger">
+      <h1>Problemer med at hente data fra serveren</h1>
+      <p>Listen over spillere kunne IKKE hentes fra serveren, og programmet kan derfor ikke køre.</p><p>Tjek at der er forbindelse til serveren, og genindlæs så siden.</p>.
+  </div>
+</div>
+<div  *ngIf="resultBackFromGettingPlayers == true && experiencedProblemWithGettingPlayers == false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2">
+        <div class="panel panel-primary">
+          <div class="panel-heading"><h4>Tilgængelige spillere</h4></div>
+          <div class="panel-body">
+            <div >
+              <table width="100%">
+                <tr valign="top">
+                  <td valign="top" width="48%">
+                    <div  *ngFor="let player of players; let i = index">
+                      <label *ngIf="i < (players.length / 2)" [className]="'labelCheckbox'" [class.labelPlayerReady]="player.playerReady" ><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <input type="checkbox" class="checkbox-inline"  [ngModel]="player.playerReady" (change)="player.playerReady = ! player.playerReady;countSelectedPlayers()"> <span>{{player.name}}</span></label>
+                    </div>
+                  </td>
+                  <td>&nbsp;&nbsp;</td>
+                  <td valign="top" width="48%">
+                    <div  *ngFor="let player of players; let i = index">
+                      <label *ngIf="i >= (players.length / 2)" [className]="'labelCheckbox'" [class.labelPlayerReady]="player.playerReady" ><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <input type="checkbox" class="checkbox-inline"  [ngModel]="player.playerReady" (change)="player.playerReady = ! player.playerReady;countSelectedPlayers()"> <span>{{player.name}}</span></label>
+                    </div>
+                  </td>
+              </tr>
+            </table>
+
+              <div>Disse {{selectedPlayers}} spillere er valgt:</div>
+              <span *ngFor="let player of players">
+                <span *ngIf="player.playerReady"><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></span >
+              </span>
+              <div style="padding-top:3px"><button (click)="deselectAll()">
+              Fravælg alle
+              </button>
+              </div>
+              <div>&nbsp;</div>
+              <div>
+                <label>Tilføj ny spiller:</label><br>
+                <input size="10" #playerName (keyUp.Enter)="add(playerName.value);playerName.value=''"/>
+                <button  (click)="add(playerName.value);playerName.value=''">
+                Tilføj spiller
+                </button>
+                <br>&nbsp;<br>
+                <alert *ngFor="let alert of playerAlerts;let i = index" [type]="alert.type" dismissOnTimeout="4000">
+                  {{ alert?.msg }}
+                </alert>
+              </div>
+
+            </div>
+          </div>
+      </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-primary" align="center">
+          <div class="panel-heading"><h4>Kampe</h4></div>
+          <div class="panel-body">
+            <div>
+              <input type="button"  value="Generer tilfældige kampe ud fra de {{selectedPlayers}} markerede spillere" (click)="getTournamentGameRounds()">
+            </div>
+            <div>
+              <alert *ngFor="let alert of noGameGenerationAlerts;let i = index" [type]="alert.type" >
+                {{ alert?.msg }}
+              </alert>
+            </div>
+            <table>
+              <tr *ngFor="let tournamentGameRound of tournamentGameRounds; let j = index">
+                <td *ngFor="let game of tournamentGameRound.tournamentGames; let i = index">
+                  <div>
+                    <table align="center">
+                      <tr>
+                        <td  [class.intenseRed]="oneRoundAtATime && game.id != 0 && (i == 0 && intenseArray[0] == 'blue')" [class.intenseGreen]="oneRoundAtATime && game.id != 0 && (i == 0 && intenseArray[0] == 'red')"  [class.intenseBlue]="oneRoundAtATime && game.id != 0 && (i == 1 && intenseArray[1] == 'blue')"   [class.intenseOrange]="oneRoundAtATime && game.id != 0 && (i == 1 && intenseArray[1] == 'red')"   >
+
+
+                          <div  class="panel"  [class.panel-success]="i == 0"  [class.panel-warning]="i == 1" align="center" style="margin-bottom: 0px">
+                            <div class="panel-heading">
+                              <table >
+                                <tr>
+
+                                   <td align="right" valign="top" style="padding-right: 4px"><b>{{game.player_red_1}}</b><span *ngIf="oneRoundAtATime && game.player_red_1 != null && currentPositionForPlayer[game.player_red_1.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_red_1.toLocaleLowerCase()]}}</span></td>
+                                   <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics == game.player_red_1" (click)="playerForStatistics=game.player_red_1;getPlayerStatistics();"  [src]=getImageUrl(game.player_red_1)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
+
+                                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                   <td align="left"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics == game.player_red_2" (click)="playerForStatistics=game.player_red_2;getPlayerStatistics();" [src]=getImageUrl(game.player_red_2)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
+
+                                   <td align="left" valign="top"  style="padding-left: 4px"><b>{{game.player_red_2}}</b><span *ngIf="oneRoundAtATime && game.player_red_2 != null && currentPositionForPlayer[game.player_red_2.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_red_2.toLocaleLowerCase()]}} </span></td>
+
+                                </tr>
+                                <tr>
+                                  <td colspan="5">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                  <td *ngIf="oneRoundAtATime && (i == 0 && intenseArray[0] == 'red')" align="center" width="80px" valign="bottom" colspan="5"><input *ngIf="game.id != 0 " type="button" class="btn btn-success" [class.disabled]="game.id == 0"  value="INTENSE - Grønt hold vinder (2 point) - INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 2)"> </td>
+                                  <td *ngIf="(!oneRoundAtATime && i == 0) || (i == 0 && intenseArray[0] != 'red')" align="center" width="80px" valign="bottom" colspan="5"><input *ngIf="game.id != 0 " type="button" class="btn btn-success" [class.disabled]="game.id == 0"  value="Grønt hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 1)"> </td>
+                                  <td *ngIf="oneRoundAtATime && (i == 1 && intenseArray[1] == 'red')" align="center" width="80px"  valign="bottom" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-warning" [class.disabled]="game.id == 0" value="INTENSE - Orange hold vinder (2 point) - INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 2)"> </td>
+                                  <td *ngIf="(!oneRoundAtATime && i == 1) || (i == 1 && intenseArray[1] != 'red')" align="center" width="80px"  valign="bottom" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-warning" [class.disabled]="game.id == 0" value="Orange hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 1)"> </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                          <table>
+                                <tr>
+                                  <td>
+                                    <div class="img_container" align="center">
+                                      <img class="fodboldbordBillede" src="assets/img/fussball-table-nummer-{{i + 1}}.png">
+
+                                      <input *ngIf="game.id != 0" type="button" class="btn btn-default uafgjortButton" [class.disabled]="game.id == 0"   value="Uafgjort (0 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'draw', game.lastUpdated, 0)">
+                                    </div>
+                                  </td>
+                                </tr>
+                          </table>
+                          <div  class="panel"  [class.panel-danger]="i == 0"  [class.panel-info]="i == 1" align="center">
+                            <div class="panel-heading">
+                              <table >
+                                <tr>
+                                  <td *ngIf="oneRoundAtATime && (i == 0 && intenseArray[0] == 'blue')" align="center" width="80px" valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-danger" [class.disabled]="game.id == 0"   value="INTENSE - Rødt hold vinder (2 point) - INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 2)"> </td>
+                                  <td *ngIf="(!oneRoundAtATime && i == 0) || (i == 0 && intenseArray[0] != 'blue')" align="center" width="80px" valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-danger" [class.disabled]="game.id == 0"   value="Rødt hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 1)"> </td>
+                                  <td *ngIf="oneRoundAtATime && (i == 1 && intenseArray[1] == 'blue')" align="center" width="80px"  valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-info" [class.disabled]="game.id == 0"   value="INTENSE - Blåt hold vinder (2 point)- INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 2)"> </td>
+                                  <td *ngIf="(!oneRoundAtATime && i == 1) || (i == 1 && intenseArray[1] != 'blue')" align="center" width="80px"  valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-info" [class.disabled]="game.id == 0"   value="Blåt hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 1)"> </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="5">&nbsp;</td>
+                                </tr>
+                                <tr>
+
+                                   <td align="right" valign="top"  style="padding-right: 4px"><b>{{game.player_blue_1}}</b><span *ngIf="oneRoundAtATime && game.player_blue_1 != null &&currentPositionForPlayer[game.player_blue_1.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_blue_1.toLocaleLowerCase()]}}</span></td>
+                                   <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue')) "  [class.selectedPersonBorder]="playerForStatistics == game.player_blue_1" (click)="playerForStatistics=game.player_blue_1;getPlayerStatistics();" [src]=getImageUrl(game.player_blue_1)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
+                                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                                   <td align="left"  valign="top"><img   [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue') )"  [class.selectedPersonBorder]="playerForStatistics == game.player_blue_2" (click)="playerForStatistics=game.player_blue_2;getPlayerStatistics();" [src]=getImageUrl(game.player_blue_2)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
+                                   <td align="left" valign="top"  style="padding-left: 4px"><b>{{game.player_blue_2}}</b><span *ngIf="oneRoundAtATime && game.player_blue_2 != null &&currentPositionForPlayer[game.player_blue_2.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_blue_2.toLocaleLowerCase()]}}</span></td>
+
+                                </tr>
+
+
+                              </table>
+                            </div>
+                          </div>
+                        </td>
+                        <td *ngIf="i == 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+
+            </table>
+          </div>
+        </div>
+        <div class="panel panel-primary" align="center">
+          <div class="panel-heading"><h4>Tidstagning</h4></div>
+          <div class="panel-body">
+
+
+            <button (click)="startCountdownTimer()" type="button" class="btn btn-success btn-lg" style=" width:250px">Start nedtælling</button>
+
+            <div style="font-size: 1400%; margin-top: -30px;margin-bottom: -30px">{{remainingTime}}</div>
+            <progressbar class="progress-striped active" [max]="playingTime" [value]="ticks" type="{{progressbarType}}"></progressbar>
+            <div class="form-group" >
+                <select class="form-control" style="width: 250px" [(ngModel)]="playingTime"  (ngModelChange)="stopCountDownTimer();">
+                    <option  value="120">Spilletid: 120 sekunder</option>
+                    <option  value="60">Spilletid: 60 sekunder</option>
+                    <option  value="30">Spilletid: 30 sekunder</option>
+                </select>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-primary">
+          <div class="panel-heading"><h4>Ranglister</h4></div>
+        <div class="panel-body">
+          <tabset>
+            <tab heading='Time' (select)="showRankingForPeriod('hour')"></tab>
+            <tab heading='Døgn' (select)="showRankingForPeriod('day')"></tab>
+            <tab heading='Uge' (select)="showRankingForPeriod('week')"></tab>
+            <tab heading='Måned' (select)="showRankingForPeriod('month')"></tab>
+            <tab heading='Samlet' (select)="showRankingForPeriod('alltime')"></tab>
+          </tabset>
+          <alert *ngFor="let alert of noRankingListAlerts;let i = index" [type]="alert.type">
+            {{ alert?.msg }}
+          </alert>
+          <div>
+            <table width="100%">
+              <tr  valign="top">
+                <td valign="top" width="48%">
+                  <table class="table table-striped table-bordered table-condensed">
+                    <thead><tr><th>Nr.</th><th>Foto</th><th>Navn</th><th>Point</th><th>Kampe</th></tr></thead>
+                    <tbody>
+                      <tr *ngFor="let rankingItem of rankingItems; let i = index">
+                        <td *ngIf="(i < (rankingItems.length / 2) && rankingItems.length > 20) || rankingItems.length <= 20">#{{rankingItem.position}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20"><img [class.selectedPersonBorder]="playerForStatistics == rankingItem.name"  [src]=getImageUrl(rankingItem.name)  (click)="playerForStatistics=rankingItem.name;getPlayerStatistics()" onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.name}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.points}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.numberOfGames}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>&nbsp;&nbsp;</td>
+                <td valign="top" width="48%">
+                  <table class="table table-striped table-bordered table-condensed">
+                    <thead><tr><th>Nr.</th><th>Foto</th><th>Navn</th><th>Point</th><th>Kampe</th></tr></thead>
+                    <tbody>
+                      <tr *ngFor="let rankingItem of rankingItems; let i = index">
+                        <td *ngIf="i >= (rankingItems.length / 2) && rankingItems.length > 20">#{{rankingItem.position}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20"><img  [class.selectedPersonBorder]="playerForStatistics == rankingItem.name" [src]=getImageUrl(rankingItem.name)   (click)="playerForStatistics=rankingItem.name;getPlayerStatistics()" onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.name}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.points}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.numberOfGames}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+            </tr>
+          </table>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="panel panel-info">
+          <div class="panel-heading"><h4>Tidligere kampe</h4></div>
+          <div class="panel-body">
+            <div >Farvers betydning: <span class="bg-success">Grøn: Vinderhold</span> - <span class="bg-warning">Gul: Uafgjort</span> - <span class="bg-danger">Rød: Taberhold</span></div>
+            <div>&nbsp;</div>
+            <tabset>
+              <tab heading='Time' (select)="showGamesForPeriod('hour')"></tab>
+              <tab heading='Døgn' (select)="showGamesForPeriod('day')"></tab>
+              <tab heading='Uge' (select)="showGamesForPeriod('week')"></tab>
+              <tab heading='Måned' (select)="showGamesForPeriod('month')"></tab>
+              <tab heading='Samlet' (select)="showGamesForPeriod('alltime')"></tab>
+            </tabset>
+            <alert *ngFor="let alert of noGamesAlerts;let i = index" [type]="alert.type">
+              {{ alert?.msg }}
+            </alert>
+            <div>
+              <table class="table table-striped table-bordered table-condensed">
+                <thead>
+                  <tr>
+                    <th>Kamp-id</th>
+                    <th>Tidspunkt</th>
+                    <th>Vinder</th>
+                    <th>(Uafgjort)</th>
+                    <th>Taber</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let game of games; let i = index">
+                    <td>{{game.id}}</td>
+                    <td>{{game.lastUpdated}} </td>
+
+                    <td *ngIf="game.match_winner == 'draw'" align="center"></td>
+                    <td *ngIf="game.match_winner == 'draw'" align="left" class="warning"><img [class.selectedPersonBorder]="playerForStatistics == game.player_red_1"  [src]=getImageUrl(game.player_red_1) (click)="playerForStatistics=game.player_red_1;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img *ngIf="game.player_red_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics == game.player_red_2"  [src]=getImageUrl(game.player_red_2) (click)="playerForStatistics=game.player_red_2;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_red_1}} <span *ngIf="game.player_red_2 != 'null'">og {{game.player_red_2}}</span><br><img [class.selectedPersonBorder]="playerForStatistics == game.player_blue_1"  [src]=getImageUrl(game.player_blue_1) (click)="playerForStatistics=game.player_blue_1;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_blue_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics == game.player_blue_2"  [src]=getImageUrl(game.player_blue_2) (click)="playerForStatistics=game.player_blue_2;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_blue_1}} <span *ngIf="game.player_blue_2 != 'null'">og {{game.player_blue_2}}</span></td>
+                    <td *ngIf="game.match_winner == 'draw'" align="center"></td>
+
+
+                    <td *ngIf="game.match_winner == 'red'" align="left" class="success"><img [class.selectedPersonBorder]="playerForStatistics == game.player_red_1"  [src]=getImageUrl(game.player_red_1) (click)="playerForStatistics=game.player_red_1;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_red_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics == game.player_red_2"  [src]=getImageUrl(game.player_red_2) (click)="playerForStatistics=game.player_red_2;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_red_1}} <span *ngIf="game.player_red_2 != 'null'">og {{game.player_red_2}}</span> (<strong>+{{game.points_at_stake}}</strong> point)</td>
+                    <td *ngIf="game.match_winner == 'red'" align="center"></td>
+                    <td *ngIf="game.match_winner == 'red'" align="left" class="danger"><img [class.selectedPersonBorder]="playerForStatistics == game.player_blue_1"  [src]=getImageUrl(game.player_blue_1) (click)="playerForStatistics=game.player_blue_1;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_blue_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics == game.player_blue_2"  [src]=getImageUrl(game.player_blue_2) (click)="playerForStatistics=game.player_blue_2;getPlayerStatistics();"   onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_blue_1}} <span *ngIf="game.player_blue_2 != 'null'">og {{game.player_blue_2}}</span>  (<strong>-{{game.points_at_stake}}</strong> point)</td>
+
+
+                    <td *ngIf="game.match_winner == 'blue'" align="left" class="success"><img [class.selectedPersonBorder]="playerForStatistics == game.player_blue_1"  [src]=getImageUrl(game.player_blue_1) (click)="playerForStatistics=game.player_blue_1;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_blue_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics == game.player_blue_2"  [src]=getImageUrl(game.player_blue_2) (click)="playerForStatistics=game.player_blue_2;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_blue_1}} <span *ngIf="game.player_blue_2 != 'null'">og {{game.player_blue_2}}</span> (<strong>+{{game.points_at_stake}}</strong> point)</td>
+                    <td *ngIf="game.match_winner == 'blue'" align="center"></td>
+                    <td *ngIf="game.match_winner == 'blue'" align="left" class="danger"><img [class.selectedPersonBorder]="playerForStatistics == game.player_red_1"  [src]=getImageUrl(game.player_red_1) (click)="playerForStatistics=game.player_red_1;getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_red_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics == game.player_red_2"  [src]=getImageUrl(game.player_red_2) (click)="playerForStatistics=game.player_red_2;getPlayerStatistics();"   onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_red_1}} <span *ngIf="game.player_red_2 != 'null'">og {{game.player_red_2}}</span> (<strong>-{{game.points_at_stake}}</strong> point)</td>
+
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="panel panel-info">
+          <div class="panel-heading"><h4>Seneste individuelle resultater</h4></div>
+          <div class="panel-body">
+
+
+<!-- <button (click)="randomize()">CLICK</button> -->
+            <div class="form-group">
+              <label for="sel1">Vælg spiller for at se point-udvikling for seneste 10 kampe:</label>
+              <select class="form-control" id="sel1" [(ngModel)]="playerForStatistics"  (ngModelChange)="getPlayerStatistics();" >
+
+                <option *ngFor="let player of players">{{player.name}}</option>
+              </select>
+            </div>
+            <alert *ngFor="let alert of noPlayerGamesAlerts;let i = index" [type]="alert.type">
+              {{ alert?.msg }}
+            </alert>
+            <div style="display: block;" >
+              <canvas width="500" height="400" *ngIf="lineChartData.length > 0" baseChart
+                          [datasets]="lineChartData"
+                          [labels]="lineChartLabels"
+                          [options]="lineChartOptions"
+                          [colors]="lineChartColors"
+                          [legend]="lineChartLegend"
+                          [chartType]="lineChartType"
+                          (chartHover)="chartHovered($event)"
+                          (chartClick)="chartClicked($event)"></canvas>
+            </div>
+            <!--
+            <div *ngFor="let game of playerGames; let i = index">
+              <div *ngIf="game.player_red_1 == playerForStatistics || game.player_red_2 == playerForStatistics || game.player_blue_1 == playerForStatistics || game.player_blue_2 == playerForStatistics"> #{{game.id}} - {{game.lastUpdated}} </div>
+            </div>
+            <div>----</div>
+            <div *ngFor="let point of playerPoints; let i = index">
+               {{point}}
+            </div>
+          -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
