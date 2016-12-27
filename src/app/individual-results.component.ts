@@ -137,7 +137,6 @@ export class IndividualResultsComponent {
           this.playerPoints.push(points + currentPoints);
 
         }
-        //this.playerPoints.reverse();
 
         let _lineChartData:Array<any> = new Array(1);
 
@@ -152,7 +151,6 @@ export class IndividualResultsComponent {
           this.lineChartLabels.push("#" + playerGamesInReverse[k - 1].id);
         }
         this.lineChartData = _lineChartData;
-        //this.playerGames.unshift(null);
       } )
       .catch(err => {
         console.log('Problemer med at hente spiller-kampene for spilleren ' + this.playerForStatistics);
