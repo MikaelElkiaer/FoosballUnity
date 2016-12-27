@@ -21,6 +21,8 @@ import {TimerObservable} from "rxjs/observable/TimerObservable";
 import { TournamentGame } from './tournament-game';
 import { TournamentGameRound } from './tournament-game-round';
 import { TournamentGameRoundService } from './tournament-game-round.service';
+
+
 //import { CHART_DIRECTIVES } from 'ng2-charts/ng2-charts';
 
 @Component({
