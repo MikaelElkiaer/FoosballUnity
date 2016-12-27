@@ -7,8 +7,8 @@ import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { Player } from './player';
 import { PlayerService } from './player.service';
 
-import { RankingItem } from './rankingitem';
-import { RankingItemService } from './rankingitem.service';
+import { RankingItem } from './ranking-item';
+import { RankingItemService } from './ranking-item.service';
 
 
 import { Game } from './game';
@@ -18,9 +18,9 @@ import {Observable} from 'rxjs/Rx';
 import {Subscription} from 'rxjs/Rx';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
 
-import { TournamentGame } from './tournamentgame';
-import { TournamentGameRound } from './tournamentgameround';
-import { TournamentGameRoundService } from './tournamentgameround.service';
+import { TournamentGame } from './tournament-game';
+import { TournamentGameRound } from './tournament-game-round';
+import { TournamentGameRoundService } from './tournament-game-round.service';
 //import { CHART_DIRECTIVES } from 'ng2-charts/ng2-charts';
 
 @Component({

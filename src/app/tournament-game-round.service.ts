@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { TournamentGame } from './tournamentgame';
-import { TournamentGameRound } from './tournamentgameround';
+import { TournamentGame } from './tournament-game';
+import { TournamentGameRound } from './tournament-game-round';
 
-//import { TOURNAMENTGAMES } from './mock-tournamentgames';
+//import { TOURNAMENTGAMES } from './mock.tournament-games';
 
 import { Player } from './player';
 

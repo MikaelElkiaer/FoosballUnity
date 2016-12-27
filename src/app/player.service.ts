@@ -4,7 +4,7 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { Player } from './player';
 
-//import { PLAYERS } from './mock-players';
+//import { PLAYERS } from './mock.players';
 
 
 

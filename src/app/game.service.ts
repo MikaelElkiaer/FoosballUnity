@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { Game } from './game';
 
-import { GAMES } from './mock-games';
+import { GAMES } from './mock.games';
 
 @Injectable()
 export class GameService {
