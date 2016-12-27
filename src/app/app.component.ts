@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { ViewChild } from '@angular/core';
 
 import { Player } from './player';
 import { PlayerService } from './player.service';
@@ -15,6 +16,8 @@ import { TournamentGame } from './tournament-game';
 import { TournamentGameRound } from './tournament-game-round';
 import { TournamentGameRoundService } from './tournament-game-round.service';
 
+import { IndividualResultsComponent } from './individual-results.component';
+
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 @Component({
@@ -24,6 +27,10 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
   providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService]
 })
 export class AppComponent {
+
+  @ViewChild(IndividualResultsComponent)
+  private individualResultsComponent: IndividualResultsComponent;
+
   oneRoundAtATime = true;
   title = 'app works!';
   newPlayer: Player;
@@ -42,7 +49,7 @@ export class AppComponent {
 
   tempTournamentGameRounds: TournamentGameRound[];
   tournamentGameRounds: TournamentGameRound[];
-  playerForStatistics = 'nikl';
+  playerForStatistics = null;
   promise:any;
   soundFire:any;
 
@@ -370,14 +377,16 @@ export class AppComponent {
         this.tournamentGameRounds[roundIndex].tournamentGames[+table - 1].id = 0;
         this.showGamesForPeriod(this.showMatchesPeriod);
         this.showRankingForPeriod(this.showRankingPeriod);
-        //this.getPlayerStatistics();
+        this.getPlayerStatistics();
       }).catch(err => {
         this.addNoGameGenerationAlert('Noget gik galt i forsøget på at indmelde resultatet af kampen på dette bord. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
 
       })
     }
 
-
+    getPlayerStatistics() {
+      this.individualResultsComponent.getPlayerStatistics();
+    }
 
     // TOURNAMENTGAMES RELATED
     getTournamentGameRounds(): void {

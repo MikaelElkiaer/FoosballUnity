@@ -10,7 +10,7 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
   selector: 'individualResults',
   template: `
     <div class="form-group">
-    <h1>Husk at kalde this.getPlayerStatistics(); ved indmeldResultat og sikre fælles playerForStatistics</h1>
+    <h1>Husk at  sikre fælles playerForStatistics</h1>
       <label for="sel1">Vælg spiller for at se point-udvikling for seneste 10 kampe:</label>
       <select class="form-control" id="sel1" [(ngModel)]="playerForStatistics"  (ngModelChange)="getPlayerStatistics();" >
 
@@ -37,9 +37,12 @@ export class IndividualResultsComponent {
   @Input()
   players: Player[];
 
+  @Input()
+  playerForStatistics = null;
+
   playerGames: Game[];
   playerPoints: number[];
-  playerForStatistics = 'nikl';
+
 
   lineChartLegend:boolean = true;
   lineChartType:string = 'line';
