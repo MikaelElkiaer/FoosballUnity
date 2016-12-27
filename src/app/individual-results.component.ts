@@ -10,9 +10,8 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
   selector: 'individualResults',
   template: `
     <div class="form-group">
-    <h1>Husk at  sikre fælles playerForStatistics</h1>
       <label for="sel1">Vælg spiller for at se point-udvikling for seneste 10 kampe:</label>
-      <select class="form-control" id="sel1" [(ngModel)]="playerForStatistics"  (ngModelChange)="getPlayerStatistics();" >
+      <select class="form-control" id="sel1"  [(ngModel)]="playerForStatistics"  (ngModelChange)="getPlayerStatistics();">
 
         <option *ngFor="let player of players">{{player.name}}</option>
       </select>
@@ -38,7 +37,7 @@ export class IndividualResultsComponent {
   players: Player[];
 
   @Input()
-  playerForStatistics = null;
+  playerForStatistics: string;
 
   playerGames: Game[];
   playerPoints: number[];
@@ -94,10 +93,15 @@ export class IndividualResultsComponent {
     this.noPlayerGamesAlerts.push({msg: msg, type: type, closable: false});
   }
 
+  setPlayerForStatistics(player: string) {
+    this.playerForStatistics = player;
+  }
+
   getPlayerStatistics() : void {
     this.noPlayerGamesAlerts = [];
     this.playerGames = null;
     this.playerPoints = [];
+    console.log("Valgt er: " + this.playerForStatistics)
 
     this.gameService.getGames(this.playerForStatistics).then(
       (games : Game[] ) => {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { OnInit, AfterViewInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { Player } from './player';
@@ -49,7 +49,7 @@ export class AppComponent {
 
   tempTournamentGameRounds: TournamentGameRound[];
   tournamentGameRounds: TournamentGameRound[];
-  playerForStatistics = null;
+  //playerForStatistics = null;
   promise:any;
   soundFire:any;
 
@@ -68,6 +68,14 @@ export class AppComponent {
     this.getPlayers();
     this.getRankingItems();
     this.showGamesForPeriod(this.showMatchesPeriod);
+  }
+
+  playerForStatistics() { return 'NotSetYet';}
+
+  ngAfterViewInit() {
+    console.log("I AFTERVIEW START")
+      setTimeout(() => this.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
+      console.log("I AFTERVIEW SLUT")
   }
 
   // PLAYER RELATED
@@ -386,6 +394,10 @@ export class AppComponent {
 
     getPlayerStatistics() {
       this.individualResultsComponent.getPlayerStatistics();
+    }
+
+    setPlayerForStatistics(player: string) {
+      this.individualResultsComponent.setPlayerForStatistics(player);
     }
 
     // TOURNAMENTGAMES RELATED
