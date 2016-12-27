@@ -1,29 +1,21 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 
-import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
-import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
-
 import { Player } from './player';
 import { PlayerService } from './player.service';
 
 import { RankingItem } from './ranking-item';
 import { RankingItemService } from './ranking-item.service';
 
-
 import { Game } from './game';
 import { GameService } from './game.service';
 
-import {Observable} from 'rxjs/Rx';
-import {Subscription} from 'rxjs/Rx';
-import {TimerObservable} from "rxjs/observable/TimerObservable";
-
 import { TournamentGame } from './tournament-game';
+
 import { TournamentGameRound } from './tournament-game-round';
 import { TournamentGameRoundService } from './tournament-game-round.service';
 
-
-//import { CHART_DIRECTIVES } from 'ng2-charts/ng2-charts';
+import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -51,28 +43,11 @@ export class AppComponent {
   playerPoints: number[];
   tempTournamentGameRounds: TournamentGameRound[];
   tournamentGameRounds: TournamentGameRound[];
-  progressbarType = "info";
-
   playerForStatistics = 'nikl';
-  urlFinish:string;
-  streamFinish:any;
-  sound1Minute:any;
-  sound30Seconds:any;
-  sound15Seconds:any;
-  soundFire:any;
   promise:any;
+  soundFire:any;
 
-  urlStart:string;
-  streamStart:any;
-
-  playingTime = 30;
-  remainingTime = this.playingTime;
-  ticks =0;
-
-  private subscription: Subscription;
-  private timer: Observable<any>;
   private mySelectedPlayers: Player[];
-
 
   constructor(
     private playerService: PlayerService,
@@ -80,20 +55,13 @@ export class AppComponent {
     private gameService: GameService,
     private tournamentGameRoundService: TournamentGameRoundService
   ) {
-    this.urlFinish = "/assets/sounds/finish.wav";
-    this.streamFinish = new Audio(this.urlFinish);
-    this.sound1Minute= new Audio("/assets/sounds/1minute.wav");
-    this.sound30Seconds= new Audio("/assets/sounds/30seconds.wav");
-    this.sound15Seconds= new Audio("/assets/sounds/15seconds.wav");
-    this.soundFire= new Audio("/assets/sounds/fire.wav");
+      this.soundFire= new Audio("/assets/sounds/fire.wav");
   }
 
   ngOnInit(): void {
-
     this.getPlayers();
     this.getRankingItems();
     this.showGamesForPeriod(this.showMatchesPeriod);
-    //this.getTournamentGames();
   }
 
   // PLAYER RELATED
@@ -203,16 +171,6 @@ export class AppComponent {
 
       })
     }
-
-       //.catch(this.handleError);
-
-  /*
-  private handleError(error: any): Promise<any> {
-    alert("Der var fejl!");
-    return Promise.reject(error.message || error);
-  }*/
-
-
 
   getPlayers(): void {
     //alert("starting");
@@ -578,55 +536,8 @@ export class AppComponent {
 
     }
 
-    // TIMER RELATED
-    showNewTime(t : number) {
-      this.ticks = t;
-      this.remainingTime = this.playingTime - this.ticks;
-      if (this.remainingTime > 60) {
-        this.progressbarType = 'success';
-      } else if (this.remainingTime == 60) {
-        this.sound1Minute.play();
-        this.progressbarType = 'info';
-      } else if (this.remainingTime == 30) {
-        this.sound30Seconds.play();
-        this.progressbarType = 'warning';
-      } else if (this.remainingTime == 15) {
-        this.sound15Seconds.play();
-        this.progressbarType = 'danger';
-      }
 
-      else if (this.remainingTime == 0) {
-        if ( this.subscription && this.subscription instanceof Subscription) {
-              this.subscription.unsubscribe();
-        }
-        //this.remainingTime = this.playingTime;
-        this.streamFinish.play();
 
-      }
-    }
-
-    stopCountDownTimer() {
-      if ( this.subscription && this.subscription instanceof Subscription) {
-            this.subscription.unsubscribe();
-      }
-      this.remainingTime = this.playingTime;
-      this.timer = null;
-      this.ticks = 0;
-    }
-
-    startCountdownTimer() {
-      if ( this.subscription && this.subscription instanceof Subscription) {
-            this.subscription.unsubscribe();
-      }
-
-      this.timer        = Observable.timer(0, 1000);
-      this.subscription = this.timer.subscribe(t=> {this.showNewTime(t)});
-      var random = Math.floor(Math.random() * 7) + 1;
-      this.urlStart = "/assets/sounds/duke/" + random + ".wav";
-      this.streamStart = new Audio(this.urlStart);
-      this.streamStart.play();
-
-    }
 
     public playerAlerts:Array<Object> = [];
 
