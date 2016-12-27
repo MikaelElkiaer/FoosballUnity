@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { CountdownComponent } from './countdown.component';
+import { IndividualResultsComponent } from './individual-results.component';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { ButtonsModule } from 'ng2-bootstrap/ng2-bootstrap';
@@ -16,7 +17,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
-    CountdownComponent
+    CountdownComponent,
+    IndividualResultsComponent
   ],
   imports: [
     BrowserModule,

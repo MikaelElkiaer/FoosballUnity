@@ -1,5 +1,4 @@
 <script src="node_modules/chart.js/src/chart.js"></script>
-
 <div *ngIf="resultBackFromGettingPlayers == true && experiencedProblemWithGettingPlayers == true">
   <div class="alert alert-danger">
       <h1>Problemer med at hente data fra serveren</h1>
@@ -273,39 +272,7 @@
         <div class="panel panel-info">
           <div class="panel-heading"><h4>Seneste individuelle resultater</h4></div>
           <div class="panel-body">
-
-
-<!-- <button (click)="randomize()">CLICK</button> -->
-            <div class="form-group">
-              <label for="sel1">Vælg spiller for at se point-udvikling for seneste 10 kampe:</label>
-              <select class="form-control" id="sel1" [(ngModel)]="playerForStatistics"  (ngModelChange)="getPlayerStatistics();" >
-
-                <option *ngFor="let player of players">{{player.name}}</option>
-              </select>
-            </div>
-            <alert *ngFor="let alert of noPlayerGamesAlerts;let i = index" [type]="alert.type">
-              {{ alert?.msg }}
-            </alert>
-            <div style="display: block;" >
-              <canvas width="500" height="400" *ngIf="lineChartData.length > 0" baseChart
-                          [datasets]="lineChartData"
-                          [labels]="lineChartLabels"
-                          [options]="lineChartOptions"
-                          [colors]="lineChartColors"
-                          [legend]="lineChartLegend"
-                          [chartType]="lineChartType"
-                          (chartHover)="chartHovered($event)"
-                          (chartClick)="chartClicked($event)"></canvas>
-            </div>
-            <!--
-            <div *ngFor="let game of playerGames; let i = index">
-              <div *ngIf="game.player_red_1 == playerForStatistics || game.player_red_2 == playerForStatistics || game.player_blue_1 == playerForStatistics || game.player_blue_2 == playerForStatistics"> #{{game.id}} - {{game.lastUpdated}} </div>
-            </div>
-            <div>----</div>
-            <div *ngFor="let point of playerPoints; let i = index">
-               {{point}}
-            </div>
-          -->
+            <individualResults [players]="players"></individualResults>
           </div>
         </div>
       </div>

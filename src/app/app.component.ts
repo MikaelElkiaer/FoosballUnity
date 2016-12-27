@@ -39,8 +39,7 @@ export class AppComponent {
   showRankingPeriod = 'hour';
   showMatchesPeriod = 'hour';
   games: Game[];
-  playerGames: Game[];
-  playerPoints: number[];
+
   tempTournamentGameRounds: TournamentGameRound[];
   tournamentGameRounds: TournamentGameRound[];
   playerForStatistics = 'nikl';
@@ -371,78 +370,14 @@ export class AppComponent {
         this.tournamentGameRounds[roundIndex].tournamentGames[+table - 1].id = 0;
         this.showGamesForPeriod(this.showMatchesPeriod);
         this.showRankingForPeriod(this.showRankingPeriod);
-        this.getPlayerStatistics();
+        //this.getPlayerStatistics();
       }).catch(err => {
         this.addNoGameGenerationAlert('Noget gik galt i forsøget på at indmelde resultatet af kampen på dette bord. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
 
       })
     }
 
-    getPlayerStatistics() : void {
-      //this.lineChartLabels = [];
-      this.noPlayerGamesAlerts = [];
-      this.playerGames = null;
-      this.playerPoints = null;
 
-      //this.lineChartData = [];
-      this.playerPoints = [];
-
-      this.gameService.getGames(this.playerForStatistics).then(
-        (games : Game[] ) => {
-          this.playerGames = games;
-          var playerGamesInReverse = this.playerGames.reverse();
-          var playerTeam;
-          var points;
-          this.playerPoints = [];
-          this.playerPoints.push(0);
-          for (let game of this.playerGames) {
-            if (game.player_red_1 == this.playerForStatistics || game.player_red_2 == this.playerForStatistics ) {
-              playerTeam = 'red';
-            } else {
-              playerTeam = 'blue';
-            }
-            if (game.match_winner == 'red' && playerTeam == 'red') {
-              points = game.points_at_stake;
-              console.log("1")
-            } else if (game.match_winner == 'red' && playerTeam == 'blue') {
-              points = -1* game.points_at_stake;
-                  console.log("2")
-            } else if (game.match_winner == 'blue' && playerTeam == 'blue') {
-            points = game.points_at_stake;
-                console.log("3")
-            } else if (game.match_winner == 'blue' && playerTeam == 'red') {
-                points = -1* game.points_at_stake;
-                    console.log("4")
-            } else {
-              points = 0;
-                  console.log("5")
-            }
-            var currentPoints = this.playerPoints[this.playerPoints.length - 1];
-            this.playerPoints.push(points + currentPoints);
-
-          }
-          //this.playerPoints.reverse();
-
-          let _lineChartData:Array<any> = new Array(1);
-
-          _lineChartData[0] = {data: new Array(this.playerPoints.length), label: this.playerForStatistics};
-          for (let j = 0; j < this.playerPoints.length; j++) {
-            _lineChartData[0].data[j] = this.playerPoints[j];
-
-          }
-          this.lineChartLabels = [''];
-
-          for (let k = 1; k <= playerGamesInReverse.length; k++) {
-            this.lineChartLabels.push("#" + playerGamesInReverse[k - 1].id);
-          }
-          this.lineChartData = _lineChartData;
-          //this.playerGames.unshift(null);
-        } )
-        .catch(err => {
-          console.log('Problemer med at hente spiller-kampene for spilleren ' + this.playerForStatistics);
-          this.addNoPlayerGamesAlert('Kunne ikke hente spiller-kampene for spilleren ' + this.playerForStatistics + '. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-        });
-    }
 
     // TOURNAMENTGAMES RELATED
     getTournamentGameRounds(): void {
@@ -558,98 +493,10 @@ export class AppComponent {
     }
 
     public noGamesAlerts:Array<Object> = [];
-    public noPlayerGamesAlerts:Array<Object> = [];
+
 
     public addNoGamesAlert(msg: string, type: string):void {
       this.noGamesAlerts.push({msg: msg, type: type, closable: false});
     }
 
-    public addNoPlayerGamesAlert(msg: string, type: string):void {
-      this.noPlayerGamesAlerts.push({msg: msg, type: type, closable: false});
-    }
-
-
-    public showTwoColumns() : boolean {
-      return this.rankingItems.length > 20;
-    }
-
-    // lineChart
-    public lineChartData:Array<any> = [
-      //{data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-      //{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
-      //{data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
-    ];
-
-    // lineChart
-    public lineChartData2:Array<any> = [
-      {data: [65, 59, 80, 81, 56, 55, 40], label: 'JMN'},
-      {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
-      {data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
-    ];
-    public lineChartLabels:Array<any> = [];
-    public lineChartOptions:any = {
-      animation: false,
-      responsive: false
-    };
-    public lineChartColors:Array<any> = [
-      { // grey
-        backgroundColor: 'rgba(148,159,177,0.2)',
-        borderColor: 'rgba(148,159,177,1)',
-        pointBackgroundColor: 'rgba(148,159,177,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-      },
-      { // dark grey
-        backgroundColor: 'rgba(77,83,96,0.2)',
-        borderColor: 'rgba(77,83,96,1)',
-        pointBackgroundColor: 'rgba(77,83,96,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(77,83,96,1)'
-      },
-      { // grey
-        backgroundColor: 'rgba(148,159,177,0.2)',
-        borderColor: 'rgba(148,159,177,1)',
-        pointBackgroundColor: 'rgba(148,159,177,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-      }
-    ];
-    public lineChartLegend:boolean = true;
-    public lineChartType:string = 'line';
-
-    public randomize():void {
-      /*
-      let _lineChartData:Array<any> = new Array(this.lineChartData2.length);
-      for (let i = 0; i < this.lineChartData2.length; i++) {
-        _lineChartData[i] = {data: new Array(this.lineChartData2[i].data.length), label: this.lineChartData2[i].label};
-        for (let j = 0; j < this.lineChartData2[i].data.length; j++) {
-          _lineChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
-        }
-      }
-      this.lineChartData = _lineChartData;
-      */
-      this.getPlayerStatistics();
-      /*
-      let _lineChartData:Array<any> = new Array(1);
-      for (let i = 0; i < 1; i++) {
-        _lineChartData[i] = {data: new Array(this.lineChartData2[i].data.length), label: this.lineChartData2[i].label};
-        for (let j = 0; j < this.lineChartData2[i].data.length; j++) {
-          _lineChartData[i].data[j] = Math.floor((Math.random() * 10) + 1 - 5);
-        }
-      }
-      this.lineChartData = _lineChartData;
-      */
-    }
-
-    // events
-    public chartClicked(e:any):void {
-      console.log(e);
-    }
-
-    public chartHovered(e:any):void {
-      console.log(e);
-    }
 }
