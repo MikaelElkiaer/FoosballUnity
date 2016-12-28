@@ -17,6 +17,7 @@ import { TournamentGameRound } from './tournament-game-round';
 import { TournamentGameRoundService } from './tournament-game-round.service';
 
 import { IndividualResultsComponent } from './individual-results.component';
+import { AvailablePlayersComponent } from './available-players.component';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -31,12 +32,15 @@ export class AppComponent {
   @ViewChild(IndividualResultsComponent)
   private individualResultsComponent: IndividualResultsComponent;
 
+  @ViewChild(AvailablePlayersComponent)
+  private availablePlayersComponent: AvailablePlayersComponent;
+
   oneRoundAtATime = true;
   title = 'app works!';
-  newPlayer: Player;
-  players: Player[];
+
+
   intenseArray: string[];
-  selectedPlayers: number;
+
   rankingItems: RankingItem[];
   rankingItemsForIntense: RankingItem[];
   currentPositionForPlayer: number[];
@@ -53,7 +57,7 @@ export class AppComponent {
   promise:any;
   soundFire:any;
 
-  private mySelectedPlayers: Player[];
+
 
   constructor(
     private playerService: PlayerService,
@@ -71,10 +75,14 @@ export class AppComponent {
   }
 
   playerForStatistics() { return 'NotSetYet';}
+  players() { return new Array()}
+  selectedPlayers() { return 0;}
 
   ngAfterViewInit() {
     console.log("I AFTERVIEW START")
       setTimeout(() => this.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
+      setTimeout(() => this.players = () => this.availablePlayersComponent.players, 0);
+      setTimeout(() => this.selectedPlayers = () => this.availablePlayersComponent.selectedPlayers, 0);
       console.log("I AFTERVIEW SLUT")
   }
 
@@ -88,114 +96,22 @@ export class AppComponent {
     }
   }
 
-  deselectAll() {
-    for (let player of this.players) {
-      player.playerReady = false;
-    }
-    this.countSelectedPlayers()
-  }
-
-  add(name: string): void {
-
-    this.playerAlerts =  [];
-    name = name.trim();
-    if (!name) {
-      this.addPlayerAlert('Du skal indtaste navn eller initialer', 'danger');
-       return;
-    }
-    var upperCaseVersion = name.toUpperCase();
-    var alreadyExist = false;
-    var theNameThatExists = '';
-    for (let play of this.players) {
-      if (play.name.toUpperCase() == upperCaseVersion) {
-        alreadyExist = true;
-        theNameThatExists = play.name;
-      }
-    }
-    if (alreadyExist) {
-      this.addPlayerAlert('Navn/initialer \'' + name + '\' kan ikke benyttes, da der allerede findes en spiller med dette navn/initialer (\'' + theNameThatExists + '\')', 'danger');
-       return;
-    }
-    if (name.length > 10) {
-       this.addPlayerAlert('Navn/initialer må maks. bestå af 10 bogstaver/tal', 'danger');
-        return;
-    }
-    if (name.includes(' ')) {
-      this.addPlayerAlert('Navn/initialer må ikke indeholde mellemrum', 'danger');
-       return;
-    }
-
-    var today = new Date();
-    var dd : number = today.getDate();
-    var mm : number = (today.getMonth()+1); //January is 0!
-    var yyyy = today.getFullYear();
-
-    var hours = today.getHours();
-    var newHOURS;
-    newHOURS = hours;
-    if(hours<10) {
-        newHOURS='0'+hours;
-    }
-
-    var minutes = today.getMinutes();
-    var newMINUTES;
-    newMINUTES = minutes;
-
-    if(minutes<10) {
-        newMINUTES='0'+minutes;
-    }
-
-    var seconds = today.getSeconds();
-    var newSECONDS;
-    newSECONDS = seconds;
-    if(seconds<10) {
-        newSECONDS='0'+seconds;
-    }
-
-    var newToday;
-    var newDD;
-    newDD = dd;
-    if(dd<10) {
-        newDD='0'+dd;
-    }
-    var newMM;
-    newMM = mm;
-    if(mm<10) {
-        newMM='0'+mm;
-    }
 
 
-    //2016-10-22 23:21:30.0
-    newToday = yyyy+'/'+newMM+'/'+newDD + " " + newHOURS + ":" + newMINUTES + ":" + newSECONDS + "." + today.getMilliseconds();
-
-
-    this.newPlayer = new Player(name, true, new Date(newToday));
-
-    this.playerService.create(name, true, new Date(newToday))
-    .then((strRes : string) => {
-    //alert(strRes);
-       this.players.push(this.newPlayer);
-       this.players = this.sortedPlayers();
-       this.countSelectedPlayers();
-        this.addPlayerAlert('Spilleren \'' + name + '\' er nu oprettet og markeret i listen', 'success');
-      //this.players.push(player);
-    }).catch(err  => {
-
-        this.addPlayerAlert('Noget gik galt i forsøget på at oprette spilleren. Fejlen var: \'' + err + '\'', 'danger');
-
-      })
-    }
 
   getPlayers(): void {
     //alert("starting");
       this.playerService.getPlayers().then(
      (players : Player[]) =>
      {
-       this.setPlayers(players) ;
        //this.problemWithGettingPlayers = false;
        this.resultBackFromGettingPlayers = true;
        //alert("1");
        this.experiencedProblemWithGettingPlayers = false;
+
+       this.availablePlayersComponent.setPlayers(players) ;
+
+
      }
    )
      .catch(err => {
@@ -208,36 +124,13 @@ export class AppComponent {
    }
 
 
-   setPlayers(players: Player[]): void {
-    this.players = players;
-    this.players = this.sortedPlayers();
-    this.countSelectedPlayers();
-   }
 
-   countSelectedPlayers(): void {
-      let playerReady = this.players.filter((x) => x.playerReady)
-      this.selectedPlayers = playerReady.length;
-    }
 
-    setMySelectedPlayers(): void {
-      let playerReady = this.players.filter((x) => x.playerReady);
-      this.mySelectedPlayers = playerReady;
-    }
-    sortedPlayers() {
 
-      var sortedArray: Player[] = this.players.sort((n1,n2) => {
-      if (n1.name.toLocaleLowerCase() > n2.name.toLocaleLowerCase()) {
-          return 1;
-      }
 
-      if (n1.name.toLocaleLowerCase() < n2.name.toLocaleLowerCase()) {
-          return -1;
-      }
 
-      return 0;
-      });
-      return sortedArray;
-    }
+
+
 
     // TABS RELATED
     public showRankingForPeriod(period: string):void {
@@ -406,8 +299,8 @@ export class AppComponent {
       // DEn skal vi lige vente på, før vi kan sætte tournamentGames helt?
       // Dvs. at tournamentgames her måske kun er noget midlertidigt, som så bliver hel/korrekt, når vi også har intenseKnowledge som area?
       this.noGameGenerationAlerts = [];
-      this.setMySelectedPlayers();
-      this.tournamentGameRoundService.getTournamentGameRounds(2, this.mySelectedPlayers).then((tournamentGameRounds : TournamentGameRound[] ) =>
+      this.availablePlayersComponent.setMySelectedPlayers();
+      this.tournamentGameRoundService.getTournamentGameRounds(2, this.availablePlayersComponent.mySelectedPlayers).then((tournamentGameRounds : TournamentGameRound[] ) =>
       {
 
        this.tempTournamentGameRounds = tournamentGameRounds;
@@ -495,11 +388,7 @@ export class AppComponent {
 
 
 
-    public playerAlerts:Array<Object> = [];
 
-    public addPlayerAlert(msg: string, type: string):void {
-      this.playerAlerts.push({msg: msg, type: type, closable: false});
-    }
 
     public noGameGenerationAlerts:Array<Object> = [];
 

@@ -1,4 +1,6 @@
 <script src="node_modules/chart.js/src/chart.js"></script>
+
+<!--
 <div *ngIf="resultBackFromGettingPlayers == true && experiencedProblemWithGettingPlayers == true">
   <div class="alert alert-danger">
       <h1>Problemer med at hente data fra serveren</h1>
@@ -6,6 +8,8 @@
   </div>
 </div>
 <div  *ngIf="resultBackFromGettingPlayers == true && experiencedProblemWithGettingPlayers == false">
+ -->
+<div>
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-2">
@@ -21,7 +25,7 @@
           <div class="panel-heading"><h4>Kampe</h4></div>
           <div class="panel-body">
             <div>
-              <input type="button"  value="Generer tilfældige kampe ud fra de {{selectedPlayers}} markerede spillere" (click)="getTournamentGameRounds()">
+              <input type="button"  value="Generer tilfældige kampe ud fra de {{selectedPlayers()}} markerede spillere" (click)="getTournamentGameRounds()">
             </div>
             <div>
               <alert *ngFor="let alert of noGameGenerationAlerts;let i = index" [type]="alert.type" >
@@ -234,7 +238,7 @@
         <div class="panel panel-info">
           <div class="panel-heading"><h4>Seneste individuelle resultater</h4></div>
           <div class="panel-body">
-            <individualResults [players]="players"></individualResults>
+            <individualResults [players]="players()"></individualResults>
           </div>
         </div>
       </div>
