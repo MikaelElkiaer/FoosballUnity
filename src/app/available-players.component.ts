@@ -3,6 +3,8 @@ import { Component, Input } from '@angular/core';
 import { Player } from './player';
 import { PlayerService } from './player.service';
 
+import { SharedCommunicationService } from './shared-communication.service';
+
 @Component({
   selector: 'availablePlayers',
   styleUrls: ['./available-players.component.css'],
@@ -24,7 +26,7 @@ import { PlayerService } from './player.service';
         </tr>
       </table>
 
-        <div>Disse {{selectedPlayers}} spillere er valgt:</div>
+        <div>Disse {{getNumberOfSelectedPlayers()}} spillere er valgt:</div>
         <span *ngFor="let player of players">
           <span *ngIf="player.playerReady"><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></span >
         </span>
@@ -51,13 +53,14 @@ import { PlayerService } from './player.service';
 
 export class AvailablePlayersComponent {
   players: Player[];
-  selectedPlayers: number;
+  selectedPlayers: Player[];
   newPlayer: Player;
 
-  mySelectedPlayers: Player[];
+  //mySelectedPlayers: Player[];
 
   constructor (
-        private playerService: PlayerService
+        private playerService: PlayerService,
+        private sharedCommunicationService: SharedCommunicationService
   ) {
 
   }
@@ -70,17 +73,26 @@ export class AvailablePlayersComponent {
     }
   }
 
+  getNumberOfSelectedPlayers() : string {
+    if (this.selectedPlayers == null) {
+      return "0";
+    } else {
+      return this.selectedPlayers.length.toString();
+    }
+  }
+
   setPlayers(players: Player[]): void {
    this.players = players;
    this.players = this.sortedPlayers();
    this.countSelectedPlayers();
   }
 
-  setMySelectedPlayers(): void {
+/*
+  getMySelectedPlayers(): Player[] {
     let playerReady = this.players.filter((x) => x.playerReady);
-    this.mySelectedPlayers = playerReady;
+    return playerReady;
   }
-
+*/
 
   public playerAlerts:Array<Object> = [];
 
@@ -119,7 +131,8 @@ export class AvailablePlayersComponent {
 
   countSelectedPlayers(): void {
      let playerReady = this.players.filter((x) => x.playerReady)
-     this.selectedPlayers = playerReady.length;
+     this.selectedPlayers = playerReady;
+     this.sharedCommunicationService.informAboutSelectedPlayersChanged(this.selectedPlayers);
    }
 
   deselectAll() {

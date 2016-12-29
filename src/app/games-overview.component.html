@@ -1,3 +1,91 @@
-<p>
-  games-overview works!
-</p>
+<div>
+  <input type="button"  value="Generer tilfældige kampe ud fra de {{getNumberOfSelectedPlayers()}} markerede spillere" (click)="getTournamentGameRounds()">
+</div>
+<div>
+  <alert *ngFor="let alert of noGameGenerationAlerts;let i = index" [type]="alert.type" >
+    {{ alert?.msg }}
+  </alert>
+</div>
+<table>
+  <tr *ngFor="let tournamentGameRound of tournamentGameRounds; let j = index">
+    <td *ngFor="let game of tournamentGameRound.tournamentGames; let i = index">
+      <div>
+        <table align="center">
+          <tr>
+            <td  [class.intenseRed]="oneRoundAtATime && game.id != 0 && (i == 0 && intenseArray[0] == 'blue')" [class.intenseGreen]="oneRoundAtATime && game.id != 0 && (i == 0 && intenseArray[0] == 'red')"  [class.intenseBlue]="oneRoundAtATime && game.id != 0 && (i == 1 && intenseArray[1] == 'blue')"   [class.intenseOrange]="oneRoundAtATime && game.id != 0 && (i == 1 && intenseArray[1] == 'red')"   >
+
+
+              <div  class="panel"  [class.panel-success]="i == 0"  [class.panel-warning]="i == 1" align="center" style="margin-bottom: 0px">
+                <div class="panel-heading">
+                  <table >
+                    <tr>
+
+                       <td align="right" valign="top" style="padding-right: 4px"><b>{{game.player_red_1}}</b><span *ngIf="oneRoundAtATime && game.player_red_1 != null && currentPositionForPlayer[game.player_red_1.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_red_1.toLocaleLowerCase()]}}</span></td>
+                       <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics == game.player_red_1" (click)="changePlayerForStatistics(game.player_red_1);"  [src]=getImageUrl(game.player_red_1)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
+
+                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                       <td align="left"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics == game.player_red_2" (click)="changePlayerForStatistics(game.player_red_2);" [src]=getImageUrl(game.player_red_2)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
+
+                       <td align="left" valign="top"  style="padding-left: 4px"><b>{{game.player_red_2}}</b><span *ngIf="oneRoundAtATime && game.player_red_2 != null && currentPositionForPlayer[game.player_red_2.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_red_2.toLocaleLowerCase()]}} </span></td>
+
+                    </tr>
+                    <tr>
+                      <td colspan="5">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td *ngIf="oneRoundAtATime && (i == 0 && intenseArray[0] == 'red')" align="center" width="80px" valign="bottom" colspan="5"><input *ngIf="game.id != 0 " type="button" class="btn btn-success" [class.disabled]="game.id == 0"  value="INTENSE - Grønt hold vinder (2 point) - INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 2)"> </td>
+                      <td *ngIf="(!oneRoundAtATime && i == 0) || (i == 0 && intenseArray[0] != 'red')" align="center" width="80px" valign="bottom" colspan="5"><input *ngIf="game.id != 0 " type="button" class="btn btn-success" [class.disabled]="game.id == 0"  value="Grønt hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 1)"> </td>
+                      <td *ngIf="oneRoundAtATime && (i == 1 && intenseArray[1] == 'red')" align="center" width="80px"  valign="bottom" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-warning" [class.disabled]="game.id == 0" value="INTENSE - Orange hold vinder (2 point) - INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 2)"> </td>
+                      <td *ngIf="(!oneRoundAtATime && i == 1) || (i == 1 && intenseArray[1] != 'red')" align="center" width="80px"  valign="bottom" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-warning" [class.disabled]="game.id == 0" value="Orange hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'red', game.lastUpdated, 1)"> </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <table>
+                    <tr>
+                      <td>
+                        <div class="img_container" align="center">
+                          <img class="fodboldbordBillede" src="assets/img/fussball-table-nummer-{{i + 1}}.png">
+
+                          <input *ngIf="game.id != 0" type="button" class="btn btn-default uafgjortButton" [class.disabled]="game.id == 0"   value="Uafgjort (0 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'draw', game.lastUpdated, 0)">
+                        </div>
+                      </td>
+                    </tr>
+              </table>
+              <div  class="panel"  [class.panel-danger]="i == 0"  [class.panel-info]="i == 1" align="center">
+                <div class="panel-heading">
+                  <table >
+                    <tr>
+                      <td *ngIf="oneRoundAtATime && (i == 0 && intenseArray[0] == 'blue')" align="center" width="80px" valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-danger" [class.disabled]="game.id == 0"   value="INTENSE - Rødt hold vinder (2 point) - INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 2)"> </td>
+                      <td *ngIf="(!oneRoundAtATime && i == 0) || (i == 0 && intenseArray[0] != 'blue')" align="center" width="80px" valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-danger" [class.disabled]="game.id == 0"   value="Rødt hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 1)"> </td>
+                      <td *ngIf="oneRoundAtATime && (i == 1 && intenseArray[1] == 'blue')" align="center" width="80px"  valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-info" [class.disabled]="game.id == 0"   value="INTENSE - Blåt hold vinder (2 point)- INTENSE" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 2)"> </td>
+                      <td *ngIf="(!oneRoundAtATime && i == 1) || (i == 1 && intenseArray[1] != 'blue')" align="center" width="80px"  valign="top" colspan="5"><input *ngIf="game.id != 0" type="button" class="btn btn-info" [class.disabled]="game.id == 0"   value="Blåt hold vinder (1 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'blue', game.lastUpdated, 1)"> </td>
+                    </tr>
+                    <tr>
+                      <td colspan="5">&nbsp;</td>
+                    </tr>
+                    <tr>
+
+                       <td align="right" valign="top"  style="padding-right: 4px"><b>{{game.player_blue_1}}</b><span *ngIf="oneRoundAtATime && game.player_blue_1 != null &&currentPositionForPlayer[game.player_blue_1.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_blue_1.toLocaleLowerCase()]}}</span></td>
+                       <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue')) "  [class.selectedPersonBorder]="playerForStatistics== game.player_blue_1" (click)="changePlayerForStatistics(game.player_blue_1);" [src]=getImageUrl(game.player_blue_1)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
+                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                       <td align="left"  valign="top"><img   [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue') )"  [class.selectedPersonBorder]="playerForStatistics== game.player_blue_2" (click)="changePlayerForStatistics(game.player_blue_2);" [src]=getImageUrl(game.player_blue_2)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
+                       <td align="left" valign="top"  style="padding-left: 4px"><b>{{game.player_blue_2}}</b><span *ngIf="oneRoundAtATime && game.player_blue_2 != null &&currentPositionForPlayer[game.player_blue_2.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_blue_2.toLocaleLowerCase()]}}</span></td>
+
+                    </tr>
+
+
+                  </table>
+                </div>
+              </div>
+            </td>
+            <td *ngIf="i == 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+
+</table>
