@@ -22,7 +22,6 @@ import { PreviousGamesComponent } from './previous-games.component';
 
 import { SharedCommunicationService } from './shared-communication.service';
 
-
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 @Component({
@@ -45,18 +44,13 @@ export class AppComponent {
   oneRoundAtATime = true;
   title = 'app works!';
 
-
   intenseArray: string[];
 
-  rankingItems: RankingItem[];
   rankingItemsForIntense: RankingItem[];
   currentPositionForPlayer: number[];
   currentPointsForPlayer: number[];
   resultBackFromGettingPlayers = false;
   experiencedProblemWithGettingPlayers = false;
-  showRankingPeriod = 'hour';
-
-
 
   tempTournamentGameRounds: TournamentGameRound[];
   tournamentGameRounds: TournamentGameRound[];
@@ -84,8 +78,6 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.getPlayers();
-    this.getRankingItems();
-
   }
 
   //playerForStatistics() { return 'NotSetYet';}
@@ -111,9 +103,6 @@ export class AppComponent {
     }
   }
 
-
-
-
   getPlayers(): void {
     //alert("starting");
       this.playerService.getPlayers().then(
@@ -123,10 +112,7 @@ export class AppComponent {
        this.resultBackFromGettingPlayers = true;
        //alert("1");
        this.experiencedProblemWithGettingPlayers = false;
-
-       this.availablePlayersComponent.setPlayers(players) ;
-
-
+       this.availablePlayersComponent.setPlayers(players);
      }
    )
      .catch(err => {
@@ -137,34 +123,6 @@ export class AppComponent {
      });
      //alert("ending");
    }
-
-
-
-
-
-
-
-
-
-
-    // TABS RELATED
-    public showRankingForPeriod(period: string):void {
-      //alert("i ts: " + period)
-      this.noRankingListAlerts = [];
-      this.showRankingPeriod = period;
-      this.rankingItems  = null;
-      this.rankingItemService.getRankingItems(period).then(
-        (rankingItems : RankingItem[]) => this.rankingItems = rankingItems)
-      .catch(err => {
-        console.log('Problemer med at hente ranking-liste for perioden ' + period);
-        this.addNoRankingListAlert('Kunne ikke hente ranglisten for den valgte periode. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-      });
-    };
-
-    // RANKINGITEMS RELATED
-    getRankingItems(): void {
-      this.rankingItemService.getRankingItems(this.showRankingPeriod).then((rankingItems : RankingItem[]) => this.rankingItems = rankingItems);
-    }
 
     public getRankingItemsForIntense(): void {
       var intenseFound = false;
@@ -263,11 +221,6 @@ export class AppComponent {
       //this.rankingItemsForIntense = null;
     }
 
-
-
-
-
-
     indmeldResultat(roundIndex : number, player_red_1 : string, player_red_2 : string, player_blue_1 : string, player_blue_2 : string, table: string, resultat : string,  updateTime: string, points_at_stake: number): void {
       this.noGameGenerationAlerts = [];
     if (this.tournamentGameRounds[roundIndex].tournamentGames[+table - 1].id == 0) {
@@ -281,7 +234,7 @@ export class AppComponent {
         //alert('Kamp registreret');
         this.tournamentGameRounds[roundIndex].tournamentGames[+table - 1].id = 0;
         //NIKLHUSK - Når ny kamp er indmeldt, skal vi vise nyt i bunden - this.showGamesForPeriod(this.showMatchesPeriod);
-        this.showRankingForPeriod(this.showRankingPeriod);
+        //NIKLHUSK - Dette måske bare væk? this.showRankingForPeriod(this.showRankingPeriod);
         //NIKLHUSK - Når ny kamp, så også vise ny personlig statistick for valgt spiller - this.getPlayerStatistics();
         this.informAboutNewMatchReported(strRes);
       }).catch(err => {
@@ -388,32 +341,15 @@ export class AppComponent {
      }
    ).catch(err => {
      console.log('der var fejl omkring generering af kampe');
-
          this.addNoGameGenerationAlert('Noget gik galt i forsøget på at generere kampe. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
-
        })
    ;
-
-
     }
-
-
-
-
-
 
     public noGameGenerationAlerts:Array<Object> = [];
 
     public addNoGameGenerationAlert(msg: string, type: string):void {
       this.noGameGenerationAlerts.push({msg: msg, type: type, closable: false});
     }
-
-    public noRankingListAlerts:Array<Object> = [];
-
-    public addNoRankingListAlert(msg: string, type: string):void {
-      this.noRankingListAlerts.push({msg: msg, type: type, closable: false});
-    }
-
-
 
 }

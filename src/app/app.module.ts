@@ -8,12 +8,14 @@ import { CountdownComponent } from './countdown.component';
 import { IndividualResultsComponent } from './individual-results.component';
 import { AvailablePlayersComponent } from './available-players.component';
 import { PreviousGamesComponent } from './previous-games.component';
+import { RankingListComponent } from './ranking-list.component';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { ButtonsModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { TabsModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+
 
 //import { AccordionModule } from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -23,7 +25,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     CountdownComponent,
     IndividualResultsComponent,
     AvailablePlayersComponent,
-    PreviousGamesComponent
+    PreviousGamesComponent,
+    RankingListComponent
   ],
   imports: [
     BrowserModule,
