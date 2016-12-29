@@ -33,25 +33,14 @@ export class TournamentGameRoundService {
       }
     }
     var combinedString = startString + fillUpString + endString;
-
-
-      //for (var property in object) {
-      //    alert('item ' + i + ': ' + property + '=' + object[property]);
-  //  }
-    // If property names are known beforehand, you can also just do e.g.
-    // alert(object.id + ',' + object.Title);
-//}
-
     //return Promise.resolve(GAMES);
     this.testInput = '{"numberOfGames": ' + numberOfGames + combinedString;
-    //alert(this.testInput);
-    console.log('TestInput:' + this.testInput);
+
     return this.http.post(this.tournamentGameRoundsUrl, this.testInput,
     {headers:this.headers})
       .toPromise()
       .then(response => response.json() as TournamentGameRound[])
       .catch(this.handleError);
-
   }
 
 

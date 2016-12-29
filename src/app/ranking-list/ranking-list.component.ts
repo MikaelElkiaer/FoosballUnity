@@ -62,7 +62,6 @@ export class RankingListComponent implements OnInit {
 
   // TABS RELATED
   public showRankingForPeriod(period: string):void {
-    //alert("i ts: " + period)
     this.noRankingListAlerts = [];
     this.showRankingPeriod = period;
     this.rankingItems  = null;

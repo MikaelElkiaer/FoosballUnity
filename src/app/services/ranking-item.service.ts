@@ -16,16 +16,10 @@ export class RankingItemService {
 
   constructor(private http: Http) {}
   getRankingItems(period : string): Promise<RankingItem[]> {
-    //alert('og i service' + period)
-    //if (period == 'alltime') {
-      //alert("get1")
       return this.http.get(this.rankingItemsUrl + period)
         .toPromise()
         .then(response => response.json() as RankingItem[])
         .catch(this.handleError);
-    //} else {
-  //    return Promise.resolve(RANKINGITEMS);
-    //}
   }
 
   private handleError(error: any): Promise<any> {

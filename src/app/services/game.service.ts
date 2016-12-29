@@ -29,16 +29,10 @@ export class GameService {
   }
 
   indmeldResultat(player_red_1 : string, player_red_2 : string, player_blue_1 : string, player_blue_2 : string, table: string, resultat : string, updateTime: string, points_at_stake: number) : Promise<string> {
-
-  //this.samletTekst = "132";
-//alert(this.samletTekst);
     this.samletTekst = '[' +
      JSON.stringify({player_red_1:player_red_1,   player_red_2:player_red_2, player_blue_1:player_blue_1, player_blue_2:player_blue_2,
 lastUpdated:  updateTime ,match_winner:resultat,points_at_stake: points_at_stake,winning_table:table})
       + ']';
-      console.log('samletTekst: ' + this.samletTekst);
-      //alert('her');
-    //alert(this.samletTekst);
     return this.http
       .post(this.gamesUrl, this.samletTekst,
       {headers:this.headers})

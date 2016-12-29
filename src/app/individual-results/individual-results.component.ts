@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit  } from '@angular/core';
 
 import { Game } from '../model/game';
 import { GameService } from '../services/game.service';
@@ -31,25 +31,20 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
                   [legend]="lineChartLegend"
                   [chartType]="lineChartType"></canvas>
     </div>
-  `,
-  providers: [GameService]  //NIKL-Remove later?
+  `
 })
 
-export class IndividualResultsComponent {
+export class IndividualResultsComponent implements OnInit  {
   @Input()
   players: Player[];
 
-  //@Input()
   playerForStatistics: string;
-
   playerGames: Game[];
   playerPoints: number[];
-
 
   lineChartLegend:boolean = true;
   lineChartType:string = 'line';
 
-  // lineChart
   lineChartData:Array<any> = [];
 
   lineChartLabels:Array<any> = [];
@@ -104,17 +99,22 @@ export class IndividualResultsComponent {
         this.getPlayerStatistics();
       }
     )
+  }
 
+  ngOnInit() {
+    setTimeout(() => {
+      if (this.players.length > 0) {
+        this.playerForStatistics = this.players[0].name;
+        this.changePlayerForStatistics(this.playerForStatistics);
+        this.getPlayerStatistics();
+      }
+    }, 1000);
 
   }
 
   public addNoPlayerGamesAlert(msg: string, type: string):void {
     this.noPlayerGamesAlerts.push({msg: msg, type: type, closable: false});
   }
-
-  //setPlayerForStatistics(player: string) {
-  //  this.playerForStatistics = player;
-  //}
 
   changePlayerForStatistics(playerForStatistics: string) {
     this.sharedCommunicationService.informAboutPlayerForStatisticsChanged(playerForStatistics);
@@ -124,7 +124,6 @@ export class IndividualResultsComponent {
     this.noPlayerGamesAlerts = [];
     this.playerGames = null;
     this.playerPoints = [];
-    console.log("Valgt er: " + this.playerForStatistics)
 
     this.gameService.getGames(this.playerForStatistics).then(
       (games : Game[] ) => {
@@ -142,23 +141,17 @@ export class IndividualResultsComponent {
           }
           if (game.match_winner == 'red' && playerTeam == 'red') {
             points = game.points_at_stake;
-            console.log("1")
-          } else if (game.match_winner == 'red' && playerTeam == 'blue') {
+            } else if (game.match_winner == 'red' && playerTeam == 'blue') {
             points = -1* game.points_at_stake;
-                console.log("2")
           } else if (game.match_winner == 'blue' && playerTeam == 'blue') {
-          points = game.points_at_stake;
-              console.log("3")
+            points = game.points_at_stake;
           } else if (game.match_winner == 'blue' && playerTeam == 'red') {
-              points = -1* game.points_at_stake;
-                  console.log("4")
+            points = -1* game.points_at_stake;
           } else {
             points = 0;
-                console.log("5")
           }
           var currentPoints = this.playerPoints[this.playerPoints.length - 1];
           this.playerPoints.push(points + currentPoints);
-
         }
 
         let _lineChartData:Array<any> = new Array(1);

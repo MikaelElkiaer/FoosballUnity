@@ -7,5 +7,4 @@ export const RANKINGITEMSSAMLET: RankingItem[] = [
   {position: 4, name: 'DWP', points: -5, numberOfGames: 155},
   {position: 5, name: 'DWP', points: -35, numberOfGames: 15},
   {position: 6, name: 'ALSK', points: -47, numberOfGames: 89}
-
 ];
