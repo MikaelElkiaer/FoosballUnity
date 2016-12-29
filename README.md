@@ -1,4 +1,8 @@
-# NykreditFoosballOrganizer
+# FoosballUnity
+
+(Not much information about FoosballUnity yet, but there will be later)
+
+Below you will find information from angular-cli:
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.21.
 
