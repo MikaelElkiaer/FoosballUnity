@@ -4,6 +4,9 @@ import { Game } from './game';
 import { GameService } from './game.service';
 import { Player } from './player';
 
+import { SharedCommunicationService } from './shared-communication.service';
+import { Subscription } from 'rxjs/Subscription';
+
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 @Component ({
@@ -11,7 +14,7 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
   template: `
     <div class="form-group">
       <label for="sel1">Vælg spiller for at se point-udvikling for seneste 10 kampe:</label>
-      <select class="form-control" id="sel1"  [(ngModel)]="playerForStatistics"  (ngModelChange)="getPlayerStatistics();">
+      <select class="form-control" id="sel1"  [(ngModel)]="playerForStatistics"  (ngModelChange)="changePlayerForStatistics(playerForStatistics);getPlayerStatistics();">
 
         <option *ngFor="let player of players">{{player.name}}</option>
       </select>
@@ -29,14 +32,14 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
                   [chartType]="lineChartType"></canvas>
     </div>
   `,
-  providers: [GameService]
+  providers: [GameService]  //NIKL-Remove later?
 })
 
 export class IndividualResultsComponent {
   @Input()
   players: Player[];
 
-  @Input()
+  //@Input()
   playerForStatistics: string;
 
   playerGames: Game[];
@@ -83,9 +86,18 @@ export class IndividualResultsComponent {
 
   public noPlayerGamesAlerts:Array<Object> = [];
 
+  subscription : Subscription ;
+
   constructor(
-    private gameService: GameService
+    private gameService: GameService,
+    private sharedCommunicationService: SharedCommunicationService
   ) {
+    this.subscription = sharedCommunicationService.playerForStatisticsChanged$.subscribe(
+      playerForStatistics => {
+        this.playerForStatistics = playerForStatistics;
+        this.getPlayerStatistics();
+      }
+    )
 
   }
 
@@ -93,8 +105,12 @@ export class IndividualResultsComponent {
     this.noPlayerGamesAlerts.push({msg: msg, type: type, closable: false});
   }
 
-  setPlayerForStatistics(player: string) {
-    this.playerForStatistics = player;
+  //setPlayerForStatistics(player: string) {
+  //  this.playerForStatistics = player;
+  //}
+
+  changePlayerForStatistics(playerForStatistics: string) {
+    this.sharedCommunicationService.informAboutPlayerForStatisticsChanged(playerForStatistics);
   }
 
   getPlayerStatistics() : void {

@@ -14,7 +14,7 @@
     <div class="row">
       <div class="col-sm-2">
         <div class="panel panel-primary">
-          <div class="panel-heading"><h4>Tilgængelige spillere</h4></div>
+          <div class="panel-heading"><h4>Tilgængelige spillere|</h4></div>
           <div class="panel-body">
             <availablePlayers></availablePlayers>
           </div>
@@ -47,11 +47,11 @@
                                 <tr>
 
                                    <td align="right" valign="top" style="padding-right: 4px"><b>{{game.player_red_1}}</b><span *ngIf="oneRoundAtATime && game.player_red_1 != null && currentPositionForPlayer[game.player_red_1.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_red_1.toLocaleLowerCase()]}}</span></td>
-                                   <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics() == game.player_red_1" (click)="setPlayerForStatistics(game.player_red_1);getPlayerStatistics();"  [src]=getImageUrl(game.player_red_1)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
+                                   <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics == game.player_red_1" (click)="changePlayerForStatistics(game.player_red_1);"  [src]=getImageUrl(game.player_red_1)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
 
                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
-                                   <td align="left"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics() == game.player_red_2" (click)="setPlayerForStatistics(game.player_red_2);getPlayerStatistics();" [src]=getImageUrl(game.player_red_2)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
+                                   <td align="left"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'red') || (i == 1 && intenseArray[1] == 'red')) "  [class.selectedPersonBorder]="playerForStatistics == game.player_red_2" (click)="changePlayerForStatistics(game.player_red_2);" [src]=getImageUrl(game.player_red_2)  onError="this.src = 'assets/img/Wildcard.jpg'" width="64" height="80"></td>
 
                                    <td align="left" valign="top"  style="padding-left: 4px"><b>{{game.player_red_2}}</b><span *ngIf="oneRoundAtATime && game.player_red_2 != null && currentPositionForPlayer[game.player_red_2.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_red_2.toLocaleLowerCase()]}} </span></td>
 
@@ -94,10 +94,10 @@
                                 <tr>
 
                                    <td align="right" valign="top"  style="padding-right: 4px"><b>{{game.player_blue_1}}</b><span *ngIf="oneRoundAtATime && game.player_blue_1 != null &&currentPositionForPlayer[game.player_blue_1.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_blue_1.toLocaleLowerCase()]}}</span></td>
-                                   <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue')) "  [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_1" (click)="setPlayerForStatistics(game.player_blue_1);getPlayerStatistics();" [src]=getImageUrl(game.player_blue_1)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
+                                   <td align="right"  valign="top"><img [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue')) "  [class.selectedPersonBorder]="playerForStatistics== game.player_blue_1" (click)="changePlayerForStatistics(game.player_blue_1);" [src]=getImageUrl(game.player_blue_1)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
-                                   <td align="left"  valign="top"><img   [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue') )"  [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_2" (click)="setPlayerForStatistics(game.player_blue_2);getPlayerStatistics();" [src]=getImageUrl(game.player_blue_2)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
+                                   <td align="left"  valign="top"><img   [class.intenseBorder]="oneRoundAtATime && ((i == 0 && intenseArray[0] == 'blue') || (i == 1 && intenseArray[1] == 'blue') )"  [class.selectedPersonBorder]="playerForStatistics== game.player_blue_2" (click)="changePlayerForStatistics(game.player_blue_2);" [src]=getImageUrl(game.player_blue_2)  onError="this.src = 'assets/img/Wildcard.jpg'"  width="64" height="80"></td>
                                    <td align="left" valign="top"  style="padding-left: 4px"><b>{{game.player_blue_2}}</b><span *ngIf="oneRoundAtATime && game.player_blue_2 != null &&currentPositionForPlayer[game.player_blue_2.toLocaleLowerCase()]"><br>Før kampen:<br>{{currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()]}} point<br>#{{currentPositionForPlayer[game.player_blue_2.toLocaleLowerCase()]}}</span></td>
 
                                 </tr>
@@ -147,7 +147,7 @@
                     <thead><tr><th>Nr.</th><th>Foto</th><th>Navn</th><th>Point</th><th>Kampe</th></tr></thead>
                     <tbody>
                       <tr *ngFor="let rankingItem of rankingItems; let i = index">
-                        <td *ngIf="(i < (rankingItems.length / 2) && rankingItems.length > 20) || rankingItems.length <= 20">#{{rankingItem.position}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20"><img [class.selectedPersonBorder]="playerForStatistics()== rankingItem.name"  [src]=getImageUrl(rankingItem.name)  (click)="setPlayerForStatistics(rankingItem.name);getPlayerStatistics()" onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.name}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.points}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.numberOfGames}}</td>
+                        <td *ngIf="(i < (rankingItems.length / 2) && rankingItems.length > 20) || rankingItems.length <= 20">#{{rankingItem.position}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20"><img [class.selectedPersonBorder]="playerForStatistics== rankingItem.name"  [src]=getImageUrl(rankingItem.name)  (click)="changePlayerForStatistics(rankingItem.name);" onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.name}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.points}}</td><td  *ngIf="(i < (rankingItems.length / 2)  && rankingItems.length > 20) || rankingItems.length <= 20">{{rankingItem.numberOfGames}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -158,7 +158,7 @@
                     <thead><tr><th>Nr.</th><th>Foto</th><th>Navn</th><th>Point</th><th>Kampe</th></tr></thead>
                     <tbody>
                       <tr *ngFor="let rankingItem of rankingItems; let i = index">
-                        <td *ngIf="i >= (rankingItems.length / 2) && rankingItems.length > 20">#{{rankingItem.position}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20"><img  [class.selectedPersonBorder]="playerForStatistics()== rankingItem.name" [src]=getImageUrl(rankingItem.name)   (click)="setPlayerForStatistics(rankingItem.name);getPlayerStatistics()" onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.name}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.points}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.numberOfGames}}</td>
+                        <td *ngIf="i >= (rankingItems.length / 2) && rankingItems.length > 20">#{{rankingItem.position}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20"><img  [class.selectedPersonBorder]="playerForStatistics== rankingItem.name" [src]=getImageUrl(rankingItem.name)   (click)="changePlayerForStatistics(rankingItem.name);" onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.name}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.points}}</td><td  *ngIf="i >= (rankingItems.length / 2)  && rankingItems.length > 20">{{rankingItem.numberOfGames}}</td>
                       </tr>
                     </tbody>
                   </table>

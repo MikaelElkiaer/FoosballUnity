@@ -20,13 +20,16 @@ import { IndividualResultsComponent } from './individual-results.component';
 import { AvailablePlayersComponent } from './available-players.component';
 import { PreviousGamesComponent } from './previous-games.component';
 
+import { SharedCommunicationService } from './shared-communication.service';
+
+
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService]
+  providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService, SharedCommunicationService]
 })
 export class AppComponent {
 
@@ -61,15 +64,22 @@ export class AppComponent {
   promise:any;
   soundFire:any;
 
-
+  //tempSpiller:string;
+  playerForStatistics : string;
 
   constructor(
     private playerService: PlayerService,
     private rankingItemService: RankingItemService,
     private gameService: GameService,
-    private tournamentGameRoundService: TournamentGameRoundService
+    private tournamentGameRoundService: TournamentGameRoundService,
+    private sharedCommunicationService: SharedCommunicationService
   ) {
       this.soundFire= new Audio("/assets/sounds/fire.wav");
+      sharedCommunicationService.playerForStatisticsChanged$.subscribe(
+        playerForStatistics => {
+          this.playerForStatistics = playerForStatistics;
+        }
+      )
   }
 
   ngOnInit(): void {
@@ -78,14 +88,14 @@ export class AppComponent {
 
   }
 
-  playerForStatistics() { return 'NotSetYet';}
+  //playerForStatistics() { return 'NotSetYet';}
   players() { return new Array()}
   selectedPlayers() { return 0;}
 
   ngAfterViewInit() {
     console.log("I AFTERVIEW START")
-      setTimeout(() => this.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
-      setTimeout(() => this.previousGamesComponent.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
+      //setTimeout(() => this.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
+      //setTimeout(() => this.previousGamesComponent.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
       setTimeout(() => this.players = () => this.availablePlayersComponent.players, 0);
       setTimeout(() => this.selectedPlayers = () => this.availablePlayersComponent.selectedPlayers, 0);
       console.log("I AFTERVIEW SLUT")
@@ -270,21 +280,25 @@ export class AppComponent {
       .then((strRes : string) => {
         //alert('Kamp registreret');
         this.tournamentGameRounds[roundIndex].tournamentGames[+table - 1].id = 0;
-        //NIKLHUSKthis.showGamesForPeriod(this.showMatchesPeriod);
+        //NIKLHUSK - Når ny kamp er indmeldt, skal vi vise nyt i bunden - this.showGamesForPeriod(this.showMatchesPeriod);
         this.showRankingForPeriod(this.showRankingPeriod);
-        this.getPlayerStatistics();
+        //NIKLHUSK - Når ny kamp, så også vise ny personlig statistick for valgt spiller - this.getPlayerStatistics();
       }).catch(err => {
         this.addNoGameGenerationAlert('Noget gik galt i forsøget på at indmelde resultatet af kampen på dette bord. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
 
       })
     }
 
-    getPlayerStatistics() {
-      this.individualResultsComponent.getPlayerStatistics();
-    }
+    //getPlayerStatistics() {
+    //  this.individualResultsComponent.getPlayerStatistics();
+    //}
 
-    setPlayerForStatistics(player: string) {
-      this.individualResultsComponent.setPlayerForStatistics(player);
+    //setPlayerForStatistics(player: string) {
+    //  this.individualResultsComponent.setPlayerForStatistics(player);
+    //}
+
+    changePlayerForStatistics(playerForStatistics: string) {
+      this.sharedCommunicationService.informAboutPlayerForStatisticsChanged(playerForStatistics);
     }
 
     // TOURNAMENTGAMES RELATED

@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Game } from './game';
 import { GameService } from './game.service';
 
+import { SharedCommunicationService } from './shared-communication.service';
+import { Subscription } from 'rxjs/Subscription';
+
 @Component({
   selector: 'previous-games',
   templateUrl: './previous-games.component.html',
@@ -16,11 +19,22 @@ export class PreviousGamesComponent implements OnInit {
 
   games: Game[];
 
-  playerForStatistics() { return 'NotSetYet';}
+  tempSpiller2 : string;
+
+  subscription: Subscription;
+
+  playerForStatistics : string;
 
   constructor(
-    private gameService: GameService
-  ) { }
+    private gameService: GameService,
+    private sharedCommunicationService: SharedCommunicationService
+  ) {
+    this.subscription = sharedCommunicationService.playerForStatisticsChanged$.subscribe(
+      playerForStatistics => {
+        this.playerForStatistics = playerForStatistics;
+      }
+    )
+  }
 
   ngOnInit() {
     this.showGamesForPeriod(this.showMatchesPeriod);
@@ -49,6 +63,10 @@ export class PreviousGamesComponent implements OnInit {
         console.log('Problemer med at hente kampene for perioden ' + period);
         this.addNoGamesAlert('Kunne ikke hente kampene for den valgte periode. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
       });
+  }
+
+  changePlayerForStatistics(playerForStatistics: string) {
+    this.sharedCommunicationService.informAboutPlayerForStatisticsChanged(playerForStatistics);
   }
 
 }
