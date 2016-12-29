@@ -1,62 +1,20 @@
 import { Component, Input } from '@angular/core';
 
-import { Player } from './player';
-import { PlayerService } from './player.service';
+import { Player } from '../model/player';
+import { PlayerService } from '../services/player.service';
 
-import { SharedCommunicationService } from './shared-communication.service';
+import { SharedCommunicationService } from '../services/shared-communication.service';
 
 @Component({
   selector: 'availablePlayers',
   styleUrls: ['./available-players.component.css'],
-  template: `
-      <div >
-        <table width="100%">
-          <tr valign="top">
-            <td valign="top" width="48%">
-              <div  *ngFor="let player of players; let i = index">
-                <label *ngIf="i < (players.length / 2)" [className]="'labelCheckbox'" [class.labelPlayerReady]="player.playerReady" ><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <input type="checkbox" class="checkbox-inline"  [ngModel]="player.playerReady" (change)="player.playerReady = ! player.playerReady;countSelectedPlayers()"> <span>{{player.name}}</span></label>
-              </div>
-            </td>
-            <td>&nbsp;&nbsp;</td>
-            <td valign="top" width="48%">
-              <div  *ngFor="let player of players; let i = index">
-                <label *ngIf="i >= (players.length / 2)" [className]="'labelCheckbox'" [class.labelPlayerReady]="player.playerReady" ><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <input type="checkbox" class="checkbox-inline"  [ngModel]="player.playerReady" (change)="player.playerReady = ! player.playerReady;countSelectedPlayers()"> <span>{{player.name}}</span></label>
-              </div>
-            </td>
-        </tr>
-      </table>
-
-        <div>Disse {{getNumberOfSelectedPlayers()}} spillere er valgt:</div>
-        <span *ngFor="let player of players">
-          <span *ngIf="player.playerReady"><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"></span >
-        </span>
-        <div style="padding-top:3px"><button (click)="deselectAll()">
-        Fravælg alle
-        </button>
-        </div>
-        <div>&nbsp;</div>
-        <div>
-          <label>Tilføj ny spiller:</label><br>
-          <input size="10" #playerName (keyUp.Enter)="add(playerName.value);playerName.value=''"/>
-          <button  (click)="add(playerName.value);playerName.value=''">
-          Tilføj spiller
-          </button>
-          <br>&nbsp;<br>
-          <alert *ngFor="let alert of playerAlerts;let i = index" [type]="alert.type" dismissOnTimeout="4000">
-            {{ alert?.msg }}
-          </alert>
-        </div>
-
-      </div>
-  `
+  templateUrl: './available-players.component.html'
 })
 
 export class AvailablePlayersComponent {
   players: Player[];
   selectedPlayers: Player[];
   newPlayer: Player;
-
-  //mySelectedPlayers: Player[];
 
   constructor (
         private playerService: PlayerService,
@@ -87,13 +45,6 @@ export class AvailablePlayersComponent {
    this.countSelectedPlayers();
   }
 
-/*
-  getMySelectedPlayers(): Player[] {
-    let playerReady = this.players.filter((x) => x.playerReady);
-    return playerReady;
-  }
-*/
-
   public playerAlerts:Array<Object> = [];
 
   public addPlayerAlert(msg: string, type: string):void {
@@ -101,17 +52,16 @@ export class AvailablePlayersComponent {
   }
 
   sortedPlayers() {
-
     var sortedArray: Player[] = this.players.sort((n1,n2) => {
-    if (n1.name.toLocaleLowerCase() > n2.name.toLocaleLowerCase()) {
-        return 1;
-    }
+      if (n1.name.toLocaleLowerCase() > n2.name.toLocaleLowerCase()) {
+          return 1;
+      }
 
-    if (n1.name.toLocaleLowerCase() < n2.name.toLocaleLowerCase()) {
-        return -1;
-    }
+      if (n1.name.toLocaleLowerCase() < n2.name.toLocaleLowerCase()) {
+          return -1;
+      }
 
-    return 0;
+      return 0;
     });
     return sortedArray;
   }
@@ -127,8 +77,6 @@ export class AvailablePlayersComponent {
     this.addPlayerAlert('Spilleren \'' + newPlayer.name + '\' er nu oprettet og markeret i listen', 'success');
   }
 
-
-
   countSelectedPlayers(): void {
      let playerReady = this.players.filter((x) => x.playerReady)
      this.selectedPlayers = playerReady;
@@ -143,7 +91,6 @@ export class AvailablePlayersComponent {
   }
 
   add(name: string): void {
-
     this.playerAlerts =  [];
     name = name.trim();
     if (!name) {
@@ -211,29 +158,15 @@ export class AvailablePlayersComponent {
         newMM='0'+mm;
     }
 
-
-    //2016-10-22 23:21:30.0
     newToday = yyyy+'/'+newMM+'/'+newDD + " " + newHOURS + ":" + newMINUTES + ":" + newSECONDS + "." + today.getMilliseconds();
-
 
     this.newPlayer = new Player(name, true, new Date(newToday));
 
     this.playerService.create(name, true, new Date(newToday))
     .then((strRes : string) => {
-    //alert(strRes);
        this.addThisPlayerToPlayers(this.newPlayer);
-
-      //this.players.push(player);
     }).catch(err  => {
-
         this.addPlayerAlert('Noget gik galt i forsøget på at oprette spilleren. Fejlen var: \'' + err + '\'', 'danger');
-
       })
     }
-
-  //showAddPlayerAlert(alert: string, type: string) {
-  //  this.availablePlayersComponent.addPlayerAlert(alert, type);
-  //}
-
-
 }

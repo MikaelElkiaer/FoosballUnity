@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { Player } from './player';
+import { Player } from '../model/player';
 
 //import { PLAYERS } from './mock.players';
 

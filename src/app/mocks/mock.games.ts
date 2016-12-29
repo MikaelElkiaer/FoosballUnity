@@ -1,4 +1,4 @@
-import { Game } from './game';
+import { Game } from '../model/game';
 
 export const GAMES: Game[] = [
   {id: 1, player_red_1: "ALSK" , player_red_2: "DWP", player_blue_1: "NIKL" , player_blue_2: "CANI" , lastUpdated: '2015-10-10', match_winner: "red" , winning_table: 1 , points_at_stake: 1 },

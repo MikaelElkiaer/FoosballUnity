@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { SharedCommunicationService } from './shared-communication.service';
+import { SharedCommunicationService } from '../services/shared-communication.service';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RankingItem } from './ranking-item';
-import { RankingItemService } from './ranking-item.service';
+import { RankingItem } from '../model/ranking-item';
+import { RankingItemService } from '../services/ranking-item.service';
 
 @Component({
   selector: 'RankingListComponent',

@@ -59,7 +59,6 @@ export class CountdownComponent {
     this.urlStart = "/assets/sounds/duke/" + random + ".wav";
     this.soundStart = new Audio(this.urlStart);
     this.soundStart.play();
-
   }
 
   showNewTime(t : number) {
@@ -93,5 +92,4 @@ export class CountdownComponent {
     this.timer = null;
     this.ticks = 0;
   }
-
 }

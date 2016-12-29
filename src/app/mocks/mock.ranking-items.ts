@@ -1,4 +1,4 @@
-import { RankingItem } from './ranking-item';
+import { RankingItem } from '../model/ranking-item';
 
 export const RANKINGITEMS: RankingItem[] = [
   {position: 1, name: 'NIKL' , points: 14, numberOfGames: 34},

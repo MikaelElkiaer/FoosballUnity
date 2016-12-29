@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { TournamentGame } from './tournament-game';
-import { TournamentGameRound } from './tournament-game-round';
+import { TournamentGame } from '../model/tournament-game';
+import { TournamentGameRound } from '../model/tournament-game-round';
 
 //import { TOURNAMENTGAMES } from './mock.tournament-games';
 
-import { Player } from './player';
+import { Player } from '../model/player';
 
 @Injectable()
 export class TournamentGameRoundService {

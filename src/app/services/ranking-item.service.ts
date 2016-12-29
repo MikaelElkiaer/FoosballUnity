@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
-import { RankingItem } from './ranking-item';
+import { RankingItem } from '../model/ranking-item';
 
-import { RANKINGITEMS } from './mock.ranking-items';
-import { RANKINGITEMSSAMLET } from './mock.ranking-items-samlet';
+import { RANKINGITEMS } from '../mocks/mock.ranking-items';
+import { RANKINGITEMSSAMLET } from '../mocks/mock.ranking-items-samlet';
 
 @Injectable()
 export class RankingItemService {

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Game } from './game';
-import { GameService } from './game.service';
+import { Game } from '../model/game';
+import { GameService } from '../services/game.service';
 
-import { SharedCommunicationService } from './shared-communication.service';
+import { SharedCommunicationService } from '../services/shared-communication.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({

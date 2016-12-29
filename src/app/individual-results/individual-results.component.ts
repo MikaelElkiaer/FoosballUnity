@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 
-import { Game } from './game';
-import { GameService } from './game.service';
-import { Player } from './player';
+import { Game } from '../model/game';
+import { GameService } from '../services/game.service';
+import { Player } from '../model/player';
 
-import { SharedCommunicationService } from './shared-communication.service';
+import { SharedCommunicationService } from '../services/shared-communication.service';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
