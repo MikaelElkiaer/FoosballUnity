@@ -86,18 +86,25 @@ export class IndividualResultsComponent {
 
   public noPlayerGamesAlerts:Array<Object> = [];
 
-  subscription : Subscription ;
+  subscriptionPlayerForStatistics : Subscription ;
+  subscriptionNewMatchReported : Subscription ;
 
   constructor(
     private gameService: GameService,
     private sharedCommunicationService: SharedCommunicationService
   ) {
-    this.subscription = sharedCommunicationService.playerForStatisticsChanged$.subscribe(
+    this.subscriptionPlayerForStatistics = sharedCommunicationService.playerForStatisticsChanged$.subscribe(
       playerForStatistics => {
         this.playerForStatistics = playerForStatistics;
         this.getPlayerStatistics();
       }
     )
+    this.subscriptionNewMatchReported = sharedCommunicationService.newMatchReported$.subscribe(
+      information => {
+        this.getPlayerStatistics();
+      }
+    )
+
 
   }
 

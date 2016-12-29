@@ -283,6 +283,7 @@ export class AppComponent {
         //NIKLHUSK - Når ny kamp er indmeldt, skal vi vise nyt i bunden - this.showGamesForPeriod(this.showMatchesPeriod);
         this.showRankingForPeriod(this.showRankingPeriod);
         //NIKLHUSK - Når ny kamp, så også vise ny personlig statistick for valgt spiller - this.getPlayerStatistics();
+        this.informAboutNewMatchReported(strRes);
       }).catch(err => {
         this.addNoGameGenerationAlert('Noget gik galt i forsøget på at indmelde resultatet af kampen på dette bord. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
 
@@ -299,6 +300,9 @@ export class AppComponent {
 
     changePlayerForStatistics(playerForStatistics: string) {
       this.sharedCommunicationService.informAboutPlayerForStatisticsChanged(playerForStatistics);
+    }
+    informAboutNewMatchReported(information : string) {
+      this.sharedCommunicationService.informAboutNewMatchReported(information);
     }
 
     // TOURNAMENTGAMES RELATED

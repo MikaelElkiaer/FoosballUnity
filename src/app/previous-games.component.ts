@@ -21,7 +21,8 @@ export class PreviousGamesComponent implements OnInit {
 
   tempSpiller2 : string;
 
-  subscription: Subscription;
+  subscriptionPlayerForStatistics : Subscription ;
+  subscriptionNewMatchReported : Subscription ;
 
   playerForStatistics : string;
 
@@ -29,9 +30,14 @@ export class PreviousGamesComponent implements OnInit {
     private gameService: GameService,
     private sharedCommunicationService: SharedCommunicationService
   ) {
-    this.subscription = sharedCommunicationService.playerForStatisticsChanged$.subscribe(
+    this.subscriptionPlayerForStatistics = sharedCommunicationService.playerForStatisticsChanged$.subscribe(
       playerForStatistics => {
         this.playerForStatistics = playerForStatistics;
+      }
+    )
+    this.subscriptionNewMatchReported = sharedCommunicationService.newMatchReported$.subscribe(
+      information => {
+        this.showGamesForPeriod(this.showMatchesPeriod);
       }
     )
   }
