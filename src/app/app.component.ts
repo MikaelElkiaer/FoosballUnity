@@ -18,6 +18,7 @@ import { TournamentGameRoundService } from './tournament-game-round.service';
 
 import { IndividualResultsComponent } from './individual-results.component';
 import { AvailablePlayersComponent } from './available-players.component';
+import { PreviousGamesComponent } from './previous-games.component';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -35,6 +36,9 @@ export class AppComponent {
   @ViewChild(AvailablePlayersComponent)
   private availablePlayersComponent: AvailablePlayersComponent;
 
+  @ViewChild(PreviousGamesComponent)
+  private previousGamesComponent: PreviousGamesComponent;
+
   oneRoundAtATime = true;
   title = 'app works!';
 
@@ -48,8 +52,8 @@ export class AppComponent {
   resultBackFromGettingPlayers = false;
   experiencedProblemWithGettingPlayers = false;
   showRankingPeriod = 'hour';
-  showMatchesPeriod = 'hour';
-  games: Game[];
+
+
 
   tempTournamentGameRounds: TournamentGameRound[];
   tournamentGameRounds: TournamentGameRound[];
@@ -71,7 +75,7 @@ export class AppComponent {
   ngOnInit(): void {
     this.getPlayers();
     this.getRankingItems();
-    this.showGamesForPeriod(this.showMatchesPeriod);
+
   }
 
   playerForStatistics() { return 'NotSetYet';}
@@ -81,6 +85,7 @@ export class AppComponent {
   ngAfterViewInit() {
     console.log("I AFTERVIEW START")
       setTimeout(() => this.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
+      setTimeout(() => this.previousGamesComponent.playerForStatistics = () => this.individualResultsComponent.playerForStatistics, 0);
       setTimeout(() => this.players = () => this.availablePlayersComponent.players, 0);
       setTimeout(() => this.selectedPlayers = () => this.availablePlayersComponent.selectedPlayers, 0);
       console.log("I AFTERVIEW SLUT")
@@ -249,18 +254,7 @@ export class AppComponent {
     }
 
 
-    // GAMES RELATED
-   showGamesForPeriod(period : string): void {
-      this.noGamesAlerts = [];
-      this.showMatchesPeriod = period;
-      this.games  = null;
-      this.gameService.getGames(period).then(
-        (games : Game[] ) => this.games = games)
-        .catch(err => {
-          console.log('Problemer med at hente kampene for perioden ' + period);
-          this.addNoGamesAlert('Kunne ikke hente kampene for den valgte periode. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-        });
-    }
+
 
 
 
@@ -276,7 +270,7 @@ export class AppComponent {
       .then((strRes : string) => {
         //alert('Kamp registreret');
         this.tournamentGameRounds[roundIndex].tournamentGames[+table - 1].id = 0;
-        this.showGamesForPeriod(this.showMatchesPeriod);
+        //NIKLHUSKthis.showGamesForPeriod(this.showMatchesPeriod);
         this.showRankingForPeriod(this.showRankingPeriod);
         this.getPlayerStatistics();
       }).catch(err => {
@@ -402,11 +396,6 @@ export class AppComponent {
       this.noRankingListAlerts.push({msg: msg, type: type, closable: false});
     }
 
-    public noGamesAlerts:Array<Object> = [];
 
-
-    public addNoGamesAlert(msg: string, type: string):void {
-      this.noGamesAlerts.push({msg: msg, type: type, closable: false});
-    }
 
 }

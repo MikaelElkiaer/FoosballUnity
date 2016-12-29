@@ -1,0 +1,47 @@
+<div >Farvers betydning: <span class="bg-success">Grøn: Vinderhold</span> - <span class="bg-warning">Gul: Uafgjort</span> - <span class="bg-danger">Rød: Taberhold</span></div>
+<div>&nbsp;</div>
+<tabset>
+  <tab heading='Time' (select)="showGamesForPeriod('hour')"></tab>
+  <tab heading='Døgn' (select)="showGamesForPeriod('day')"></tab>
+  <tab heading='Uge' (select)="showGamesForPeriod('week')"></tab>
+  <tab heading='Måned' (select)="showGamesForPeriod('month')"></tab>
+  <tab heading='Samlet' (select)="showGamesForPeriod('alltime')"></tab>
+</tabset>
+<alert *ngFor="let alert of noGamesAlerts;let i = index" [type]="alert.type">
+  {{ alert?.msg }}
+</alert>
+<div>
+  <table class="table table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Kamp-id</th>
+        <th>Tidspunkt</th>
+        <th>Vinder</th>
+        <th>(Uafgjort)</th>
+        <th>Taber</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let game of games; let i = index">
+        <td>{{game.id}}</td>
+        <td>{{game.lastUpdated}} </td>
+
+        <td *ngIf="game.match_winner == 'draw'" align="center"></td>
+        <td *ngIf="game.match_winner == 'draw'" align="left" class="warning"><img [class.selectedPersonBorder]="playerForStatistics()== game.player_red_1"  [src]=getImageUrl(game.player_red_1) (click)="NIKLHUSK - Her skal der kaldes op fra previous games og op til app component og så videre ned til individual results - (også de mange andre steder) setPlayerForStatistics(game.player_red_1);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img *ngIf="game.player_red_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics()== game.player_red_2"  [src]=getImageUrl(game.player_red_2) (click)="setPlayerForStatistics(game.player_red_2);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_red_1}} <span *ngIf="game.player_red_2 != 'null'">og {{game.player_red_2}}</span><br><img [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_1"  [src]=getImageUrl(game.player_blue_1) (click)="setPlayerForStatistics(game.player_blue_1);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_blue_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_2"  [src]=getImageUrl(game.player_blue_2) (click)="setPlayerForStatistics(game.player_blue_2);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_blue_1}} <span *ngIf="game.player_blue_2 != 'null'">og {{game.player_blue_2}}</span></td>
+        <td *ngIf="game.match_winner == 'draw'" align="center"></td>
+
+
+        <td *ngIf="game.match_winner == 'red'" align="left" class="success"><img [class.selectedPersonBorder]="playerForStatistics()== game.player_red_1"  [src]=getImageUrl(game.player_red_1) (click)="setPlayerForStatistics(game.player_red_1);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_red_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics()== game.player_red_2"  [src]=getImageUrl(game.player_red_2) (click)="setPlayerForStatistics(game.player_red_2);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_red_1}} <span *ngIf="game.player_red_2 != 'null'">og {{game.player_red_2}}</span> (<strong>+{{game.points_at_stake}}</strong> point)</td>
+        <td *ngIf="game.match_winner == 'red'" align="center"></td>
+        <td *ngIf="game.match_winner == 'red'" align="left" class="danger"><img [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_1"  [src]=getImageUrl(game.player_blue_1) (click)="setPlayerForStatistics(game.player_blue_1);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_blue_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_2"  [src]=getImageUrl(game.player_blue_2) (click)="setPlayerForStatistics(game.player_blue_2);getPlayerStatistics();"   onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_blue_1}} <span *ngIf="game.player_blue_2 != 'null'">og {{game.player_blue_2}}</span>  (<strong>-{{game.points_at_stake}}</strong> point)</td>
+
+
+        <td *ngIf="game.match_winner == 'blue'" align="left" class="success"><img [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_1"  [src]=getImageUrl(game.player_blue_1) (click)="setPlayerForStatistics(game.player_blue_1);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_blue_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics()== game.player_blue_2"  [src]=getImageUrl(game.player_blue_2) (click)="setPlayerForStatistics(game.player_blue_2);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_blue_1}} <span *ngIf="game.player_blue_2 != 'null'">og {{game.player_blue_2}}</span> (<strong>+{{game.points_at_stake}}</strong> point)</td>
+        <td *ngIf="game.match_winner == 'blue'" align="center"></td>
+        <td *ngIf="game.match_winner == 'blue'" align="left" class="danger"><img [class.selectedPersonBorder]="playerForStatistics()== game.player_red_1"  [src]=getImageUrl(game.player_red_1) (click)="setPlayerForStatistics(game.player_red_1);getPlayerStatistics();"  onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> <img  *ngIf="game.player_red_2 != 'null'" [class.selectedPersonBorder]="playerForStatistics()== game.player_red_2"  [src]=getImageUrl(game.player_red_2) (click)="setPlayerForStatistics(game.player_red_2);getPlayerStatistics();"   onError="this.src = 'assets/img/Wildcard.jpg'" width="24" height="30"> {{game.player_red_1}} <span *ngIf="game.player_red_2 != 'null'">og {{game.player_red_2}}</span> (<strong>-{{game.points_at_stake}}</strong> point)</td>
+
+      </tr>
+
+    </tbody>
+  </table>
+</div>
