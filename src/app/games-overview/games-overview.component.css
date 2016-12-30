@@ -58,3 +58,35 @@
   border-style: solid;
   border-color: 2px;
 }
+
+.intensePurple {
+  border-color: #564AA3;
+  border-style: solid;
+  border-color: 2px;
+}
+
+.intenseBlack {
+  border-color: black;
+  border-style: solid;
+  border-color: 2px;
+}
+
+.btn-purple {
+  background-color: #564AA3;
+  color: #fff;
+  border-color: #3F3197;
+}
+
+.btn-black {
+  background-color: black;
+  color: #fff;
+  border-color: #383E4C
+}
+
+.panel-purple {
+  background-color: #D7D3FF;
+}
+
+.panel-black {
+  background-color: #C7CAD6;
+}

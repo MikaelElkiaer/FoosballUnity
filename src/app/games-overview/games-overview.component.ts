@@ -170,7 +170,7 @@ export class GamesOverviewComponent implements OnInit {
   getTournamentGameRounds(): void {
     this.noGameGenerationAlerts = [];
 
-    this.tournamentGameRoundService.getTournamentGameRounds(2, this.selectedPlayers).then((tournamentGameRounds : TournamentGameRound[] ) =>
+    this.tournamentGameRoundService.getTournamentGameRounds(3, this.selectedPlayers).then((tournamentGameRounds : TournamentGameRound[] ) =>
     {
 
      this.tempTournamentGameRounds = tournamentGameRounds;
