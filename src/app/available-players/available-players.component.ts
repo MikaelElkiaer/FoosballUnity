@@ -27,7 +27,7 @@ export class AvailablePlayersComponent {
     if (playerName == null) {
       return "assets/img/Wildcard.jpg";
     } else {
-      return "assets/img/" + playerName + ".jpg";
+      return "assets/img/" + playerName.toLocaleLowerCase() + ".jpg";
     }
   }
 

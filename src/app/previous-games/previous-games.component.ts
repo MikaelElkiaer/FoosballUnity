@@ -50,7 +50,7 @@ export class PreviousGamesComponent implements OnInit {
     if (playerName == null) {
       return "assets/img/Wildcard.jpg";
     } else {
-      return "assets/img/" + playerName + ".jpg";
+      return "assets/img/" + playerName.toLocaleLowerCase() + ".jpg";
     }
   }
 
