@@ -10,6 +10,8 @@ import { Player } from '../model/player';
 
 import { TournamentGame } from '../model/tournament-game';
 
+import { ConfigurationItem } from '../model/configuration-item';
+
 import { TournamentGameRound } from '../model/tournament-game-round';
 import { TournamentGameRoundService } from '../services/tournament-game-round.service';
 
@@ -36,6 +38,7 @@ export class GamesOverviewComponent implements OnInit {
   playerForStatistics : string;
 
   selectedPlayers: Player[];
+  configurationItems : ConfigurationItem[];
 
   public noGameGenerationAlerts:Array<Object> = [];
 
@@ -72,6 +75,10 @@ export class GamesOverviewComponent implements OnInit {
     } else {
       return this.selectedPlayers.length.toString();
     }
+  }
+
+  setConfigurationItems(configurationItems : ConfigurationItem[]) {
+    this.configurationItems = configurationItems;
   }
 
   getImageUrl(playerName : string) : string {
@@ -169,8 +176,15 @@ export class GamesOverviewComponent implements OnInit {
 
   getTournamentGameRounds(): void {
     this.noGameGenerationAlerts = [];
+    // Default is 1 table
+    var numberOfTables = 1;
+    for (let configurationItem of this.configurationItems) {
+      if (configurationItem.name == "numberOfTables") {
+        numberOfTables = +configurationItem.value;
+      }
+    }
 
-    this.tournamentGameRoundService.getTournamentGameRounds(3, this.selectedPlayers).then((tournamentGameRounds : TournamentGameRound[] ) =>
+    this.tournamentGameRoundService.getTournamentGameRounds(numberOfTables, this.selectedPlayers).then((tournamentGameRounds : TournamentGameRound[] ) =>
     {
 
      this.tempTournamentGameRounds = tournamentGameRounds;

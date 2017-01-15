@@ -17,6 +17,9 @@ import { TournamentGame } from './model/tournament-game';
 import { TournamentGameRound } from './model/tournament-game-round';
 import { TournamentGameRoundService } from './services/tournament-game-round.service';
 
+import { ConfigurationItem } from './model/configuration-item';
+import { ConfigurationItemService } from './services/configuration-item.service';
+
 import { IndividualResultsComponent } from './individual-results/individual-results.component';
 import { AvailablePlayersComponent } from './available-players/available-players.component';
 import { PreviousGamesComponent } from './previous-games/previous-games.component';
@@ -30,12 +33,15 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService, SharedCommunicationService]
+  providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService, SharedCommunicationService, ConfigurationItemService]
 })
 export class AppComponent {
 
   @ViewChild(AvailablePlayersComponent)
   private availablePlayersComponent: AvailablePlayersComponent;
+
+  @ViewChild(GamesOverviewComponent)
+  private gamesOverviewComponent: GamesOverviewComponent;
 
   resultBackFromGettingPlayers = false;
   experiencedProblemWithGettingPlayers = false;
@@ -52,7 +58,8 @@ export class AppComponent {
     private rankingItemService: RankingItemService,
     private gameService: GameService,
     private tournamentGameRoundService: TournamentGameRoundService,
-    private sharedCommunicationService: SharedCommunicationService
+    private sharedCommunicationService: SharedCommunicationService,
+    private configurationItemService: ConfigurationItemService
   ) {
       sharedCommunicationService.playerForStatisticsChanged$.subscribe(
         playerForStatistics => {
@@ -68,6 +75,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.getPlayers();
+    this.getConfigurationItems();
   }
 
   ngAfterViewInit() {
@@ -88,4 +96,16 @@ export class AppComponent {
        return Promise.reject(err.message || err);
      });
    }
+
+   getConfigurationItems(): void {
+       this.configurationItemService.getConfigurationItems().then(
+      (configurationItems : ConfigurationItem[]) =>
+      {
+        this.gamesOverviewComponent.setConfigurationItems(configurationItems);
+      }
+    ).catch(err => {
+        console.log("Damn, an error occured, when getting configuration items")
+        return Promise.reject(err.message || err);
+      });
+    }
 }

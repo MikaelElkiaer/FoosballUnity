@@ -25,7 +25,7 @@ import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 export class CountdownComponent {
 
-  playingTime = 30;
+  playingTime = 120;
   remainingTime = this.playingTime;
   ticks = 0;
   progressbarType = "info";
