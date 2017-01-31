@@ -40,6 +40,10 @@ export class GamesOverviewComponent implements OnInit {
   selectedPlayers: Player[];
   configurationItems : ConfigurationItem[];
 
+  nameTable1 = "";
+  nameTable2 = "";
+  nameTable3 = "";
+
   public noGameGenerationAlerts:Array<Object> = [];
 
   public addNoGameGenerationAlert(msg: string, type: string):void {
@@ -79,6 +83,18 @@ export class GamesOverviewComponent implements OnInit {
 
   setConfigurationItems(configurationItems : ConfigurationItem[]) {
     this.configurationItems = configurationItems;
+
+    for (let configurationItem of this.configurationItems) {
+      if (configurationItem.name == "nameTable1") {
+        this.nameTable1 = configurationItem.value;
+      }
+      if (configurationItem.name == "nameTable2") {
+        this.nameTable2 = configurationItem.value;
+      }
+      if (configurationItem.name == "nameTable3") {
+        this.nameTable3 = configurationItem.value;
+      }
+    }
   }
 
   getImageUrl(playerName : string) : string {
@@ -178,6 +194,7 @@ export class GamesOverviewComponent implements OnInit {
     this.noGameGenerationAlerts = [];
     // Default is 1 table
     var numberOfTables = 1;
+
     for (let configurationItem of this.configurationItems) {
       if (configurationItem.name == "numberOfTables") {
         numberOfTables = +configurationItem.value;
