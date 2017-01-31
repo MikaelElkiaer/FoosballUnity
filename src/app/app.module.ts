@@ -17,7 +17,6 @@ import { TabsModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-import { TrainingOverviewComponent } from './training-overview/training-overview.component';
 
 @NgModule({
   declarations: [
@@ -27,8 +26,7 @@ import { TrainingOverviewComponent } from './training-overview/training-overview
     AvailablePlayersComponent,
     PreviousGamesComponent,
     RankingListComponent,
-    GamesOverviewComponent,
-    TrainingOverviewComponent
+    GamesOverviewComponent
   ],
   imports: [
     BrowserModule,
