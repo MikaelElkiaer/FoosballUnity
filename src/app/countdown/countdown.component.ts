@@ -6,6 +6,10 @@ import { TimerObservable } from "rxjs/observable/TimerObservable";
 
 import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
 
+import {Http} from '@angular/http';
+
+import { TimerAction } from '../model/timer-action';
+
 @Component({
   selector: 'countdown',
   template: `
@@ -40,12 +44,29 @@ export class CountdownComponent {
   sound15Seconds:any;
 
   urlStart:string;
+  ta : TimerAction;
+  lastSeenlastRequestedTimerStart = null;
 
-  constructor() {
+  constructor(http: Http) {
     this.soundFinish = new Audio("/assets/sounds/finish.wav");
     this.sound1Minute= new Audio("/assets/sounds/1minute.wav");
     this.sound30Seconds= new Audio("/assets/sounds/30seconds.wav");
     this.sound15Seconds= new Audio("/assets/sounds/15seconds.wav");
+
+    Observable.interval(1000).switchMap(() => http.get('http://localhost:5050/timer')).map((data) => data.json())
+      .subscribe((data) => {
+       this.ta = data[0];
+       //console.log("tid: " + this.ta.lastRequestedTimerStart)
+       if (this.lastSeenlastRequestedTimerStart == null) {
+         this.lastSeenlastRequestedTimerStart = this.ta.lastRequestedTimerStart;
+
+       } else {
+         if (this.lastSeenlastRequestedTimerStart != this.ta.lastRequestedTimerStart) {
+           this.startCountdownTimer();
+           this.lastSeenlastRequestedTimerStart = this.ta.lastRequestedTimerStart;
+         }
+       }
+    });
   }
 
   startCountdownTimer() {
