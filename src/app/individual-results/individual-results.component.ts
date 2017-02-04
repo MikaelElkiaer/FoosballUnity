@@ -23,7 +23,7 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
       {{ alert?.msg }}
     </alert>
     <div style="display: block;" >
-      <canvas width="500" height="400" *ngIf="lineChartData.length > 0" baseChart
+      <canvas width="400" height="400" *ngIf="lineChartData.length > 0" baseChart
                   [datasets]="lineChartData"
                   [labels]="lineChartLabels"
                   [options]="lineChartOptions"

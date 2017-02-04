@@ -12,7 +12,8 @@ import { Player } from '../model/player';
 
 @Injectable()
 export class TournamentGameRoundService {
-  private tournamentGameRoundsUrl = 'http://localhost:5050/tournament/lastFirstTournament/';
+  //private tournamentGameRoundsUrl = 'http://localhost:5050/tournament/lastFirstTournament/';
+  private tournamentGameRoundsUrl = 'http://localhost:5050/tournament/awesomeAlgorithmTournament/';
 
   private headers = new Headers({'Content-Type': 'application/json'});
   private samletTekst = '';
