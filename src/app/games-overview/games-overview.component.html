@@ -43,7 +43,7 @@
                     <tr>
                       <td>
                         <div class="img_container" align="center">
-                          <img class="fodboldbordBillede" src="assets/img/fussball-table-nummer-{{i + 1}}.png" heigth="75" width="400">
+                          <img class="fodboldbordBillede" src="assets/img/fussball-table-nummer-{{i + 1}}.png" heigth="75" width="433">
                           <input *ngIf="game.id != 0" type="button" class="btn btn-default uafgjortButton" [class.disabled]="game.id == 0"   value="Uafgjort (0 point)" (click)="indmeldResultat(j, game.player_red_1, game.player_red_2, game.player_blue_1, game.player_blue_2, (i + 1), 'draw', game.lastUpdated, 0)">
                         </div>
                       </td>
