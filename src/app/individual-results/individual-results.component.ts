@@ -4,6 +4,9 @@ import { Game } from '../model/game';
 import { GameService } from '../services/game.service';
 import { Player } from '../model/player';
 
+import { RankingItem } from '../model/ranking-item';
+import { RankingItemService } from '../services/ranking-item.service';
+
 import { SharedCommunicationService } from '../services/shared-communication.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -85,6 +88,7 @@ export class IndividualResultsComponent implements OnInit  {
   subscriptionNewMatchReported : Subscription ;
 
   constructor(
+    private rankingItemService: RankingItemService,
     private gameService: GameService,
     private sharedCommunicationService: SharedCommunicationService
   ) {
@@ -124,53 +128,79 @@ export class IndividualResultsComponent implements OnInit  {
     this.noPlayerGamesAlerts = [];
     this.playerGames = null;
     this.playerPoints = [];
+    var endPointsForPlayer;
+    endPointsForPlayer = 0;
 
-    this.gameService.getGames(this.playerForStatistics).then(
-      (games : Game[] ) => {
-        this.playerGames = games;
-        var playerGamesInReverse = this.playerGames.reverse();
-        var playerTeam;
-        var points;
-        this.playerPoints = [];
-        this.playerPoints.push(0);
-        for (let game of this.playerGames) {
-          if (game.player_red_1 == this.playerForStatistics || game.player_red_2 == this.playerForStatistics ) {
-            playerTeam = 'red';
-          } else {
-            playerTeam = 'blue';
-          }
-          if (game.match_winner == 'red' && playerTeam == 'red') {
-            points = game.points_at_stake;
-            } else if (game.match_winner == 'red' && playerTeam == 'blue') {
-            points = -1* game.points_at_stake;
-          } else if (game.match_winner == 'blue' && playerTeam == 'blue') {
-            points = game.points_at_stake;
-          } else if (game.match_winner == 'blue' && playerTeam == 'red') {
-            points = -1* game.points_at_stake;
-          } else {
-            points = 0;
-          }
-          var currentPoints = this.playerPoints[this.playerPoints.length - 1];
-          this.playerPoints.push(points + currentPoints);
+    this.rankingItemService.getRankingItems('alltime').
+    then((rankingItems : RankingItem[]) => {
+
+      for (let rankingItem of rankingItems) {
+        if (rankingItem.name == this.playerForStatistics) {
+          endPointsForPlayer = rankingItem.points;
+          break;
         }
+      }
 
-        let _lineChartData:Array<any> = new Array(1);
+        this.gameService.getGames(this.playerForStatistics).then(
+          (games : Game[] ) => {
+            this.playerGames = games;
+            var playerGamesInReverse = this.playerGames.reverse();
+            var playerTeam;
+            var points;
+            this.playerPoints = [];
+            this.playerPoints.push(0);
+            for (let game of this.playerGames) {
+              if (game.player_red_1 == this.playerForStatistics || game.player_red_2 == this.playerForStatistics ) {
+                playerTeam = 'red';
+              } else {
+                playerTeam = 'blue';
+              }
+              if (game.match_winner == 'red' && playerTeam == 'red') {
+                points = game.points_at_stake;
+                } else if (game.match_winner == 'red' && playerTeam == 'blue') {
+                points = -1* game.points_at_stake;
+              } else if (game.match_winner == 'blue' && playerTeam == 'blue') {
+                points = game.points_at_stake;
+              } else if (game.match_winner == 'blue' && playerTeam == 'red') {
+                points = -1* game.points_at_stake;
+              } else {
+                points = 0;
+              }
+              var currentPoints = this.playerPoints[this.playerPoints.length - 1];
+              this.playerPoints.push(points + currentPoints);
+            }
 
-        _lineChartData[0] = {data: new Array(this.playerPoints.length), label: this.playerForStatistics};
-        for (let j = 0; j < this.playerPoints.length; j++) {
-          _lineChartData[0].data[j] = this.playerPoints[j];
+            var diff = 0;
+            if (this.playerPoints.length > 0) {
+              diff = endPointsForPlayer - this.playerPoints[this.playerPoints.length - 1];
+            }
 
-        }
-        this.lineChartLabels = [''];
+            for (var j = 0; j < this.playerPoints.length; j++) {
+              this.playerPoints[j] = this.playerPoints[j] + diff;
+            }
 
-        for (let k = 1; k <= playerGamesInReverse.length; k++) {
-          this.lineChartLabels.push("#" + playerGamesInReverse[k - 1].id);
-        }
-        this.lineChartData = _lineChartData;
-      } )
-      .catch(err => {
-        console.log('Problemer med at hente spiller-kampene for spilleren ' + this.playerForStatistics);
-        this.addNoPlayerGamesAlert('Kunne ikke hente spiller-kampene for spilleren ' + this.playerForStatistics + '. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-      });
+            let _lineChartData:Array<any> = new Array(1);
+
+            _lineChartData[0] = {data: new Array(this.playerPoints.length), label: this.playerForStatistics};
+            for (let j = 0; j < this.playerPoints.length; j++) {
+              _lineChartData[0].data[j] = this.playerPoints[j];
+
+            }
+            this.lineChartLabels = [''];
+
+
+            for (let k = 1; k <= playerGamesInReverse.length; k++) {
+              this.lineChartLabels.push("#" + playerGamesInReverse[k - 1].id);
+            }
+            this.lineChartData = _lineChartData;
+          } )
+          .catch(err => {
+            console.log('Problemer med at hente spiller-kampene for spilleren ' + this.playerForStatistics);
+            this.addNoPlayerGamesAlert('Kunne ikke hente spiller-kampene for spilleren ' + this.playerForStatistics + '. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
+          });
+        }).catch(err => {
+          console.log('Problemer med at hente spiller-kampene for spilleren ' + this.playerForStatistics);
+          this.addNoPlayerGamesAlert('Kunne ikke hente spiller-kampene for spilleren ' + this.playerForStatistics + '. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
+        });
   }
 }
