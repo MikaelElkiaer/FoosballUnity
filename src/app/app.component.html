@@ -40,6 +40,12 @@
             <RankingListComponent></RankingListComponent>
         </div>
       </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading"><h4>Seneste individuelle resultater</h4></div>
+        <div class="panel-body">
+          <individualResults [players]="players()"></individualResults>
+        </div>
+      </div>
     </div>
   </div>
   </div>
@@ -57,12 +63,6 @@
       </div>
 
       <div class="col-sm-3">
-        <div class="panel panel-info">
-          <div class="panel-heading"><h4>Seneste individuelle resultater</h4></div>
-          <div class="panel-body">
-            <individualResults [players]="players()"></individualResults>
-          </div>
-        </div>
         <div class="panel panel-info">
           <div class="panel-heading"><h4>Træningsflid</h4></div>
           <div class="panel-body">
