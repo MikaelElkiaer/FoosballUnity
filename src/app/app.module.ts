@@ -9,6 +9,7 @@ import { IndividualResultsComponent } from './individual-results/individual-resu
 import { AvailablePlayersComponent } from './available-players/available-players.component';
 import { PreviousGamesComponent } from './previous-games/previous-games.component';
 import { RankingListComponent } from './ranking-list/ranking-list.component';
+import { FixedRankingListComponent } from './fixed-ranking-list/fixed-ranking-list.component';
 import { GamesOverviewComponent } from './games-overview/games-overview.component';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
@@ -27,6 +28,7 @@ import { TrainingOverviewComponent } from './training-overview/training-overview
     AvailablePlayersComponent,
     PreviousGamesComponent,
     RankingListComponent,
+    FixedRankingListComponent,
     GamesOverviewComponent,
     TrainingOverviewComponent
   ],
