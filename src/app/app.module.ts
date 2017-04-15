@@ -11,6 +11,7 @@ import { PreviousGamesComponent } from './previous-games/previous-games.componen
 import { RankingListComponent } from './ranking-list/ranking-list.component';
 import { FixedRankingListComponent } from './fixed-ranking-list/fixed-ranking-list.component';
 import { GamesOverviewComponent } from './games-overview/games-overview.component';
+import { RfidRegistrationComponent } from './rfid-registration/rfid-registration.component';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { ButtonsModule } from 'ng2-bootstrap/ng2-bootstrap';
@@ -30,7 +31,8 @@ import { TrainingOverviewComponent } from './training-overview/training-overview
     RankingListComponent,
     FixedRankingListComponent,
     GamesOverviewComponent,
-    TrainingOverviewComponent
+    TrainingOverviewComponent,
+    RfidRegistrationComponent
   ],
   imports: [
     BrowserModule,

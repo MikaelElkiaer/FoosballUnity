@@ -25,6 +25,8 @@ import { AvailablePlayersComponent } from './available-players/available-players
 import { PreviousGamesComponent } from './previous-games/previous-games.component';
 import { GamesOverviewComponent } from './games-overview/games-overview.component';
 
+import { RfidRegistrationComponent } from  './rfid-registration/rfid-registration.component';
+
 import { SharedCommunicationService } from './services/shared-communication.service';
 
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';

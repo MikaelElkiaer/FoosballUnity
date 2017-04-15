@@ -27,7 +27,7 @@ export class PlayerService {
 
   create(name : string, playerReady: boolean, created: Date ): Promise<string> {
     return this.http
-      .post(this.playersUrl, "[" + JSON.stringify({name:name, playerReady:playerReady, oprettet:'2016-10-10 21:46:36.0'}) + "]",
+      .post(this.playersUrl, "[" + JSON.stringify({name:name, playerReady:playerReady, oprettet:'2016-10-10 21:46:36.0', registeredRFIDTag:''}) + "]",
       {headers:this.headers})
       .toPromise()
       .then(res => res.toString())

@@ -9,12 +9,14 @@ export class SharedCommunicationService {
   private newMatchReportedSource = new Subject<string>();
   // Observable array ressources
   private selectedPlayersChangedSource = new Subject<Player[]>();
+  private registeredPlayerChangedSource = new Subject<Player>();
 
   // Observable string streams
   playerForStatisticsChanged$ = this.playerForStatisticsChangedSource.asObservable();
   newMatchReported$ = this.newMatchReportedSource.asObservable();
   // Observable array streams
   selectedPlayersChanged$ = this.selectedPlayersChangedSource.asObservable();
+  registeredPlayerChanged$ = this.registeredPlayerChangedSource.asObservable();
 
   // Service message command
   informAboutPlayerForStatisticsChanged(playerForStatistics: string) {
@@ -27,5 +29,9 @@ export class SharedCommunicationService {
 
   informAboutSelectedPlayersChanged(selectedPlayers: Player[]) {
     this.selectedPlayersChangedSource.next(selectedPlayers);
+  }
+
+  informAboutRegisteredPlayerChanged(registeredPlayer: Player) {
+    this.registeredPlayerChangedSource.next(registeredPlayer);
   }
 }

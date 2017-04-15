@@ -5,6 +5,12 @@ import { PlayerService } from '../services/player.service';
 
 import { SharedCommunicationService } from '../services/shared-communication.service';
 
+import {Http} from '@angular/http';
+
+import { Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Rx';
+import { TimerObservable } from "rxjs/observable/TimerObservable";
+
 @Component({
   selector: 'availablePlayers',
   styleUrls: ['./available-players.component.css'],
@@ -15,11 +21,35 @@ export class AvailablePlayersComponent {
   players: Player[];
   selectedPlayers: Player[];
   newPlayer: Player;
+  public rfidName : any;
+  soundCheckin : any;
+  soundCheckout : any;
+  soundError: any;
 
   constructor (
         private playerService: PlayerService,
-        private sharedCommunicationService: SharedCommunicationService
+        private sharedCommunicationService: SharedCommunicationService,
+        private http: Http
   ) {
+
+    this.soundCheckin = new Audio("/assets/sounds/workout-started.wav");
+    this.soundCheckout= new Audio("/assets/sounds/workout-complete.wav");
+    this.soundError= new Audio("/assets/sounds/error.wav");
+
+    Observable.interval(500).switchMap(() => http.get('http://localhost:5050/registration')).map((data) => data.json())
+      .subscribe((data) => {
+       this.inverseSelectionForPlayer(data);
+    });
+
+/*
+    //Kode til at reagere på det (fjern det herfra senere)
+    sharedCommunicationService.registeredPlayerChanged$.subscribe(
+      registeredPlayer => {
+        this.inverseSelectionForPlayer(registeredPlayer);
+      }
+
+    )
+    */
 
   }
 
@@ -81,6 +111,39 @@ export class AvailablePlayersComponent {
      let playerReady = this.players.filter((x) => x.playerReady)
      this.selectedPlayers = playerReady;
      this.sharedCommunicationService.informAboutSelectedPlayersChanged(this.selectedPlayers);
+   }
+
+   inverseSelectionForPlayer(player : Player) : void {
+     if (player.registeredRFIDTag != "") {
+       let found = false;
+       for (let tempPlayer of this.players) {
+         if (tempPlayer.name == player.name) {
+           found = true;
+           tempPlayer.playerReady = !tempPlayer.playerReady;
+           player.playerReady = tempPlayer.playerReady;
+           if (player.playerReady) {
+             this.soundCheckin.play();
+           } else {
+             this.soundCheckout.play();
+           }
+         }
+       }
+
+
+
+      this.changeRegisteredPlayer(player);
+
+      if (found == false) {
+         this.soundError.play();
+       } else {
+        this.countSelectedPlayers()
+       }
+     }
+
+   }
+
+   changeRegisteredPlayer(player: Player) {
+     this.sharedCommunicationService.informAboutRegisteredPlayerChanged(player);
    }
 
   deselectAll() {
@@ -160,7 +223,7 @@ export class AvailablePlayersComponent {
 
     newToday = yyyy+'/'+newMM+'/'+newDD + " " + newHOURS + ":" + newMINUTES + ":" + newSECONDS + "." + today.getMilliseconds();
 
-    this.newPlayer = new Player(name, true, new Date(newToday));
+    this.newPlayer = new Player(name, true, new Date(newToday), "");
 
     this.playerService.create(name, true, new Date(newToday))
     .then((strRes : string) => {
