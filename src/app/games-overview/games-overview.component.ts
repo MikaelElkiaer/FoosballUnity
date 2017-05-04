@@ -17,6 +17,8 @@ import { TournamentGameRoundService } from '../services/tournament-game-round.se
 
 import { SharedCommunicationService } from '../services/shared-communication.service';
 
+import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
+
 @Component({
   selector: 'games-overview',
   templateUrl: './games-overview.component.html',
@@ -27,6 +29,10 @@ export class GamesOverviewComponent implements OnInit {
   soundFire:any;
   oneRoundAtATime = true;
   intenseArray: string[];
+
+  pointsToWinForTopTeam: string[];
+  pointsToWinForBottomTeam: string[];
+
 
   rankingItemsForIntense: RankingItem[];
   currentPositionForPlayer: number[];
@@ -97,54 +103,80 @@ export class GamesOverviewComponent implements OnInit {
     var intenseFound = false;
     if (this.oneRoundAtATime) {
         this.intenseArray = new Array(this.tempTournamentGameRounds[0].tournamentGames.length);
+        this.pointsToWinForTopTeam = new Array(this.tempTournamentGameRounds[0].tournamentGames.length);
+        this.pointsToWinForBottomTeam = new Array(this.tempTournamentGameRounds[0].tournamentGames.length);
         this.currentPointsForPlayer = new Array();
         this.currentPositionForPlayer = new Array();
         var firstTournamentGameRound = this.tempTournamentGameRounds[0];
 
       this.rankingItemService.getRankingItems('alltime').
       then((rankingItems : RankingItem[]) => {
+
           this.rankingItemsForIntense = rankingItems;
 
           var i = 0;
           for (let game of firstTournamentGameRound.tournamentGames) {
-            // OLD Variables for counting points for teams
-            var combinedPointsTeamRed = 0;
-            var combinedPointsTeamBlue = 0;
 
-            // Look at all rankingItems
-            for (let rankingItem of this.rankingItemsForIntense) {
-              //If the rankingItem relates to our players
-              if (rankingItem.name == game.player_red_1 ||
-                  rankingItem.name == game.player_red_2 ||
-                  rankingItem.name == game.player_blue_1 ||
-                  rankingItem.name == game.player_blue_2) {
+            var useNewMethod = true;
+            if (useNewMethod == true) {
+              this.intenseArray[i] = "none";
+              this.pointsToWinForTopTeam[i] = "47";
+              this.pointsToWinForBottomTeam[i] = "3";
 
-                  // Save into two arrays for "current points and current position"
-                  this.currentPointsForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.points;
-                  this.currentPositionForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.position;
+              // Look at all rankingItems
+              for (let rankingItem of this.rankingItemsForIntense) {
+                //If the rankingItem relates to our players
+                if (rankingItem.name == game.player_red_1 ||
+                    rankingItem.name == game.player_red_2 ||
+                    rankingItem.name == game.player_blue_1 ||
+                    rankingItem.name == game.player_blue_2) {
+
+                    // Save into two arrays for "current points and current position"
+                    this.currentPointsForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.points;
+                    this.currentPositionForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.position;
+                }
               }
-
-              // Add to points for Red
-              if (rankingItem.name == game.player_red_1 || (rankingItem.name == game.player_red_2)) {
-                combinedPointsTeamRed = combinedPointsTeamRed + rankingItem.points;
-
-              }
-              // Add to points for Blue
-              if (rankingItem.name == game.player_blue_1 || (rankingItem.name == game.player_blue_2)) {
-                combinedPointsTeamBlue = combinedPointsTeamBlue + rankingItem.points;
-              }
-            }
-            // Check whether the point difference is more than 5 poins in either direction
-            if (combinedPointsTeamRed > combinedPointsTeamBlue + 5) {
-              this.intenseArray[i] = "blue";
-              intenseFound = true;
-            } else if (combinedPointsTeamRed + 5 < combinedPointsTeamBlue) {
-              this.intenseArray[i] = "red";
-              intenseFound = true;
+              i++;
             } else {
-              this.intenseArray[i] = "";
+              // OLD Variables for counting points for teams
+              var combinedPointsTeamRed = 0;
+              var combinedPointsTeamBlue = 0;
+
+              // Look at all rankingItems
+              for (let rankingItem of this.rankingItemsForIntense) {
+                //If the rankingItem relates to our players
+                if (rankingItem.name == game.player_red_1 ||
+                    rankingItem.name == game.player_red_2 ||
+                    rankingItem.name == game.player_blue_1 ||
+                    rankingItem.name == game.player_blue_2) {
+
+                    // Save into two arrays for "current points and current position"
+                    this.currentPointsForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.points;
+                    this.currentPositionForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.position;
+                }
+
+                // Add to points for Red
+                if (rankingItem.name == game.player_red_1 || (rankingItem.name == game.player_red_2)) {
+                  combinedPointsTeamRed = combinedPointsTeamRed + rankingItem.points;
+
+                }
+                // Add to points for Blue
+                if (rankingItem.name == game.player_blue_1 || (rankingItem.name == game.player_blue_2)) {
+                  combinedPointsTeamBlue = combinedPointsTeamBlue + rankingItem.points;
+                }
+              }
+              // Check whether the point difference is more than 5 poins in either direction
+              if (combinedPointsTeamRed > combinedPointsTeamBlue + 5) {
+                this.intenseArray[i] = "blue";
+                intenseFound = true;
+              } else if (combinedPointsTeamRed + 5 < combinedPointsTeamBlue) {
+                this.intenseArray[i] = "red";
+                intenseFound = true;
+              } else {
+                this.intenseArray[i] = "";
+              }
+              i++;
             }
-            i++;
           }
           // Make a sound, if at least one intense was found
           if (intenseFound) {
