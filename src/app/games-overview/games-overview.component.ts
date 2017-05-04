@@ -120,8 +120,7 @@ export class GamesOverviewComponent implements OnInit {
             var useNewMethod = true;
             if (useNewMethod == true) {
               this.intenseArray[i] = "none";
-              this.pointsToWinForTopTeam[i] = "47";
-              this.pointsToWinForBottomTeam[i] = "3";
+
 
               // Look at all rankingItems
               for (let rankingItem of this.rankingItemsForIntense) {
@@ -136,6 +135,91 @@ export class GamesOverviewComponent implements OnInit {
                     this.currentPositionForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.position;
                 }
               }
+
+              if(game.player_red_1 != null && this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()] == null) {
+                console.log("ingen for r1")
+                this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()] = 1500;
+              }
+              if(game.player_red_2 != null && this.currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()] == null) {
+                                console.log("ingen for r2")
+                this.currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()] = 1500;
+              }
+              if(game.player_blue_1 != null && this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()] == null) {
+                                console.log("ingen for b1")
+                this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()] = 1500;
+              }
+              if(game.player_blue_2 != null && this.currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()] == null) {
+                                console.log("ingen for b2")
+                this.currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()] = 1500;
+              }
+
+
+
+              // Lets calculate for top team winning
+              console.log("blue 1:" + game.player_blue_1);
+              console.log("blue 2:" + game.player_blue_2);
+              if (game.player_blue_2 == null) {
+                console.log("Nummer 2 var null")
+              }
+
+              var blueEloRanking;
+              var redEloRanking;
+
+              if (game.player_red_2 != null) {
+                redEloRanking = (this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()] + this.currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()]) / 2;
+              } else {
+                redEloRanking = this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()];
+              }
+              redEloRanking = parseInt(redEloRanking)
+              console.log("redEloRanking: " + redEloRanking)
+
+
+              if (game.player_blue_2 != null) {
+                blueEloRanking = (this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()] + this.currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()]) / 2;
+              } else {
+                blueEloRanking = this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()];
+              }
+              blueEloRanking = parseInt(blueEloRanking)
+              console.log("blueEloRanking: " + blueEloRanking)
+
+
+              var redDiff = blueEloRanking - redEloRanking;
+
+              var redWe = (1 / (Math.pow(10, ( redDiff / 1000)) + 1 ))
+              var blueWe = 1 - redWe;
+
+              console.log("redWe: " + redWe)
+              console.log("blueWe: " + blueWe)
+
+              var  KFactor = 50;
+
+              var totalForRedWin = (KFactor * (1 - redWe))
+              var totalForRedWinInt = parseInt("" + totalForRedWin)
+              console.log("if red wins: " + totalForRedWin);
+              //logger.info("if red looses: " + (KFactor * (0 - redWe)))
+
+              var totalForBlueWin = (KFactor * (1 - blueWe))
+              var totalForBlueWinInt = parseInt("" + totalForBlueWin)
+              console.log("if blue wins: " + totalForBlueWin)
+              //logger.info("if blue looses: " + (KFactor * (0 - blueWe)))
+
+              if ((totalForBlueWinInt + totalForRedWinInt) < KFactor) {
+                if (totalForBlueWinInt < totalForRedWinInt) {
+                  totalForBlueWinInt = KFactor - totalForRedWinInt
+                } else {
+                  totalForRedWinInt = KFactor - totalForBlueWinInt
+                }
+              }
+
+
+
+
+              // This is the points to win or lose
+              // Please note that in a case of a draw, none of these numbers are used
+              this.pointsToWinForTopTeam[i] = "" + totalForRedWinInt;
+              this.pointsToWinForBottomTeam[i] = "" + totalForBlueWinInt;
+
+
               i++;
             } else {
               // OLD Variables for counting points for teams
