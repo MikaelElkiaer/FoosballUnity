@@ -107,25 +107,34 @@ export class GamesOverviewComponent implements OnInit {
 
           var i = 0;
           for (let game of firstTournamentGameRound.tournamentGames) {
+            // OLD Variables for counting points for teams
             var combinedPointsTeamRed = 0;
             var combinedPointsTeamBlue = 0;
+
+            // Look at all rankingItems
             for (let rankingItem of this.rankingItemsForIntense) {
+              //If the rankingItem relates to our players
               if (rankingItem.name == game.player_red_1 ||
                   rankingItem.name == game.player_red_2 ||
                   rankingItem.name == game.player_blue_1 ||
                   rankingItem.name == game.player_blue_2) {
 
+                  // Save into two arrays for "current points and current position"
                   this.currentPointsForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.points;
                   this.currentPositionForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.position;
               }
+
+              // Add to points for Red
               if (rankingItem.name == game.player_red_1 || (rankingItem.name == game.player_red_2)) {
                 combinedPointsTeamRed = combinedPointsTeamRed + rankingItem.points;
 
               }
+              // Add to points for Blue
               if (rankingItem.name == game.player_blue_1 || (rankingItem.name == game.player_blue_2)) {
                 combinedPointsTeamBlue = combinedPointsTeamBlue + rankingItem.points;
               }
             }
+            // Check whether the point difference is more than 5 poins in either direction
             if (combinedPointsTeamRed > combinedPointsTeamBlue + 5) {
               this.intenseArray[i] = "blue";
               intenseFound = true;
@@ -137,6 +146,7 @@ export class GamesOverviewComponent implements OnInit {
             }
             i++;
           }
+          // Make a sound, if at least one intense was found
           if (intenseFound) {
             this.soundFire.play();
           }
