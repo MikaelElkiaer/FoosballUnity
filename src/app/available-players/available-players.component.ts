@@ -21,7 +21,7 @@ export class AvailablePlayersComponent {
   players: Player[];
   selectedPlayers: Player[];
   newPlayer: Player;
-  public rfidName : any;
+  rfidName : any;
   soundCheckin : any;
   soundCheckout : any;
   soundError: any;
