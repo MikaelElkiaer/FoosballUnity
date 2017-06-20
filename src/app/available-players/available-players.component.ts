@@ -41,16 +41,6 @@ export class AvailablePlayersComponent {
        this.inverseSelectionForPlayer(data);
     });
 
-/*
-    //Kode til at reagere på det (fjern det herfra senere)
-    sharedCommunicationService.registeredPlayerChanged$.subscribe(
-      registeredPlayer => {
-        this.inverseSelectionForPlayer(registeredPlayer);
-      }
-
-    )
-    */
-
   }
 
   getImageUrl(playerName : string) : string {
