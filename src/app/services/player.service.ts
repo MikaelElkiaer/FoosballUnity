@@ -19,11 +19,7 @@ export class PlayerService {
       .toPromise()
       .then(response => response.json() as Player[])
       .catch(this.handleError);
-
-    //return Promise.resolve(PLAYERS);
   }
-
-
 
   create(name : string, playerReady: boolean, created: Date ): Promise<string> {
     return this.http

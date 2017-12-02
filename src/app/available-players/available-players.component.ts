@@ -41,16 +41,6 @@ export class AvailablePlayersComponent {
        this.inverseSelectionForPlayer(data);
     });
 
-/*
-    //Kode til at reagere på det (fjern det herfra senere)
-    sharedCommunicationService.registeredPlayerChanged$.subscribe(
-      registeredPlayer => {
-        this.inverseSelectionForPlayer(registeredPlayer);
-      }
-
-    )
-    */
-
   }
 
   getImageUrl(playerName : string) : string {
@@ -173,8 +163,8 @@ export class AvailablePlayersComponent {
       this.addPlayerAlert('Navn/initialer \'' + name + '\' kan ikke benyttes, da der allerede findes en spiller med dette navn/initialer (\'' + theNameThatExists + '\')', 'danger');
        return;
     }
-    if (name.length > 10) {
-       this.addPlayerAlert('Navn/initialer må maks. bestå af 10 bogstaver/tal', 'danger');
+    if (name.length > 20) {
+       this.addPlayerAlert('Navn/initialer må maks. bestå af 20 bogstaver/tal', 'danger');
         return;
     }
     if (name.includes(' ')) {
