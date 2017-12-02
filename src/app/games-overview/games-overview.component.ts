@@ -17,7 +17,7 @@ import { TournamentGameRoundService } from '../services/tournament-game-round.se
 
 import { SharedCommunicationService } from '../services/shared-communication.service';
 
-import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { ProgressbarModule } from 'ngx-bootstrap';
 
 @Component({
   selector: 'games-overview',

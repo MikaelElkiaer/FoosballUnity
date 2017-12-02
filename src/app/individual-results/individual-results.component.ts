@@ -10,7 +10,7 @@ import { RankingItemService } from '../services/ranking-item.service';
 import { SharedCommunicationService } from '../services/shared-communication.service';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { AlertModule } from 'ngx-bootstrap';
 
 @Component ({
   selector: 'individualResults',

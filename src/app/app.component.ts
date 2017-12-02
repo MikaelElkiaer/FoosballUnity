@@ -29,7 +29,7 @@ import { RfidRegistrationComponent } from  './rfid-registration/rfid-registratio
 
 import { SharedCommunicationService } from './services/shared-communication.service';
 
-import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { AlertModule } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-root',
