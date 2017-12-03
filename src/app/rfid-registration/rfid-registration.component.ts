@@ -6,8 +6,6 @@ import { TimerObservable } from "rxjs/observable/TimerObservable";
 
 import { ProgressbarModule } from 'ngx-bootstrap';
 
-import {Http} from '@angular/http';
-
 import { Player } from '../model/player';
 
 import { SharedCommunicationService } from '../services/shared-communication.service';

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { RankingItem } from '../model/ranking-item';
 import { RankingItemService } from '../services/ranking-item.service';
+import { Observable } from 'rxjs/Observable';
 
 import { Game } from '../model/game';
 import { GameService } from '../services/game.service';
@@ -32,7 +33,6 @@ export class GamesOverviewComponent implements OnInit {
 
   pointsToWinForTopTeam: string[];
   pointsToWinForBottomTeam: string[];
-
 
   rankingItemsForIntense: RankingItem[];
   currentPositionForPlayer: number[];
@@ -109,8 +109,7 @@ export class GamesOverviewComponent implements OnInit {
         this.currentPositionForPlayer = new Array();
         var firstTournamentGameRound = this.tempTournamentGameRounds[0];
 
-      this.rankingItemService.getRankingItems('alltime').
-      then((rankingItems : RankingItem[]) => {
+      this.rankingItemService.getRankingItems('alltime').subscribe(rankingItems => {
 
           this.rankingItemsForIntense = rankingItems;
 
@@ -152,8 +151,6 @@ export class GamesOverviewComponent implements OnInit {
                                 console.log("ingen for b2")
                 this.currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()] = 1500;
               }
-
-
 
               // Lets calculate for top team winning
               console.log("blue 1:" + game.player_blue_1);
@@ -211,14 +208,10 @@ export class GamesOverviewComponent implements OnInit {
                 }
               }
 
-
-
-
               // This is the points to win or lose
               // Please note that in a case of a draw, none of these numbers are used
               this.pointsToWinForTopTeam[i] = "" + totalForRedWinInt;
               this.pointsToWinForBottomTeam[i] = "" + totalForBlueWinInt;
-
 
               i++;
             } else {
@@ -266,13 +259,13 @@ export class GamesOverviewComponent implements OnInit {
           if (intenseFound) {
             this.soundFire.play();
           }
-        })
-        .catch(err => {
+        },
+        err => {
           console.log('Der var fejl omkring generering af kampe');
 
           this.addNoGameGenerationAlert('Noget gik galt i forsøget på at generere kampe. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
           this.tempTournamentGameRounds = null;
-        })
+        });
     }
 
     this.tournamentGameRounds = this.tempTournamentGameRounds;
@@ -287,13 +280,14 @@ export class GamesOverviewComponent implements OnInit {
     }
 
     this.gameService.indmeldResultat(player_red_1, player_red_2, player_blue_1, player_blue_2, table, resultat, updateTime, points_at_stake)
-    .then((strRes : string) => {
+    .subscribe(strRes => {
 
       this.tournamentGameRounds[roundIndex].tournamentGames[+table - 1].id = 0;
       this.informAboutNewMatchReported(strRes);
-    }).catch(err => {
+    },
+    err => {
       this.addNoGameGenerationAlert('Noget gik galt i forsøget på at indmelde resultatet af kampen på dette bord. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
-    })
+    });
   }
 
   changePlayerForStatistics(playerForStatistics: string) {
@@ -325,66 +319,61 @@ export class GamesOverviewComponent implements OnInit {
       }
     }
 
-    this.tournamentGameRoundService.getTournamentGameRounds(numberOfTables, this.selectedPlayers).then((tournamentGameRounds : TournamentGameRound[] ) =>
-    {
+    this.tournamentGameRoundService.getTournamentGameRounds(numberOfTables, this.selectedPlayers)
+      .subscribe(tournamentGameRounds => {
+         this.tempTournamentGameRounds = tournamentGameRounds;
 
-     this.tempTournamentGameRounds = tournamentGameRounds;
+         var today = new Date()
+         var dd : number = today.getDate();
+         var mm : number = (today.getMonth()+1); //January is 0!
+         var yyyy = today.getFullYear();
 
+         var hours = today.getHours();
 
-     var today = new Date()
-     var dd : number = today.getDate();
-     var mm : number = (today.getMonth()+1); //January is 0!
-     var yyyy = today.getFullYear();
+         var newHOURS;
+         newHOURS = hours;
+         if(hours<10) {
+             newHOURS='0'+hours;
+         }
 
-     var hours = today.getHours();
+         var minutes = today.getMinutes();
+         var newMINUTES;
+         newMINUTES = minutes;
 
-     var newHOURS;
-     newHOURS = hours;
-     if(hours<10) {
-         newHOURS='0'+hours;
+         if(minutes<10) {
+             newMINUTES='0'+minutes;
+         }
+
+         var seconds = today.getSeconds();
+         var newSECONDS;
+         newSECONDS = seconds;
+         if(seconds<10) {
+             newSECONDS='0'+seconds;
+         }
+
+         var newToday;
+         var newDD;
+         newDD = dd;
+         if(dd<10) {
+             newDD='0'+dd;
+         }
+         var newMM;
+         newMM = mm;
+         if(mm<10) {
+             newMM='0'+mm;
+         }
+         newToday = yyyy+'/'+newMM+'/'+newDD + " " + newHOURS + ":" + newMINUTES + ":" + newSECONDS + "." + today.getMilliseconds();
+
+         for (let tournamentGameRound of this.tempTournamentGameRounds) {
+           for (let game of tournamentGameRound.tournamentGames) {
+             game.lastUpdated = newToday;
+             console.log("game:  + game")
+           }
+         }
+         this.getRankingItemsForIntense();
+       }, err => {
+         console.log('der var fejl omkring generering af kampe');
+         this.addNoGameGenerationAlert('Noget gik galt i forsøget på at generere kampe. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
+       });
      }
-
-     var minutes = today.getMinutes();
-     var newMINUTES;
-     newMINUTES = minutes;
-
-     if(minutes<10) {
-         newMINUTES='0'+minutes;
-     }
-
-     var seconds = today.getSeconds();
-     var newSECONDS;
-     newSECONDS = seconds;
-     if(seconds<10) {
-         newSECONDS='0'+seconds;
-     }
-
-     var newToday;
-     var newDD;
-     newDD = dd;
-     if(dd<10) {
-         newDD='0'+dd;
-     }
-     var newMM;
-     newMM = mm;
-     if(mm<10) {
-         newMM='0'+mm;
-     }
-     newToday = yyyy+'/'+newMM+'/'+newDD + " " + newHOURS + ":" + newMINUTES + ":" + newSECONDS + "." + today.getMilliseconds();
-
-     for (let tournamentGameRound of this.tempTournamentGameRounds) {
-       for (let game of tournamentGameRound.tournamentGames) {
-         game.lastUpdated = newToday;
-         console.log("game:  + game")
-       }
-     }
-     this.getRankingItemsForIntense();
-   }
- ).catch(err => {
-    console.log('der var fejl omkring generering af kampe');
-       this.addNoGameGenerationAlert('Noget gik galt i forsøget på at generere kampe. Tjek venligst at der er forbindelse til serveren og prøv så igen. Fejlen var: \'' + err + '\'', 'danger');
-     })
- ;
-  }
-
 }

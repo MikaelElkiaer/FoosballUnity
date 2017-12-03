@@ -85,29 +85,26 @@ export class AppComponent {
   }
 
   getPlayers(): void {
-      this.playerService.getPlayers().then(
-     (players : Player[]) =>
+      this.playerService.getPlayers().subscribe(players =>
      {
        this.resultBackFromGettingPlayers = true;
        this.experiencedProblemWithGettingPlayers = false;
        this.availablePlayersComponent.setPlayers(players);
-     }
-   ).catch(err => {
-       this.resultBackFromGettingPlayers = true;
-       this.experiencedProblemWithGettingPlayers = true;
-       return Promise.reject(err.message || err);
-     });
+     },
+     err => {
+      this.resultBackFromGettingPlayers = true;
+      this.experiencedProblemWithGettingPlayers = true;
+      return Promise.reject(err.message || err);
+    });
    }
 
    getConfigurationItems(): void {
-       this.configurationItemService.getConfigurationItems().then(
-      (configurationItems : ConfigurationItem[]) =>
-      {
-        this.gamesOverviewComponent.setConfigurationItems(configurationItems);
-      }
-    ).catch(err => {
-        console.log("Damn, an error occured, when getting configuration items")
-        return Promise.reject(err.message || err);
-      });
+       this.configurationItemService.getConfigurationItems().subscribe(
+         configurationItems => {this.gamesOverviewComponent.setConfigurationItems(configurationItems)},
+         err => {
+           console.log("Damn, an error occured, when getting configuration items")
+           return Promise.reject(err.message || err);
+         }
+       );
     }
 }

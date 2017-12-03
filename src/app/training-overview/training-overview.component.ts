@@ -47,8 +47,8 @@ export class TrainingOverviewComponent implements OnInit {
      this.noGamesAlerts = [];
      this.games  = null;
 
-     this.gameService.getGames(period).then(
-       (games : Game[] ) => {
+     this.gameService.getGames(period).subscribe(
+       games => {
           this.games = games;
 
           this.trainingResultCurrentMonth = new Array();
@@ -175,10 +175,11 @@ export class TrainingOverviewComponent implements OnInit {
           s = this.checkTime(s);
           this.lastManualUpdate = "D. " + date + "/" + (month +1 ) + " kl. "+  h + ":" + m + ":" + s
 
-        }).catch(err => {
-         console.log('Problemer med at udregne træningsflid for perioden ' + period);
-         this.addNoGamesAlert('Kunne ikke udregne træningsflid. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-       });
+        },
+        err => {
+          console.log('Problemer med at udregne træningsflid for perioden ' + period);
+          this.addNoGamesAlert('Kunne ikke udregne træningsflid. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
+        });
    }
 
   private checkTime(i) {

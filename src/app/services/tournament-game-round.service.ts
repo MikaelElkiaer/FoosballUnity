@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Headers, Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
 import { TournamentGame } from '../model/tournament-game';
 import { TournamentGameRound } from '../model/tournament-game-round';
@@ -15,13 +15,13 @@ export class TournamentGameRoundService {
   //private tournamentGameRoundsUrl = 'http://localhost:5050/tournament/lastFirstTournament/';
   private tournamentGameRoundsUrl = 'http://localhost:5050/tournament/awesomeAlgorithmTournament/';
 
-  private headers = new Headers({'Content-Type': 'application/json'});
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
   private samletTekst = '';
   private testInput = '';
 
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
-  getTournamentGameRounds(numberOfGames: number, possiblePlayers: Player[]): Promise<TournamentGameRound[]> {
+  getTournamentGameRounds(numberOfGames: number, possiblePlayers: Player[]): Observable<TournamentGameRound[]> {
 
     var startString = ',"players":[';
     var endString = ']}'
@@ -34,20 +34,17 @@ export class TournamentGameRoundService {
       }
     }
     var combinedString = startString + fillUpString + endString;
-    //return Promise.resolve(GAMES);
     this.testInput = '{"numberOfGames": ' + numberOfGames + combinedString;
 
-    return this.http.post(this.tournamentGameRoundsUrl, this.testInput,
+    return this.http.post<TournamentGameRound[]>(this.tournamentGameRoundsUrl, this.testInput,
     {headers:this.headers})
-      .toPromise()
-      .then(response => response.json() as TournamentGameRound[])
       .catch(this.handleError);
   }
 
 
-  private handleError(error: any): Promise<any> {
+  private handleError(error: any): Observable<any> {
     console.error('DAMN, An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
+    return Observable.throw(error.message || error);
     }
 
 }

@@ -82,21 +82,21 @@ export class FixedRankingListComponent implements OnInit {
     this.noRankingListAlerts = [];
     this.showRankingPeriod = period;
     this.rankingItems  = null;
-    this.rankingItemService.getRankingItems(period).then(
-      (rankingItems : RankingItem[]) => this.rankingItems = rankingItems)
-    .catch(err => {
-      console.log('Problemer med at hente ranking-liste for perioden ' + period);
-      this.addNoRankingListAlert('Kunne ikke hente ranglisten for den valgte periode. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-    });
+    this.rankingItemService.getRankingItems(period).subscribe(
+      rankingItems => this.rankingItems = rankingItems,
+      err => {
+        console.log('Problemer med at hente ranking-liste for perioden ' + period);
+        this.addNoRankingListAlert('Kunne ikke hente ranglisten for den valgte periode. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
+      });
   };
 
   // RANKINGITEMS RELATED
   getRankingItems(): void {
-    this.rankingItemService.getRankingItems(this.showRankingPeriod).then((rankingItems : RankingItem[]) => this.rankingItems = rankingItems);
+    this.rankingItemService.getRankingItems(this.showRankingPeriod).subscribe(rankingItems => this.rankingItems = rankingItems);
   }
 
   determineRankingLeaderStatus(): void {
-    this.rankingItemService.getRankingItems("alltime").then((rankingItems : RankingItem[]) => {
+    this.rankingItemService.getRankingItems("alltime").subscribe(rankingItems => {
       this.currentRankingItemsForRankingLeaderStatus = rankingItems;
 
       // We will start by finding the current top rated items
@@ -157,8 +157,6 @@ export class FixedRankingListComponent implements OnInit {
       console.log(JSON.stringify(this.previousTopRankedRankingItems))
 
       this.previousTopRankedRankingItems = this.currentTopRankedRankingItems;
-
-
     });
   }
 

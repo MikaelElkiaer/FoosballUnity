@@ -63,12 +63,13 @@ export class PreviousGamesComponent implements OnInit {
     this.noGamesAlerts = [];
     this.showMatchesPeriod = period;
     this.games  = null;
-    this.gameService.getGames(period).then(
-      (games : Game[] ) => this.games = games)
-      .catch(err => {
+    this.gameService.getGames(period).subscribe(
+      games => this.games = games,
+      err => {
         console.log('Problemer med at hente kampene for perioden ' + period);
         this.addNoGamesAlert('Kunne ikke hente kampene for den valgte periode. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-      });
+      }
+    );
   }
 
   changePlayerForStatistics(playerForStatistics: string) {

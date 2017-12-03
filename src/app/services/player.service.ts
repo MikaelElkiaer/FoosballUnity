@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { Headers, Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Player } from '../model/player';
+import { Observable } from 'rxjs/Observable';
 
 //import { PLAYERS } from '../mock.players';
 
@@ -10,29 +10,24 @@ import { Player } from '../model/player';
 export class PlayerService {
 
   private playersUrl = 'http://localhost:5050/players/';
-  private headers = new Headers({'Content-Type': 'application/json'});
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
-  getPlayers(): Promise<Player[]> {
-    return this.http.get(this.playersUrl)
-      .toPromise()
-      .then(response => response.json() as Player[])
+  getPlayers(): Observable<Player[]> {
+    return this.http.get<Player[]>(this.playersUrl)
       .catch(this.handleError);
   }
 
-  create(name : string, playerReady: boolean, created: Date ): Promise<string> {
+  create(name : string, playerReady: boolean, created: Date ): Observable<string> {
     return this.http
       .post(this.playersUrl, "[" + JSON.stringify({name:name, playerReady:playerReady, oprettet:'2016-10-10 21:46:36.0', registeredRFIDTag:''}) + "]",
       {headers:this.headers})
-      .toPromise()
-      .then(res => res.toString())
       .catch(this.handleError);
-
   }
 
-  private handleError(error: any): Promise<any> {
+  private handleError(error: any): Observable<any> {
     console.error('DAMN, An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
+    return Observable.throw(error.message || error);
   }
 }
