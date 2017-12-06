@@ -4,9 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Rx';
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 
-import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
-
-import {Http} from '@angular/http';
+import { ProgressbarModule } from 'ngx-bootstrap';
 
 import { Player } from '../model/player';
 

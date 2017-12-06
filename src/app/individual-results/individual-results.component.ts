@@ -10,7 +10,7 @@ import { RankingItemService } from '../services/ranking-item.service';
 import { SharedCommunicationService } from '../services/shared-communication.service';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { AlertModule } from 'ngx-bootstrap';
 
 @Component ({
   selector: 'individualResults',
@@ -132,7 +132,7 @@ export class IndividualResultsComponent implements OnInit  {
     endPointsForPlayer = 0;
 
     this.rankingItemService.getRankingItems('alltime').
-    then((rankingItems : RankingItem[]) => {
+    subscribe(rankingItems => {
 
       for (let rankingItem of rankingItems) {
         if (rankingItem.name == this.playerForStatistics) {
@@ -141,8 +141,8 @@ export class IndividualResultsComponent implements OnInit  {
         }
       }
 
-        this.gameService.getGames(this.playerForStatistics).then(
-          (games : Game[] ) => {
+        this.gameService.getGames(this.playerForStatistics).subscribe(
+          games => {
             this.playerGames = games;
             var playerGamesInReverse = this.playerGames.reverse();
             var playerTeam;
@@ -193,14 +193,11 @@ export class IndividualResultsComponent implements OnInit  {
               this.lineChartLabels.push("#" + playerGamesInReverse[k - 1].id);
             }
             this.lineChartData = _lineChartData;
-          } )
-          .catch(err => {
+          }, 
+          err => {
             console.log('Problemer med at hente spiller-kampene for spilleren ' + this.playerForStatistics);
             this.addNoPlayerGamesAlert('Kunne ikke hente spiller-kampene for spilleren ' + this.playerForStatistics + '. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-          });
-        }).catch(err => {
-          console.log('Problemer med at hente spiller-kampene for spilleren ' + this.playerForStatistics);
-          this.addNoPlayerGamesAlert('Kunne ikke hente spiller-kampene for spilleren ' + this.playerForStatistics + '. Tjek evt. om der er problemer med adgangen til serveren?', 'danger');
-        });
+          })
+        })
   }
 }

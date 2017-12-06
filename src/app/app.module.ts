@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { CountdownComponent } from './countdown/countdown.component';
@@ -13,10 +13,10 @@ import { FixedRankingListComponent } from './fixed-ranking-list/fixed-ranking-li
 import { GamesOverviewComponent } from './games-overview/games-overview.component';
 import { RfidRegistrationComponent } from './rfid-registration/rfid-registration.component';
 
-import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
-import { ButtonsModule } from 'ng2-bootstrap/ng2-bootstrap';
-import { TabsModule } from 'ng2-bootstrap/ng2-bootstrap';
-import { ProgressbarModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { AlertModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap';
+import { TabsModule } from 'ngx-bootstrap';
+import { ProgressbarModule } from 'ngx-bootstrap';
 
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { TrainingOverviewComponent } from './training-overview/training-overview.component';
@@ -37,11 +37,11 @@ import { TrainingOverviewComponent } from './training-overview/training-overview
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
-    AlertModule,
-    ButtonsModule,
-    TabsModule,
-    ProgressbarModule,
+    HttpClientModule,
+    AlertModule.forRoot(),
+    ButtonsModule.forRoot(),
+    TabsModule.forRoot(),
+    ProgressbarModule.forRoot(),
     ChartsModule
   ],
   providers: [],

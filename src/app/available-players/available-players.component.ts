@@ -5,7 +5,7 @@ import { PlayerService } from '../services/player.service';
 
 import { SharedCommunicationService } from '../services/shared-communication.service';
 
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Rx';
@@ -29,18 +29,15 @@ export class AvailablePlayersComponent {
   constructor (
         private playerService: PlayerService,
         private sharedCommunicationService: SharedCommunicationService,
-        private http: Http
+        private http: HttpClient
   ) {
 
     this.soundCheckin = new Audio("/assets/sounds/workout-started.wav");
     this.soundCheckout= new Audio("/assets/sounds/workout-complete.wav");
     this.soundError= new Audio("/assets/sounds/error.wav");
 
-    Observable.interval(500).switchMap(() => http.get('http://localhost:5050/registration')).map((data) => data.json())
-      .subscribe((data) => {
-       this.inverseSelectionForPlayer(data);
-    });
-
+    Observable.interval(500).switchMap(() => http.get<Player>('http://localhost:5050/registration'))
+      .subscribe(data => this.inverseSelectionForPlayer(data));
   }
 
   getImageUrl(playerName : string) : string {
@@ -118,8 +115,6 @@ export class AvailablePlayersComponent {
            }
          }
        }
-
-
 
       this.changeRegisteredPlayer(player);
 
@@ -216,10 +211,11 @@ export class AvailablePlayersComponent {
     this.newPlayer = new Player(name, true, new Date(newToday), "");
 
     this.playerService.create(name, true, new Date(newToday))
-    .then((strRes : string) => {
+    .subscribe(strRes => {
        this.addThisPlayerToPlayers(this.newPlayer);
-    }).catch(err  => {
-        this.addPlayerAlert('Noget gik galt i forsøget på at oprette spilleren. Fejlen var: \'' + err + '\'', 'danger');
-      })
+    },
+    err  => {
+      this.addPlayerAlert('Noget gik galt i forsøget på at oprette spilleren. Fejlen var: \'' + err + '\'', 'danger');
+    })
     }
 }
