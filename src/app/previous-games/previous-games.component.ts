@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'previous-games',
   templateUrl: './previous-games.component.html',
-  styleUrls: ['./previous-games.component.css']
+  styleUrls: ['./previous-games.component.scss']
 })
 export class PreviousGamesComponent implements OnInit {
 

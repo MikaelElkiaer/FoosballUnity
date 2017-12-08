@@ -34,7 +34,7 @@ import { AlertModule } from 'ngx-bootstrap';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
   providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService, SharedCommunicationService, ConfigurationItemService]
 })
 export class AppComponent {

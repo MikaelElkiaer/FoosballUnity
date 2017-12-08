@@ -9,7 +9,7 @@ import { RankingItemService } from '../services/ranking-item.service';
 @Component({
   selector: 'FixedRankingListComponent',
   templateUrl: './fixed-ranking-list.component.html',
-  styleUrls: ['./fixed-ranking-list.component.css']
+  styleUrls: ['./fixed-ranking-list.component.scss']
 })
 export class FixedRankingListComponent implements OnInit {
   @Input()

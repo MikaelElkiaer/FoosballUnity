@@ -23,10 +23,12 @@ import { ProgressbarModule } from 'ngx-bootstrap';
 @Component({
   selector: 'games-overview',
   templateUrl: './games-overview.component.html',
-  styleUrls: ['./games-overview.component.css']
+  styleUrls: ['./games-overview.component.scss']
 })
 export class GamesOverviewComponent implements OnInit {
 
+  teamsColors = [ "Grøn/Rød", "Orange/Blå", "Lilla/Sort" ];
+  tableNames: string[] = [ null, null, null];
   soundFire:any;
   oneRoundAtATime = true;
   intenseArray: string[];
@@ -45,10 +47,6 @@ export class GamesOverviewComponent implements OnInit {
 
   selectedPlayers: Player[];
   configurationItems : ConfigurationItem[];
-
-  nameTable1 = "";
-  nameTable2 = "";
-  nameTable3 = "";
 
   public noGameGenerationAlerts:Array<Object> = [];
 
@@ -307,15 +305,14 @@ export class GamesOverviewComponent implements OnInit {
         numberOfTables = +configurationItem.value;
       }
 
-
       if (configurationItem.name == "nameTable1") {
-        this.nameTable1 = configurationItem.value;
+        this.tableNames[0] = configurationItem.value;
       }
       if (configurationItem.name == "nameTable2") {
-       this.nameTable2 = configurationItem.value;
+       this.tableNames[1] = configurationItem.value;
       }
       if (configurationItem.name == "nameTable3") {
-        this.nameTable3 = configurationItem.value;
+        this.tableNames[2] = configurationItem.value;
       }
     }
 

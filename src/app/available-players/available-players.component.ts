@@ -13,7 +13,7 @@ import { TimerObservable } from "rxjs/observable/TimerObservable";
 
 @Component({
   selector: 'availablePlayers',
-  styleUrls: ['./available-players.component.css'],
+  styleUrls: ['./available-players.component.scss'],
   templateUrl: './available-players.component.html'
 })
 

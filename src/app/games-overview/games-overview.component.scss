@@ -1,3 +1,39 @@
+.playerimg {
+  width:128px;
+  height:160px;
+  margin: 0px 3px;
+  border-radius: 15px;
+}
+.team {
+  display:flex; 
+  align-items: center;
+  padding: 10px 0px;
+}
+.fodboldbordBillede {
+  width: 433px;
+}
+
+.tablename {
+  display:flex; 
+  justify-content: center;
+  background-color: #404040; 
+  color: white;
+}
+.btn-point {
+  display:flex; 
+  justify-content:center
+}
+.playerContent {
+  display:flex; 
+  flex-direction: column;
+}
+.tournamentGameRound {
+  display:flex; 
+}
+
+.tournamentGame {
+  padding: 5px;
+}
 .img_container {
     position:relative;
     display:inline-block;

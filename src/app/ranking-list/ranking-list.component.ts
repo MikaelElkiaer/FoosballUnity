@@ -9,7 +9,7 @@ import { RankingItemService } from '../services/ranking-item.service';
 @Component({
   selector: 'RankingListComponent',
   templateUrl: './ranking-list.component.html',
-  styleUrls: ['./ranking-list.component.css']
+  styleUrls: ['./ranking-list.component.scss']
 })
 export class RankingListComponent implements OnInit {
 
