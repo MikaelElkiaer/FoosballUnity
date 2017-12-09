@@ -27,7 +27,7 @@ import { ProgressbarModule } from 'ngx-bootstrap';
 })
 export class GamesOverviewComponent implements OnInit {
 
-  teamsColors = [ "Grøn/Rød", "Orange/Blå", "Lilla/Sort" ];
+  teamsColors = [ "Grøn/Rød", "Orange/Blå", "Lilla/Sort", "Pink/Lime"];
   tableNames: string[] = [ null, null, null];
   soundFire:any;
   oneRoundAtATime = true;
@@ -313,6 +313,9 @@ export class GamesOverviewComponent implements OnInit {
       }
       if (configurationItem.name == "nameTable3") {
         this.tableNames[2] = configurationItem.value;
+      }
+      if (configurationItem.name == "nameTable4") {
+        this.tableNames[3] = configurationItem.value;
       }
     }
 
