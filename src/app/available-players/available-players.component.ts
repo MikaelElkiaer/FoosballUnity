@@ -9,7 +9,7 @@ import {HttpClient} from '@angular/common/http';
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Rx';
-import { TimerObservable } from "rxjs/observable/TimerObservable";
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
 @Component({
   selector: 'availablePlayers',
@@ -18,12 +18,13 @@ import { TimerObservable } from "rxjs/observable/TimerObservable";
 })
 
 export class AvailablePlayersComponent {
+  public playerAlerts:Array<Object> = [];
   players: Player[];
   selectedPlayers: Player[];
   newPlayer: Player;
-  rfidName : any;
-  soundCheckin : any;
-  soundCheckout : any;
+  rfidName: any;
+  soundCheckin: any;
+  soundCheckout: any;
   soundError: any;
 
   constructor (
@@ -32,25 +33,25 @@ export class AvailablePlayersComponent {
         private http: HttpClient
   ) {
 
-    this.soundCheckin = new Audio("/assets/sounds/workout-started.wav");
-    this.soundCheckout= new Audio("/assets/sounds/workout-complete.wav");
-    this.soundError= new Audio("/assets/sounds/error.wav");
+    this.soundCheckin = new Audio('/assets/sounds/workout-started.wav');
+    this.soundCheckout = new Audio('/assets/sounds/workout-complete.wav');
+    this.soundError = new Audio('/assets/sounds/error.wav');
 
     Observable.interval(500).switchMap(() => http.get<Player>('http://localhost:5050/registration'))
       .subscribe(data => this.inverseSelectionForPlayer(data));
   }
 
-  getImageUrl(playerName : string) : string {
+  getImageUrl(playerName: string): string {
     if (playerName == null) {
-      return "assets/img/Wildcard.jpg";
+      return 'assets/img/Wildcard.jpg';
     } else {
-      return "assets/img/" + playerName.toLocaleLowerCase() + ".jpg";
+      return 'assets/img/' + playerName.toLocaleLowerCase() + '.jpg';
     }
   }
 
-  getNumberOfSelectedPlayers() : string {
+  getNumberOfSelectedPlayers(): string {
     if (this.selectedPlayers == null) {
-      return "0";
+      return '0';
     } else {
       return this.selectedPlayers.length.toString();
     }
@@ -62,14 +63,13 @@ export class AvailablePlayersComponent {
    this.countSelectedPlayers();
   }
 
-  public playerAlerts:Array<Object> = [];
 
   public addPlayerAlert(msg: string, type: string):void {
     this.playerAlerts.push({msg: msg, type: type, closable: false});
   }
 
   sortedPlayers() {
-    var sortedArray: Player[] = this.players.sort((n1,n2) => {
+    const sortedArray: Player[] = this.players.sort((n1, n2) => {
       if (n1.name.toLocaleLowerCase() > n2.name.toLocaleLowerCase()) {
           return 1;
       }
@@ -100,11 +100,11 @@ export class AvailablePlayersComponent {
      this.sharedCommunicationService.informAboutSelectedPlayersChanged(this.selectedPlayers);
    }
 
-   inverseSelectionForPlayer(player : Player) : void {
-     if (player.registeredRFIDTag != "") {
+   inverseSelectionForPlayer(player: Player): void {
+     if (player.registeredRFIDTag !== '') {
        let found = false;
        for (let tempPlayer of this.players) {
-         if (tempPlayer.name == player.name) {
+         if (tempPlayer.name === player.name) {
            found = true;
            tempPlayer.playerReady = !tempPlayer.playerReady;
            player.playerReady = tempPlayer.playerReady;
@@ -118,7 +118,7 @@ export class AvailablePlayersComponent {
 
       this.changeRegisteredPlayer(player);
 
-      if (found == false) {
+      if (found === false) {
          this.soundError.play();
        } else {
         this.countSelectedPlayers()
@@ -145,18 +145,20 @@ export class AvailablePlayersComponent {
       this.addPlayerAlert('Du skal indtaste navn eller initialer', 'danger');
        return;
     }
-    var upperCaseVersion = name.toUpperCase();
-    var alreadyExist = false;
-    var theNameThatExists = '';
+    const upperCaseVersion = name.toUpperCase();
+    let alreadyExist = false;
+    let theNameThatExists = '';
     for (let play of this.players) {
-      if (play.name.toUpperCase() == upperCaseVersion) {
+      if (play.name.toUpperCase() === upperCaseVersion) {
         alreadyExist = true;
         theNameThatExists = play.name;
       }
     }
     if (alreadyExist) {
-      this.addPlayerAlert('Navn/initialer \'' + name + '\' kan ikke benyttes, da der allerede findes en spiller med dette navn/initialer (\'' + theNameThatExists + '\')', 'danger');
-       return;
+      this.addPlayerAlert('Navn/initialer \'' + name
+      + '\' kan ikke benyttes, da der allerede findes en spiller med dette navn/initialer (\''
+      + theNameThatExists + '\')', 'danger');
+      return;
     }
     if (name.length > 20) {
        this.addPlayerAlert('Navn/initialer må maks. bestå af 20 bogstaver/tal', 'danger');
@@ -167,54 +169,57 @@ export class AvailablePlayersComponent {
        return;
     }
 
-    var today = new Date();
-    var dd : number = today.getDate();
-    var mm : number = (today.getMonth()+1); //January is 0!
-    var yyyy = today.getFullYear();
+    const today = new Date();
+    const dd: number = today.getDate();
+    const mm: number = (today.getMonth() + 1); // January is 0!
+    const yyyy = today.getFullYear();
+    const hours = today.getHours();
 
-    var hours = today.getHours();
-    var newHOURS;
+    let newHOURS;
     newHOURS = hours;
-    if(hours<10) {
-        newHOURS='0'+hours;
+    if (hours < 10) {
+        newHOURS = '0' + hours;
     }
 
-    var minutes = today.getMinutes();
-    var newMINUTES;
+    let minutes = today.getMinutes();
+    let newMINUTES;
     newMINUTES = minutes;
 
-    if(minutes<10) {
-        newMINUTES='0'+minutes;
+    if (minutes < 10) {
+        newMINUTES = '0' + minutes;
     }
 
-    var seconds = today.getSeconds();
-    var newSECONDS;
+    let seconds = today.getSeconds();
+    let newSECONDS;
     newSECONDS = seconds;
-    if(seconds<10) {
-        newSECONDS='0'+seconds;
+    if (seconds < 10) {
+        newSECONDS = '0' + seconds;
     }
 
-    var newToday;
-    var newDD;
+    let newToday;
+    let newDD;
     newDD = dd;
-    if(dd<10) {
-        newDD='0'+dd;
+    if (dd < 10) {
+        newDD = '0' + dd;
     }
-    var newMM;
+    let newMM;
     newMM = mm;
-    if(mm<10) {
-        newMM='0'+mm;
+    if (mm < 10) {
+        newMM = '0' + mm;
     }
 
-    newToday = yyyy+'/'+newMM+'/'+newDD + " " + newHOURS + ":" + newMINUTES + ":" + newSECONDS + "." + today.getMilliseconds();
+    newToday = yyyy + '/' + newMM + '/' + newDD + ' ' + newHOURS + ':' + newMINUTES + ':' + newSECONDS + '.' + today.getMilliseconds();
 
-    this.newPlayer = new Player(name, true, new Date(newToday), "");
+    this.newPlayer = new Player(name, true, new Date(newToday), '');
+    console.log(`Adding Player ${name}`);
 
     this.playerService.create(name, true, new Date(newToday))
     .subscribe(strRes => {
-       this.addThisPlayerToPlayers(this.newPlayer);
-    },
+        console.log(`1 Added Player. ${strRes}`);
+        this.addThisPlayerToPlayers(this.newPlayer);
+      },
     err  => {
+      console.log('errer::::::::::::::::');
       this.addPlayerAlert('Noget gik galt i forsøget på at oprette spilleren. Fejlen var: \'' + err + '\'', 'danger');
     })
     }
