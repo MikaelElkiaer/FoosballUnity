@@ -90,6 +90,19 @@ export class AppComponent implements OnInit, AfterViewInit {
        this.resultBackFromGettingPlayers = true;
        this.experiencedProblemWithGettingPlayers = false;
        this.availablePlayersComponent.setPlayers(players);
+       this.rankingItemService.getRankingItems('month').subscribe(
+         rankItems => {
+          const activePlayers = [];
+          rankItems.forEach(item => {
+            activePlayers.push(players.filter(player => {
+              return player.name === item.name;
+            })[0]);
+          });
+          console.log('Setting Active players', activePlayers);
+          this.availablePlayersComponent.setActivePlayers(activePlayers);
+         }
+       );
+       this.availablePlayersComponent.showAllPlayers();
      },
      err => {
       this.resultBackFromGettingPlayers = true;

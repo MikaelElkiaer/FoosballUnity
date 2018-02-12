@@ -1,5 +1,9 @@
+<tabset>
+  <tab heading='Alle' (select)="this.showingPlayers = this.players"></tab>
+  <tab heading='Aktive' (select)="this.showingPlayers = this.activePlayers"></tab>
+</tabset>
 <div>
-  <div  *ngFor="let player of players; let i = index">
+  <div  *ngFor="let player of this.showingPlayers; let i = index">
     <label [className]="'labelCheckbox'" [class.labelPlayerReady]="player.playerReady" ><img   [src]=getImageUrl(player.name)  onError="this.src = 'assets/img/Wildcard.jpg'" width="12" height="16"> <input type="checkbox" class="checkbox-inline"  [ngModel]="player.playerReady" (change)="player.playerReady = ! player.playerReady;countSelectedPlayers()"><span>{{player.name}}</span></label>
   </div>
 

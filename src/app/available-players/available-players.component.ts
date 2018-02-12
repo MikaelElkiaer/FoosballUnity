@@ -18,9 +18,11 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable';
 })
 
 export class AvailablePlayersComponent {
-  public playerAlerts:Array<Object> = [];
+  public playerAlerts: Array<Object> = [];
   players: Player[];
+  activePlayers: Player[];
   selectedPlayers: Player[];
+  showingPlayers: Player[];
   newPlayer: Player;
   rfidName: any;
   soundCheckin: any;
@@ -59,17 +61,25 @@ export class AvailablePlayersComponent {
 
   setPlayers(players: Player[]): void {
    this.players = players;
-   this.players = this.sortedPlayers();
+   this.players = this.sortedPlayers(this.players);
    this.countSelectedPlayers();
   }
+  setActivePlayers(players: Player[]): void {
+    this.activePlayers = players;
+    this.activePlayers = this.sortedPlayers(this.activePlayers);
+    this.countSelectedPlayers();
+   }
+ 
+   showAllPlayers() {
+     this.showingPlayers = this.players;
+   }
 
-
-  public addPlayerAlert(msg: string, type: string):void {
+  public addPlayerAlert(msg: string, type: string): void {
     this.playerAlerts.push({msg: msg, type: type, closable: false});
   }
 
-  sortedPlayers() {
-    const sortedArray: Player[] = this.players.sort((n1, n2) => {
+  sortedPlayers(playersToSort: Player[]) {
+    const sortedArray: Player[] = playersToSort.sort((n1, n2) => {
       if (n1.name.toLocaleLowerCase() > n2.name.toLocaleLowerCase()) {
           return 1;
       }
@@ -83,13 +93,11 @@ export class AvailablePlayersComponent {
     return sortedArray;
   }
 
-  setPlayersToBeSorted() {
-    this.players = this.sortedPlayers();
-  }
-
   addThisPlayerToPlayers(newPlayer: Player) {
     this.players.push(newPlayer);
-    this.setPlayersToBeSorted();
+    this.activePlayers.push(newPlayer);
+    this.players = this.sortedPlayers(this.players);
+    this.activePlayers = this.sortedPlayers(this.activePlayers);
     this.countSelectedPlayers();
     this.addPlayerAlert('Spilleren \'' + newPlayer.name + '\' er nu oprettet og markeret i listen', 'success');
   }
@@ -215,11 +223,9 @@ export class AvailablePlayersComponent {
 
     this.playerService.create(name, true, new Date(newToday))
     .subscribe(strRes => {
-        console.log(`1 Added Player. ${strRes}`);
         this.addThisPlayerToPlayers(this.newPlayer);
       },
     err  => {
-      console.log('errer::::::::::::::::');
       this.addPlayerAlert('Noget gik galt i forsøget på at oprette spilleren. Fejlen var: \'' + err + '\'', 'danger');
     })
     }
