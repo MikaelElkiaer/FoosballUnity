@@ -14,7 +14,7 @@ export class RankingItemService {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) {}
-  getRankingItems(period : string): Observable<RankingItem[]> {
+  getRankingItems(period: string): Observable<RankingItem[]> {
       return this.http.get<RankingItem[]>(this.rankingItemsUrl + period)
         .catch(this.handleError);
   }

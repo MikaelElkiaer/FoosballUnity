@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Rx';
-import { TimerObservable } from "rxjs/observable/TimerObservable";
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
 import { ProgressbarModule } from 'ngx-bootstrap';
 
@@ -32,26 +32,26 @@ export class CountdownComponent {
   playingTime = 120;
   remainingTime = this.playingTime;
   ticks = 0;
-  progressbarType = "info";
+  progressbarType = 'info';
 
   subscription: Subscription;
   timer: Observable<any>;
 
-  soundStart:any;
-  soundFinish:any;
-  sound1Minute:any;
-  sound30Seconds:any;
-  sound15Seconds:any;
+  soundStart: any;
+  soundFinish: any;
+  sound1Minute: any;
+  sound30Seconds: any;
+  sound15Seconds: any;
 
-  urlStart:string;
-  ta : TimerAction;
+  urlStart: string;
+  ta: TimerAction;
   lastSeenlastRequestedTimerStart = null;
 
   constructor(http: HttpClient) {
-    this.soundFinish = new Audio("/assets/sounds/finish.wav");
-    this.sound1Minute= new Audio("/assets/sounds/1minute.wav");
-    this.sound30Seconds= new Audio("/assets/sounds/30seconds.wav");
-    this.sound15Seconds= new Audio("/assets/sounds/15seconds.wav");
+    this.soundFinish = new Audio('/assets/sounds/finish.wav');
+    this.sound1Minute = new Audio('/assets/sounds/1minute.wav');
+    this.sound30Seconds = new Audio('/assets/sounds/30seconds.wav');
+    this.sound15Seconds = new Audio('/assets/sounds/15seconds.wav');
 
     Observable.interval(1000).switchMap(() => http.get('http://localhost:5050/timer'))
       .subscribe(data => {
@@ -61,7 +61,7 @@ export class CountdownComponent {
          this.lastSeenlastRequestedTimerStart = this.ta.lastRequestedTimerStart;
 
        } else {
-         if (this.lastSeenlastRequestedTimerStart != this.ta.lastRequestedTimerStart) {
+         if (this.lastSeenlastRequestedTimerStart !== this.ta.lastRequestedTimerStart) {
            this.startCountdownTimer();
            this.lastSeenlastRequestedTimerStart = this.ta.lastRequestedTimerStart;
          }
@@ -75,29 +75,28 @@ export class CountdownComponent {
     }
 
     this.timer = Observable.timer(0, 1000);
-    this.subscription = this.timer.subscribe(t=> {this.showNewTime(t)});
-    var random = Math.floor(Math.random() * 7) + 1;
-    this.urlStart = "/assets/sounds/duke/" + random + ".wav";
+    this.subscription = this.timer.subscribe(t => {this.showNewTime(t)});
+    const random = Math.floor(Math.random() * 7) + 1;
+    this.urlStart = '/assets/sounds/duke/' + random + '.wav';
     this.soundStart = new Audio(this.urlStart);
     this.soundStart.play();
   }
 
-  showNewTime(t : number) {
+  showNewTime(t: number) {
     this.ticks = t;
     this.remainingTime = this.playingTime - this.ticks;
     if (this.remainingTime > 60) {
       this.progressbarType = 'success';
-    } else if (this.remainingTime == 60) {
+    } else if (this.remainingTime === 60) {
       this.sound1Minute.play();
       this.progressbarType = 'info';
-    } else if (this.remainingTime == 30) {
+    } else if (this.remainingTime === 30) {
       this.sound30Seconds.play();
       this.progressbarType = 'warning';
-    } else if (this.remainingTime == 15) {
+    } else if (this.remainingTime === 15) {
       this.sound15Seconds.play();
       this.progressbarType = 'danger';
-    }
-    else if (this.remainingTime == 0) {
+    } else if (this.remainingTime === 0) {
       if ( this.subscription && this.subscription instanceof Subscription) {
             this.subscription.unsubscribe();
       }

@@ -34,10 +34,11 @@ import { AlertModule } from 'ngx-bootstrap';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService, SharedCommunicationService, ConfigurationItemService]
+  styleUrls: ['./app.component.scss'],
+  providers: [PlayerService, RankingItemService, GameService, TournamentGameRoundService, 
+    SharedCommunicationService, ConfigurationItemService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
 
   @ViewChild(AvailablePlayersComponent)
   private availablePlayersComponent: AvailablePlayersComponent;
@@ -48,12 +49,12 @@ export class AppComponent {
   resultBackFromGettingPlayers = false;
   experiencedProblemWithGettingPlayers = false;
 
-  promise : any;
+  promise: any;
 
-  playerForStatistics : string;
+  playerForStatistics: string;
+  selectedPlayers: Player[];
 
   players() { return new Array()}
-  selectedPlayers : Player[];
 
   constructor(
     private playerService: PlayerService,
@@ -85,11 +86,23 @@ export class AppComponent {
   }
 
   getPlayers(): void {
-      this.playerService.getPlayers().subscribe(players =>
-     {
+      this.playerService.getPlayers().subscribe(players => {
        this.resultBackFromGettingPlayers = true;
        this.experiencedProblemWithGettingPlayers = false;
        this.availablePlayersComponent.setPlayers(players);
+       this.rankingItemService.getRankingItems('month').subscribe(
+         rankItems => {
+          const activePlayers = [];
+          rankItems.forEach(item => {
+            activePlayers.push(players.filter(player => {
+              return player.name === item.name;
+            })[0]);
+          });
+          console.log('Setting Active players', activePlayers);
+          this.availablePlayersComponent.setActivePlayers(activePlayers);
+         }
+       );
+       this.availablePlayersComponent.showAllPlayers();
      },
      err => {
       this.resultBackFromGettingPlayers = true;
@@ -102,7 +115,7 @@ export class AppComponent {
        this.configurationItemService.getConfigurationItems().subscribe(
          configurationItems => {this.gamesOverviewComponent.setConfigurationItems(configurationItems)},
          err => {
-           console.log("Damn, an error occured, when getting configuration items")
+           console.log('Damn, an error occured, when getting configuration items');
            return Promise.reject(err.message || err);
          }
        );

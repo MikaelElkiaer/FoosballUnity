@@ -107,7 +107,7 @@ export class IndividualResultsComponent implements OnInit  {
 
   ngOnInit() {
     setTimeout(() => {
-      if (this.players.length > 0) {
+      if (this.players && this.players.length > 0) {
         this.playerForStatistics = this.players[0].name;
         this.changePlayerForStatistics(this.playerForStatistics);
         this.getPlayerStatistics();

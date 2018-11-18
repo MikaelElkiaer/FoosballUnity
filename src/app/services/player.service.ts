@@ -4,8 +4,6 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Player } from '../model/player';
 import { Observable } from 'rxjs/Observable';
 
-//import { PLAYERS } from '../mock.players';
-
 @Injectable()
 export class PlayerService {
 
@@ -19,10 +17,13 @@ export class PlayerService {
       .catch(this.handleError);
   }
 
-  create(name : string, playerReady: boolean, created: Date ): Observable<string> {
+  create(name: string, playerReady: boolean, created: Date ): Observable<string> {
+    const now = new Date().toISOString();
+    let dateStr = now.substring(0, now.indexOf('T')) + ' ' + now.substring(now.indexOf('T') + 1, now.indexOf('.') + 2);
     return this.http
-      .post(this.playersUrl, "[" + JSON.stringify({name:name, playerReady:playerReady, oprettet:'2016-10-10 21:46:36.0', registeredRFIDTag:''}) + "]",
-      {headers:this.headers})
+      .post(this.playersUrl,
+        '[' + JSON.stringify({name: name, playerReady: playerReady, oprettet: dateStr, registeredRFIDTag: ''}) + ']',
+      {headers: this.headers, responseType: 'text'})
       .catch(this.handleError);
   }
 
