@@ -9,7 +9,7 @@ import { GAMES } from '../mocks/mock.games';
 
 @Injectable()
 export class GameService {
-  private gamesUrl = 'http://localhost:5050/games/';
+  private gamesUrl = '/api/games/';
 
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   private samletTekst = '';

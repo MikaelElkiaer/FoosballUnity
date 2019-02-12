@@ -1,8 +1,10 @@
+using FoosballUnity.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +29,9 @@ namespace FoosballUnity2
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            string connectionString = Configuration["ConnectionStrings:DefaultConnectionString"];
+            services.AddDbContext<FoosballContext>(o => o.UseSqlite(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

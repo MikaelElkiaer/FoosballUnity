@@ -39,7 +39,7 @@ export class AvailablePlayersComponent {
     this.soundCheckout = new Audio('/assets/sounds/workout-complete.wav');
     this.soundError = new Audio('/assets/sounds/error.wav');
 
-    Observable.interval(500).switchMap(() => http.get<Player>('http://localhost:5050/registration'))
+    Observable.interval(500).switchMap(() => http.get<Player>('/api/registration'))
       .subscribe(data => this.inverseSelectionForPlayer(data));
   }
 

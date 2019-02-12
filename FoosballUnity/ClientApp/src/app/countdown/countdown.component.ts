@@ -53,7 +53,7 @@ export class CountdownComponent {
     this.sound30Seconds = new Audio('/assets/sounds/30seconds.wav');
     this.sound15Seconds = new Audio('/assets/sounds/15seconds.wav');
 
-    Observable.interval(1000).switchMap(() => http.get('http://localhost:5050/timer'))
+    Observable.interval(1000).switchMap(() => http.get('/api/timer'))
       .subscribe(data => {
        this.ta = data[0];
        //console.log("tid: " + this.ta.lastRequestedTimerStart)

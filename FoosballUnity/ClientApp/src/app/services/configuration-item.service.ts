@@ -9,7 +9,7 @@ import { ConfigurationItem } from '../model/configuration-item';
 @Injectable()
 export class ConfigurationItemService {
 
-  private configurationItemsUrl = 'http://localhost:5050/configuration/';
+  private configurationItemsUrl = '/api/configuration/';
 
   constructor(private http: HttpClient) {}
 

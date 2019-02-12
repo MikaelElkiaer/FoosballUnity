@@ -10,7 +10,7 @@ import { RANKINGITEMSSAMLET } from '../mocks/mock.ranking-items-samlet';
 @Injectable()
 export class RankingItemService {
 
-  private rankingItemsUrl = 'http://localhost:5050/pointsPrPlayer/';
+  private rankingItemsUrl = '/api/pointsPrPlayer/';
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) {}
