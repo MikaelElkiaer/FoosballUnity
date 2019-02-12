@@ -13,20 +13,20 @@ namespace FoosballUnity.Model
             PlayerRed2 = playerRed2;
             PlayerBlue1 = playerBlue1;
             PlayerBlue2 = playerBlue2;
-            LastUpdated = lastUpdatedUtc;
+            LastUpdatedUtc = lastUpdatedUtc;
             MatchWinner = matchWinner;
             WinningTable = winningTable;
             PointsAtStake = pointsAtStake;
         }
 
-        public int Id { get; }
-        public string PlayerRed1 { get; }
-        public string PlayerRed2 { get; }
-        public string PlayerBlue1 { get; }
-        public string PlayerBlue2 { get; }
-        public DateTime LastUpdated { get; }
-        public string MatchWinner { get; }
-        public int WinningTable { get; }
-        public int PointsAtStake { get; }
+        public int Id { get; private set; }
+        public string PlayerRed1 { get; private set; }
+        public string PlayerRed2 { get; private set; }
+        public string PlayerBlue1 { get; private set; }
+        public string PlayerBlue2 { get; private set; }
+        public DateTime LastUpdatedUtc { get; private set; }
+        public string MatchWinner { get; private set; }
+        public int WinningTable { get; private set; }
+        public int PointsAtStake { get; private set; }
     }
 }

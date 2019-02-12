@@ -14,9 +14,9 @@ namespace FoosballUnity.Model
             Name = name;
         }
 
-        public int Position { get; }
-        public int Points { get; }
-        public int NumberOfGames { get; }
-        public string Name { get; }
+        public int Position { get; private set; }
+        public int Points { get; private set; }
+        public int NumberOfGames { get; private set; }
+        public string Name { get; private set; }
     }
 }

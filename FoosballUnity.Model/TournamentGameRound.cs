@@ -12,6 +12,6 @@ namespace FoosballUnity.Model
             TournamentGames = tournamentGames.ToArray();
         }
 
-        public Game[] TournamentGames { get; }
+        public Game[] TournamentGames { get; private set; }
     }
 }

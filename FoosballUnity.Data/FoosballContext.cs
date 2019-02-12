@@ -14,15 +14,19 @@ namespace FoosballUnity.Data
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Database.EnsureCreated();
+            modelBuilder.Entity<ConfigurationItem>().HasKey(c => c.Name);
+            modelBuilder.Entity<Game>().HasKey(g => g.Id);
+            modelBuilder.Entity<Player>().HasKey(p => p.Name);
+            modelBuilder.Entity<Registration>().HasKey(r => r.RfidTag);
+            modelBuilder.Entity<TimerAction>().HasKey(t => t.Id);
         }
 
         public DbSet<ConfigurationItem> Configurations { get; set; }
-        public DbSet<TimerAction> TimerActions { get; set; }
-        public DbSet<Registration> Registrations { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
+        public DbSet<Registration> Registrations { get; set; }
+        public DbSet<TimerAction> TimerActions { get; set; }
     }
 }

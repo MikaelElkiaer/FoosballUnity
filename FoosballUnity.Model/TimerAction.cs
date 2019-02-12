@@ -12,7 +12,7 @@ namespace FoosballUnity.Model
             LastRequestedTimerStartUtc = lastRequestedTimerStartUtc;
         }
 
-        public int Id { get; }
-        public DateTime LastRequestedTimerStartUtc { get; }
+        public int Id { get; private set; }
+        public DateTime LastRequestedTimerStartUtc { get; private set; }
     }
 }

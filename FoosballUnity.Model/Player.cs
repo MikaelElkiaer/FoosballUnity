@@ -14,9 +14,9 @@ namespace FoosballUnity.Model
             RegisteredRfidTag = registeredRfidTag;
         }
 
-        public string Name { get; }
-        public bool PlayerReady { get; }
-        public DateTime CreatedUtc { get; }
-        public string RegisteredRfidTag { get; }
+        public string Name { get; private set; }
+        public bool PlayerReady { get; private set; }
+        public DateTime CreatedUtc { get; private set; }
+        public string RegisteredRfidTag { get; private set; }
     }
 }

@@ -11,6 +11,6 @@ namespace FoosballUnity.Model
             RfidTag = rfidTag;
         }
 
-        public string RfidTag { get; }
+        public string RfidTag { get; private set; }
     }
 }
