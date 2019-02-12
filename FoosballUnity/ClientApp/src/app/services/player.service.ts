@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class PlayerService {
 
-  private playersUrl = 'http://localhost:5050/players/';
+  private playersUrl = 'api/players/';
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) {}
@@ -22,7 +22,7 @@ export class PlayerService {
     let dateStr = now.substring(0, now.indexOf('T')) + ' ' + now.substring(now.indexOf('T') + 1, now.indexOf('.') + 2);
     return this.http
       .post(this.playersUrl,
-        '[' + JSON.stringify({name: name, playerReady: playerReady, oprettet: dateStr, registeredRFIDTag: ''}) + ']',
+        JSON.stringify({name: name, playerReady: playerReady, oprettet: dateStr, registeredRFIDTag: ''}),
       {headers: this.headers, responseType: 'text'})
       .catch(this.handleError);
   }
