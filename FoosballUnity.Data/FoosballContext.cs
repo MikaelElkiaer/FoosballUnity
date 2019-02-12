@@ -17,7 +17,9 @@ namespace FoosballUnity.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ConfigurationItem>().HasKey(c => c.Name);
-            modelBuilder.Entity<Game>().HasKey(g => g.Id);
+            var game = modelBuilder.Entity<Game>();
+            game.Property(g => g.Id).ValueGeneratedOnAdd();
+            game.HasKey(g => g.Id);
             modelBuilder.Entity<Player>().HasKey(p => p.Name);
             modelBuilder.Entity<Registration>().HasKey(r => r.RfidTag);
             modelBuilder.Entity<TimerAction>().HasKey(t => t.Id);

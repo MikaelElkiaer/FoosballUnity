@@ -7,11 +7,11 @@ namespace FoosballUnity.Model
 {
     public class GamePostResponse
     {
-        public GamePostResponse(IEnumerable<string> newGameIds)
+        public GamePostResponse(IEnumerable<int> newGameIds)
         {
             NewGameIds = newGameIds.ToArray();
         }
 
-        public string[] NewGameIds { get; }
+        public int[] NewGameIds { get; }
     }
 }
