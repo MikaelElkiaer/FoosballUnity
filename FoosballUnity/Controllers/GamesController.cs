@@ -19,7 +19,7 @@ namespace FoosballUnity.Controllers
             this.context = context;
         }
 
-        [Route("")]
+        [Route("{name}")]
         [HttpGet]
         public async Task<ActionResult<Game[]>> GetByName(string name = null)
         {
@@ -35,16 +35,16 @@ namespace FoosballUnity.Controllers
                     break;
                 case "month":
                     hoursToGoBackInTime = 31 * 24;
-                    throw new NotImplementedException();
+                    break;
                 case "week":
                     hoursToGoBackInTime = 7 * 24;
-                    throw new NotImplementedException();
+                    break;
                 case "day":
                     hoursToGoBackInTime = 24;
-                    throw new NotImplementedException();
+                    break;
                 case "hour":
                     hoursToGoBackInTime = 1;
-                    throw new NotImplementedException();
+                    break;
                 default:
                     hoursToGoBackInTime = -1;
                     nothingFound = true;
