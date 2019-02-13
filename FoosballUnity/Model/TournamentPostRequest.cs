@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace FoosballUnity.Model
 {
-    public class GamePostRequest
+    public class TournamentPostRequest
     {
-        public GamePostRequest(int numberOfGames, IEnumerable<Player> players)
+        public TournamentPostRequest(int numberOfGames, IEnumerable<Player> players)
         {
             NumberOfGames = numberOfGames;
             Players = players.ToArray();

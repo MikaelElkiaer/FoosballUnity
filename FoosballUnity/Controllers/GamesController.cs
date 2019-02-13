@@ -98,7 +98,7 @@ namespace FoosballUnity.Controllers
             context.Games.AddRange(games);
             await context.SaveChangesAsync();
 
-            return games.Select(g => g.Id).ToArray();
+            return games.Select(g => g.Id.Value).ToArray();
         }
     }
 }

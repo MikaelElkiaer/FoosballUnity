@@ -13,7 +13,7 @@ import { Player } from '../model/player';
 @Injectable()
 export class TournamentGameRoundService {
   //private tournamentGameRoundsUrl = '/api/tournament/lastFirstTournament/';
-  private tournamentGameRoundsUrl = '/api/tournament/awesomeAlgorithmTournament/';
+  private tournamentGameRoundsUrl = '/api/tournament/roundrequest';
 
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   private samletTekst = '';

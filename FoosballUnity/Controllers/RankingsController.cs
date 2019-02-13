@@ -45,16 +45,16 @@ namespace FoosballUnity.Controllers
                     throw new NotImplementedException();
                 case "month":
                     hoursToGoBackInTime = 31 * 24;
-                    throw new NotImplementedException();
+                    break;
                 case "week":
                     hoursToGoBackInTime = 7 * 24;
-                    throw new NotImplementedException();
+                    break;
                 case "day":
                     hoursToGoBackInTime = 24;
-                    throw new NotImplementedException();
+                    break;
                 case "hour":
                     hoursToGoBackInTime = 1;
-                    throw new NotImplementedException();
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -63,7 +63,7 @@ namespace FoosballUnity.Controllers
 
             var rankings = GenerateRankings(games, filter);
 
-            return Ok(rankings.ToArray());
+            return rankings.ToArray();
         }
 
         private IEnumerable<Ranking> GenerateRankings(IEnumerable<Game> games, string filter)
@@ -75,20 +75,17 @@ namespace FoosballUnity.Controllers
             {
                 foreach (var game in games)
                 {
-
-
                     // Ensure all players have an initial ranking, if they haven't already played before
-                    if (game.PlayerBlue1 != null && !numberOfGames.ContainsKey(game.PlayerBlue1)) scores.Add(game.PlayerBlue1, 1500);
-                    if (game.PlayerBlue2 != null && !numberOfGames.ContainsKey(game.PlayerBlue2)) scores.Add(game.PlayerBlue2, 1500);
-                    if (game.PlayerRed1 != null && !numberOfGames.ContainsKey(game.PlayerRed1)) scores.Add(game.PlayerRed1, 1500);
-                    if (game.PlayerRed2 != null && !numberOfGames.ContainsKey(game.PlayerRed2)) scores.Add(game.PlayerRed2, 1500);
+                    if (game.PlayerBlue1 != null && !scores.ContainsKey(game.PlayerBlue1)) scores.Add(game.PlayerBlue1, 1500);
+                    if (game.PlayerBlue2 != null && !scores.ContainsKey(game.PlayerBlue2)) scores.Add(game.PlayerBlue2, 1500);
+                    if (game.PlayerRed1 != null && !scores.ContainsKey(game.PlayerRed1)) scores.Add(game.PlayerRed1, 1500);
+                    if (game.PlayerRed2 != null && !scores.ContainsKey(game.PlayerRed2)) scores.Add(game.PlayerRed2, 1500);
 
                     // Ensure all players are registred in the numberOfGames, if they haven't already played before
                     if (game.PlayerBlue1 != null && !numberOfGames.ContainsKey(game.PlayerBlue1)) numberOfGames.Add(game.PlayerBlue1, 0);
                     if (game.PlayerBlue2 != null && !numberOfGames.ContainsKey(game.PlayerBlue2)) numberOfGames.Add(game.PlayerBlue2, 0);
                     if (game.PlayerRed1 != null && !numberOfGames.ContainsKey(game.PlayerRed1)) numberOfGames.Add(game.PlayerRed1, 0);
                     if (game.PlayerRed2 != null && !numberOfGames.ContainsKey(game.PlayerRed2)) numberOfGames.Add(game.PlayerRed2, 0);
-
 
                     // Add to number of games
                     if (game.PlayerBlue1 != null) numberOfGames[game.PlayerBlue1]++;
@@ -114,6 +111,59 @@ namespace FoosballUnity.Controllers
                     }
                     else if (game.MatchWinner.Equals("draw", StringComparison.InvariantCultureIgnoreCase))
                     {
+                        if (game.PlayerBlue1 != null) scores[game.PlayerBlue1] += game.PointsAtStake;
+                        if (game.PlayerBlue2 != null) scores[game.PlayerBlue2] += game.PointsAtStake;
+                        if (game.PlayerRed1 != null) scores[game.PlayerRed1] += game.PointsAtStake;
+                        if (game.PlayerRed2 != null) scores[game.PlayerRed2] += game.PointsAtStake;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var game in games)
+                {
+                    if (game.PlayerBlue1 != null && !numberOfGames.ContainsKey(game.PlayerBlue1)) numberOfGames.Add(game.PlayerBlue1, 0);
+                    if (game.PlayerBlue2 != null && !numberOfGames.ContainsKey(game.PlayerBlue2)) numberOfGames.Add(game.PlayerBlue2, 0);
+                    if (game.PlayerRed1 != null && !numberOfGames.ContainsKey(game.PlayerRed1)) numberOfGames.Add(game.PlayerRed1, 0);
+                    if (game.PlayerRed2 != null && !numberOfGames.ContainsKey(game.PlayerRed2)) numberOfGames.Add(game.PlayerRed2, 0);
+
+                    if (game.PlayerBlue1 != null) numberOfGames[game.PlayerBlue1]++;
+                    if (game.PlayerBlue2 != null) numberOfGames[game.PlayerBlue2]++;
+                    if (game.PlayerRed1 != null) numberOfGames[game.PlayerRed1]++;
+                    if (game.PlayerRed2 != null) numberOfGames[game.PlayerRed2]++;
+
+                    // Then add their games
+                    if (game.MatchWinner.Equals("blue", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (game.PlayerBlue1 != null && !scores.ContainsKey(game.PlayerBlue1)) scores.Add(game.PlayerBlue1, game.PointsAtStake);
+                        if (game.PlayerBlue2 != null && !scores.ContainsKey(game.PlayerBlue2)) scores.Add(game.PlayerBlue2, game.PointsAtStake);
+                        if (game.PlayerRed1 != null && !scores.ContainsKey(game.PlayerRed1)) scores.Add(game.PlayerRed1, -game.PointsAtStake);
+                        if (game.PlayerRed2 != null && !scores.ContainsKey(game.PlayerRed2)) scores.Add(game.PlayerRed2, -game.PointsAtStake);
+
+                        if (game.PlayerBlue1 != null) scores[game.PlayerBlue1] += game.PointsAtStake;
+                        if (game.PlayerBlue2 != null) scores[game.PlayerBlue2] += game.PointsAtStake;
+                        if (game.PlayerRed1 != null) scores[game.PlayerRed1] -= game.PointsAtStake;
+                        if (game.PlayerRed2 != null) scores[game.PlayerRed2] -= game.PointsAtStake;
+                    }
+                    else if (game.MatchWinner.Equals("red", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (game.PlayerRed1 != null && !scores.ContainsKey(game.PlayerRed1)) scores.Add(game.PlayerRed1, game.PointsAtStake);
+                        if (game.PlayerRed2 != null && !scores.ContainsKey(game.PlayerRed2)) scores.Add(game.PlayerRed2, game.PointsAtStake);
+                        if (game.PlayerBlue1 != null && !scores.ContainsKey(game.PlayerBlue1)) scores.Add(game.PlayerBlue1, -game.PointsAtStake);
+                        if (game.PlayerBlue2 != null && !scores.ContainsKey(game.PlayerBlue2)) scores.Add(game.PlayerBlue2, -game.PointsAtStake);
+
+                        if (game.PlayerRed1 != null) scores[game.PlayerRed1] += game.PointsAtStake;
+                        if (game.PlayerRed2 != null) scores[game.PlayerRed2] += game.PointsAtStake;
+                        if (game.PlayerBlue1 != null) scores[game.PlayerBlue1] -= game.PointsAtStake;
+                        if (game.PlayerBlue2 != null) scores[game.PlayerBlue2] -= game.PointsAtStake;
+                    }
+                    else if (game.MatchWinner.Equals("draw", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (game.PlayerRed1 != null && !scores.ContainsKey(game.PlayerRed1)) scores.Add(game.PlayerRed1, game.PointsAtStake);
+                        if (game.PlayerRed2 != null && !scores.ContainsKey(game.PlayerRed2)) scores.Add(game.PlayerRed2, game.PointsAtStake);
+                        if (game.PlayerBlue1 != null && !scores.ContainsKey(game.PlayerBlue1)) scores.Add(game.PlayerBlue1, game.PointsAtStake);
+                        if (game.PlayerBlue2 != null && !scores.ContainsKey(game.PlayerBlue2)) scores.Add(game.PlayerBlue2, game.PointsAtStake);
+
                         if (game.PlayerBlue1 != null) scores[game.PlayerBlue1] += game.PointsAtStake;
                         if (game.PlayerBlue2 != null) scores[game.PlayerBlue2] += game.PointsAtStake;
                         if (game.PlayerRed1 != null) scores[game.PlayerRed1] += game.PointsAtStake;
