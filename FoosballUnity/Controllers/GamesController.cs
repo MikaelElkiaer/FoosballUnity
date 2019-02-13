@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FoosballUnity.Controllers
 {
-    [Route("games")]
+    [Route("api/games")]
     public class GamesController : Controller
     {
         private readonly FoosballContext context;
