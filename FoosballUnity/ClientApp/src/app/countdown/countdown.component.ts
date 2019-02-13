@@ -52,21 +52,6 @@ export class CountdownComponent {
     this.sound1Minute = new Audio('/assets/sounds/1minute.wav');
     this.sound30Seconds = new Audio('/assets/sounds/30seconds.wav');
     this.sound15Seconds = new Audio('/assets/sounds/15seconds.wav');
-
-    Observable.interval(1000).switchMap(() => http.get('/api/timer'))
-      .subscribe(data => {
-       this.ta = data[0];
-       //console.log("tid: " + this.ta.lastRequestedTimerStart)
-       if (this.lastSeenlastRequestedTimerStart == null) {
-         this.lastSeenlastRequestedTimerStart = this.ta.lastRequestedTimerStart;
-
-       } else {
-         if (this.lastSeenlastRequestedTimerStart !== this.ta.lastRequestedTimerStart) {
-           this.startCountdownTimer();
-           this.lastSeenlastRequestedTimerStart = this.ta.lastRequestedTimerStart;
-         }
-       }
-    });
   }
 
   startCountdownTimer() {
