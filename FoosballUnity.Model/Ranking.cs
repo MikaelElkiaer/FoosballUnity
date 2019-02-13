@@ -4,9 +4,9 @@ using System.Text;
 
 namespace FoosballUnity.Model
 {
-    public class PointsPerPlayerPlayer
+    public class Ranking
     {
-        public PointsPerPlayerPlayer(int position, int points, int numberOfGames, string name)
+        public Ranking(int position, int points, int numberOfGames, string name)
         {
             Position = position;
             Points = points;

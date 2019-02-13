@@ -35,16 +35,16 @@ namespace FoosballUnity.Controllers
                     break;
                 case "month":
                     hoursToGoBackInTime = 31 * 24;
-                    break;
+                    throw new NotImplementedException();
                 case "week":
                     hoursToGoBackInTime = 7 * 24;
-                    break;
+                    throw new NotImplementedException();
                 case "day":
                     hoursToGoBackInTime = 24;
-                    break;
+                    throw new NotImplementedException();
                 case "hour":
                     hoursToGoBackInTime = 1;
-                    break;
+                    throw new NotImplementedException();
                 default:
                     hoursToGoBackInTime = -1;
                     nothingFound = true;
