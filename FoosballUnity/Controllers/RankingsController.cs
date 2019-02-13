@@ -174,7 +174,7 @@ namespace FoosballUnity.Controllers
 
             var playersByScore = scores.ToLookup(s => s.Value, s => s.Key)
                 .SelectMany(x => x.Select(y => (Score: x.Key, PlayerName: y)))
-                .OrderBy(x => x.Score)
+                .OrderByDescending(x => x.Score)
                 .Select((x, i) => (Position: i + 1, x.Score, x.PlayerName))
                 .Select(x => new Ranking(x.Position, x.Score, numberOfGames[x.PlayerName], x.PlayerName));
 

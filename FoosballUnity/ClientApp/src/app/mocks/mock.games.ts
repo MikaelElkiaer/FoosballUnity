@@ -1,6 +1,6 @@
 import { Game } from '../model/game';
 
 export const GAMES: Game[] = [
-  {id: 1, player_red_1: "ALSK" , player_red_2: "DWP", player_blue_1: "NIKL" , player_blue_2: "CANI" , lastUpdated: '2015-10-10', match_winner: "red" , winning_table: 1 , points_at_stake: 1 },
-  {id: 2, player_red_1: "CARS", player_red_2: "CJO", player_blue_1: "FBU" , player_blue_2: "BCSP" , lastUpdated: '2015-10-10', match_winner: "draw", winning_table: 2, points_at_stake: 1 },
+  {id: 1, playerRed1: "ALSK" , playerRed2: "DWP", playerBlue1: "NIKL" , playerBlue2: "CANI" , lastUpdatedUtc: '2015-10-10', matchWinner: "red" , winningTable: 1 , pointsAtStake: 1 },
+  {id: 2, playerRed1: "CARS", playerRed2: "CJO", playerBlue1: "FBU" , playerBlue2: "BCSP" , lastUpdatedUtc: '2015-10-10', matchWinner: "draw", winningTable: 2, pointsAtStake: 1 },
 ]

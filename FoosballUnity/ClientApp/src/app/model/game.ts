@@ -1,11 +1,11 @@
 export class Game {
   id: number;
-  player_red_1: string;
-  player_red_2: string;
-  player_blue_1: string;
-  player_blue_2: string;
-  lastUpdated: string;
-  match_winner: string;
-  winning_table: number;
-  points_at_stake: number;
+  playerRed1: string;
+  playerRed2: string;
+  playerBlue1: string;
+  playerBlue2: string;
+  lastUpdatedUtc: string;
+  matchWinner: string;
+  winningTable: number;
+  pointsAtStake: number;
 }

@@ -89,7 +89,7 @@ export class TrainingOverviewComponent implements OnInit {
 
           for (let game of games) {
             var arr = null;
-            var gameDateInMilli = Date.parse(game.lastUpdated)
+            var gameDateInMilli = Date.parse(game.lastUpdatedUtc)
             var gameDateDateAsDate = new Date(gameDateInMilli)
 
             var gameDateDateAsNumber = gameDateDateAsDate.getDate()
@@ -116,7 +116,7 @@ export class TrainingOverviewComponent implements OnInit {
                 var j = 0;
 
                 for (let player of this.players) {
-                  if (game.player_red_1 == player.name || game.player_red_2 == player.name || game.player_blue_1 == player.name || game.player_blue_2 == player.name) {
+                  if (game.playerRed1 == player.name || game.playerRed2 == player.name || game.playerBlue1 == player.name || game.playerBlue2 == player.name) {
                     var thisObject = arr[j];
                     thisObject[gameDateDateAsNumber] = 1;
                     arr[j] = thisObject;

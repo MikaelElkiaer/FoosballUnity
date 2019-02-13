@@ -24,7 +24,7 @@ namespace FoosballUnity.Controllers
         public async Task<ActionResult<Game[]>> GetByName(string name = null)
         {
             if (name is null)
-                return await getAllGames();
+                return await GetAllGames();
 
             int hoursToGoBackInTime;
             bool nothingFound = false;
@@ -54,51 +54,51 @@ namespace FoosballUnity.Controllers
             if (nothingFound)
             {
                 // Didn't find "alltime", "week", "day" or "hour", so we should return for a person instead
-                return await getGamesForName(name);
+                return await GetGamesForName(name);
             }
             else
             {
-                return await getGamesForThisManyHoursBackInTime(hoursToGoBackInTime);
+                return await GetGamesForThisManyHoursBackInTime(hoursToGoBackInTime);
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<GamePostResponse>> Post(Game[] games)
+        public async Task<ActionResult<GamePostResponse>> Post([FromBody]Game game)
         {
-            var gameIds = await submitGames(games);
+            var gameId = await SubmitGame(game);
 
-            var response = new GamePostResponse(gameIds);
+            var response = new GamePostResponse(new[] { gameId });
 
             return response;
         }
 
-        private Task<Game[]> getAllGames()
+        private Task<Game[]> GetAllGames()
         {
             return context.Games.OrderByDescending(g => g.Id).ToArrayAsync();
         }
 
-        private Task<Game[]> getGamesForThisManyHoursBackInTime(int hoursToGoBackInTime)
+        private Task<Game[]> GetGamesForThisManyHoursBackInTime(int hoursToGoBackInTime)
         {
             return context.Games.Where(g => g.LastUpdatedUtc > DateTime.UtcNow.Subtract(TimeSpan.FromHours(hoursToGoBackInTime))).OrderByDescending(g => g.Id).ToArrayAsync();
         }
 
-        private Task<Game[]> getGamesForName(string name)
+        private Task<Game[]> GetGamesForName(string name)
         {
-            return context.Games.Where(g => g.PlayerRed1.Equals(name, StringComparison.InvariantCultureIgnoreCase)
-                || g.PlayerRed2.Equals(name, StringComparison.InvariantCultureIgnoreCase)
-                || g.PlayerBlue1.Equals(name, StringComparison.InvariantCultureIgnoreCase)
-                || g.PlayerBlue2.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+            return context.Games.Where(g => g.PlayerRed1 != null && g.PlayerRed1.Equals(name, StringComparison.InvariantCultureIgnoreCase)
+                || g.PlayerRed2 != null && g.PlayerRed2.Equals(name, StringComparison.InvariantCultureIgnoreCase)
+                || g.PlayerBlue1 != null && g.PlayerBlue1.Equals(name, StringComparison.InvariantCultureIgnoreCase)
+                || g.PlayerBlue2 != null && g.PlayerBlue2.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                 .OrderByDescending(g => g.Id)
                 .Take(10)
                 .ToArrayAsync();
         }
 
-        private async Task<int[]> submitGames(Game[] games)
+        private async Task<int> SubmitGame(Game game)
         {
-            context.Games.AddRange(games);
+            context.Games.Add(game);
             await context.SaveChangesAsync();
 
-            return games.Select(g => g.Id.Value).ToArray();
+            return game.Id.Value;
         }
     }
 }

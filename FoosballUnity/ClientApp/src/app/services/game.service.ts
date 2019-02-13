@@ -24,12 +24,17 @@ export class GameService {
   indmeldResultat(player_red_1 : string, player_red_2 : string,
                   player_blue_1 : string, player_blue_2 : string,
                   table: string, resultat : string, updateTime: string, points_at_stake: number) : Observable<string> {
-    this.samletTekst = '[' +
-     JSON.stringify({player_red_1:player_red_1,   player_red_2:player_red_2, player_blue_1:player_blue_1, player_blue_2:player_blue_2,
-lastUpdated:  updateTime ,match_winner:resultat,points_at_stake: points_at_stake,winning_table:table})
-      + ']';
+    let game = new Game();
+    game.playerRed1 = player_red_1;
+    game.playerRed2 = player_red_2;
+    game.playerBlue1 = player_blue_1;
+    game.playerBlue2 = player_blue_2;
+    game.winningTable = parseInt(table);
+    game.lastUpdatedUtc = updateTime;
+    game.pointsAtStake = points_at_stake;
+    game.matchWinner = resultat;
     return this.http
-      .post<string>(this.gamesUrl, this.samletTekst,
+      .post<Game>(this.gamesUrl, game,
       {headers:this.headers})
       .catch(this.handleError);
   }

@@ -20,14 +20,14 @@ namespace FoosballUnity.Controllers
 
         [HttpPost]
         [Route("roundrequest")]
-        public async Task<ActionResult<Game[][]>> RequestGames(TournamentPostRequest request)
+        public async Task<ActionResult<TournamentGameRound[]>> RequestGames([FromBody]TournamentPostRequest request)
         {
             var games = GenerateGames(request);
 
-            return (await games).Select(g => g.ToArray()).ToArray();
+            return (await games).ToArray();
         }
 
-        private Task<IEnumerable<IEnumerable<Game>>> GenerateGames(TournamentPostRequest game)
+        private Task<IEnumerable<TournamentGameRound>> GenerateGames(TournamentPostRequest game)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -101,9 +101,9 @@ namespace FoosballUnity.Controllers
                     count++;
                 }
 
-                var resultAsArray = new List<IEnumerable<Game>>();
+                var resultAsArray = new List<TournamentGameRound>();
                 TournamentGameRound tournamentGameRound = new TournamentGameRound(result);
-                resultAsArray.Add(tournamentGameRound.TournamentGames);
+                resultAsArray.Add(tournamentGameRound);
 
                 return resultAsArray.AsEnumerable();
             });

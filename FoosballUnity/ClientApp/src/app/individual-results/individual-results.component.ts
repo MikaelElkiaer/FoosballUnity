@@ -150,19 +150,19 @@ export class IndividualResultsComponent implements OnInit  {
             this.playerPoints = [];
             this.playerPoints.push(0);
             for (let game of this.playerGames) {
-              if (game.player_red_1 == this.playerForStatistics || game.player_red_2 == this.playerForStatistics ) {
+              if (game.playerRed1 == this.playerForStatistics || game.playerRed2 == this.playerForStatistics ) {
                 playerTeam = 'red';
               } else {
                 playerTeam = 'blue';
               }
-              if (game.match_winner == 'red' && playerTeam == 'red') {
-                points = game.points_at_stake;
-                } else if (game.match_winner == 'red' && playerTeam == 'blue') {
-                points = -1* game.points_at_stake;
-              } else if (game.match_winner == 'blue' && playerTeam == 'blue') {
-                points = game.points_at_stake;
-              } else if (game.match_winner == 'blue' && playerTeam == 'red') {
-                points = -1* game.points_at_stake;
+              if (game.matchWinner == 'red' && playerTeam == 'red') {
+                points = game.pointsAtStake;
+                } else if (game.matchWinner == 'red' && playerTeam == 'blue') {
+                points = -1* game.pointsAtStake;
+              } else if (game.matchWinner == 'blue' && playerTeam == 'blue') {
+                points = game.pointsAtStake;
+              } else if (game.matchWinner == 'blue' && playerTeam == 'red') {
+                points = -1* game.pointsAtStake;
               } else {
                 points = 0;
               }

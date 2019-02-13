@@ -122,10 +122,10 @@ export class GamesOverviewComponent implements OnInit {
               // Look at all rankingItems
               for (let rankingItem of this.rankingItemsForIntense) {
                 //If the rankingItem relates to our players
-                if (rankingItem.name === game.player_red_1 ||
-                    rankingItem.name === game.player_red_2 ||
-                    rankingItem.name === game.player_blue_1 ||
-                    rankingItem.name === game.player_blue_2) {
+                if (rankingItem.name === game.playerRed1 ||
+                    rankingItem.name === game.playerRed2 ||
+                    rankingItem.name === game.playerBlue1 ||
+                    rankingItem.name === game.playerBlue2) {
 
                     // Save into two arrays for "current points and current position"
                     this.currentPointsForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.points;
@@ -133,48 +133,48 @@ export class GamesOverviewComponent implements OnInit {
                 }
               }
 
-              if (game.player_red_1 != null && this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()] == null) {
+              if (game.playerRed1 != null && this.currentPointsForPlayer[game.playerRed1.toLocaleLowerCase()] == null) {
                 console.log('ingen for r1')
-                this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()] = 1500;
+                this.currentPointsForPlayer[game.playerRed1.toLocaleLowerCase()] = 1500;
               }
-              if (game.player_red_2 != null && this.currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()] == null) {
+              if (game.playerRed2 != null && this.currentPointsForPlayer[game.playerRed2.toLocaleLowerCase()] == null) {
                                 console.log('ingen for r2')
-                this.currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()] = 1500;
+                this.currentPointsForPlayer[game.playerRed2.toLocaleLowerCase()] = 1500;
               }
-              if (game.player_blue_1 != null && this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()] == null) {
+              if (game.playerBlue1 != null && this.currentPointsForPlayer[game.playerBlue1.toLocaleLowerCase()] == null) {
                                 console.log('ingen for b1')
-                this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()] = 1500;
+                this.currentPointsForPlayer[game.playerBlue1.toLocaleLowerCase()] = 1500;
               }
-              if (game.player_blue_2 != null && this.currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()] == null) {
+              if (game.playerBlue2 != null && this.currentPointsForPlayer[game.playerBlue2.toLocaleLowerCase()] == null) {
                                 console.log('ingen for b2')
-                this.currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()] = 1500;
+                this.currentPointsForPlayer[game.playerBlue2.toLocaleLowerCase()] = 1500;
               }
 
               // Lets calculate for top team winning
-              console.log('blue 1:' + game.player_blue_1);
-              console.log('blue 2:' + game.player_blue_2);
-              if (game.player_blue_2 == null) {
+              console.log('blue 1:' + game.playerBlue1);
+              console.log('blue 2:' + game.playerBlue2);
+              if (game.playerBlue2 == null) {
                 console.log('Nummer 2 var null')
               }
 
               let blueEloRanking;
               let redEloRanking;
 
-              if (game.player_red_2 != null) {
-                redEloRanking = (this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()]
-                + this.currentPointsForPlayer[game.player_red_2.toLocaleLowerCase()]) / 2;
+              if (game.playerRed2 != null) {
+                redEloRanking = (this.currentPointsForPlayer[game.playerRed1.toLocaleLowerCase()]
+                + this.currentPointsForPlayer[game.playerRed2.toLocaleLowerCase()]) / 2;
               } else {
-                redEloRanking = this.currentPointsForPlayer[game.player_red_1.toLocaleLowerCase()];
+                redEloRanking = this.currentPointsForPlayer[game.playerRed1.toLocaleLowerCase()];
               }
               redEloRanking = parseInt(redEloRanking, 10);
               console.log('redEloRanking: ' + redEloRanking);
 
 
-              if (game.player_blue_2 != null) {
-                blueEloRanking = (this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()]
-                + this.currentPointsForPlayer[game.player_blue_2.toLocaleLowerCase()]) / 2;
+              if (game.playerBlue2 != null) {
+                blueEloRanking = (this.currentPointsForPlayer[game.playerBlue1.toLocaleLowerCase()]
+                + this.currentPointsForPlayer[game.playerBlue2.toLocaleLowerCase()]) / 2;
               } else {
-                blueEloRanking = this.currentPointsForPlayer[game.player_blue_1.toLocaleLowerCase()];
+                blueEloRanking = this.currentPointsForPlayer[game.playerBlue1.toLocaleLowerCase()];
               }
               blueEloRanking = parseInt(blueEloRanking, 10)
               console.log('blueEloRanking: ' + blueEloRanking)
@@ -221,10 +221,10 @@ export class GamesOverviewComponent implements OnInit {
               // Look at all rankingItems
               for (let rankingItem of this.rankingItemsForIntense) {
                 // If the rankingItem relates to our players
-                if (rankingItem.name === game.player_red_1 ||
-                    rankingItem.name === game.player_red_2 ||
-                    rankingItem.name === game.player_blue_1 ||
-                    rankingItem.name === game.player_blue_2) {
+                if (rankingItem.name === game.playerRed1 ||
+                    rankingItem.name === game.playerRed2 ||
+                    rankingItem.name === game.playerBlue1 ||
+                    rankingItem.name === game.playerBlue2) {
 
                     // Save into two arrays for "current points and current position"
                     this.currentPointsForPlayer[rankingItem.name.toLocaleLowerCase()] = rankingItem.points;
@@ -232,12 +232,12 @@ export class GamesOverviewComponent implements OnInit {
                 }
 
                 // Add to points for Red
-                if (rankingItem.name === game.player_red_1 || (rankingItem.name === game.player_red_2)) {
+                if (rankingItem.name === game.playerRed1 || (rankingItem.name === game.playerRed2)) {
                   combinedPointsTeamRed = combinedPointsTeamRed + rankingItem.points;
 
                 }
                 // Add to points for Blue
-                if (rankingItem.name === game.player_blue_1 || (rankingItem.name === game.player_blue_2)) {
+                if (rankingItem.name === game.playerBlue1 || (rankingItem.name === game.playerBlue2)) {
                   combinedPointsTeamBlue = combinedPointsTeamBlue + rankingItem.points;
                 }
               }
@@ -371,7 +371,7 @@ export class GamesOverviewComponent implements OnInit {
 
          for (let tournamentGameRound of this.tempTournamentGameRounds) {
            for (let game of tournamentGameRound.tournamentGames) {
-             game.lastUpdated = newToday;
+             game.lastUpdatedUtc = newToday;
              console.log('game:  + game')
            }
          }

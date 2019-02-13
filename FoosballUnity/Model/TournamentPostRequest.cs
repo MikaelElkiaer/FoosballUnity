@@ -13,7 +13,7 @@ namespace FoosballUnity.Model
             Players = players.ToArray();
         }
 
-        public int NumberOfGames { get; }
-        public Player[] Players { get; }
+        public int NumberOfGames { get; private set; }
+        public Player[] Players { get; private set; }
     }
 }
