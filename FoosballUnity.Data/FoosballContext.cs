@@ -21,14 +21,10 @@ namespace FoosballUnity.Data
             game.Property(g => g.Id).ValueGeneratedOnAdd();
             game.HasKey(g => g.Id);
             modelBuilder.Entity<Player>().HasKey(p => p.Name);
-            modelBuilder.Entity<Registration>().HasKey(r => r.RfidTag);
-            modelBuilder.Entity<TimerAction>().HasKey(t => t.Id);
         }
 
         public DbSet<ConfigurationItem> Configurations { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
-        public DbSet<Registration> Registrations { get; set; }
-        public DbSet<TimerAction> TimerActions { get; set; }
     }
 }

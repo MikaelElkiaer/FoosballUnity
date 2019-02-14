@@ -8,8 +8,6 @@ import { ProgressbarModule } from 'ngx-bootstrap';
 
 import {HttpClient} from '@angular/common/http';
 
-import { TimerAction } from '../model/timer-action';
-
 @Component({
   selector: 'countdown',
   template: `
@@ -44,7 +42,6 @@ export class CountdownComponent {
   sound15Seconds: any;
 
   urlStart: string;
-  ta: TimerAction;
   lastSeenlastRequestedTimerStart = null;
 
   constructor(http: HttpClient) {

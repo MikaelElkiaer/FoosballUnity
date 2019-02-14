@@ -12,8 +12,6 @@ import { RankingItemService } from './services/ranking-item.service';
 import { Game } from './model/game';
 import { GameService } from './services/game.service';
 
-import { TournamentGame } from './model/tournament-game';
-
 import { TournamentGameRound } from './model/tournament-game-round';
 import { TournamentGameRoundService } from './services/tournament-game-round.service';
 
@@ -24,8 +22,6 @@ import { IndividualResultsComponent } from './individual-results/individual-resu
 import { AvailablePlayersComponent } from './available-players/available-players.component';
 import { PreviousGamesComponent } from './previous-games/previous-games.component';
 import { GamesOverviewComponent } from './games-overview/games-overview.component';
-
-import { RfidRegistrationComponent } from  './rfid-registration/rfid-registration.component';
 
 import { SharedCommunicationService } from './services/shared-communication.service';
 

@@ -19,10 +19,9 @@ export class PlayerService {
 
   create(name: string, playerReady: boolean, created: Date ): Observable<string> {
     const now = new Date().toISOString();
-    let dateStr = now.substring(0, now.indexOf('T')) + ' ' + now.substring(now.indexOf('T') + 1, now.indexOf('.') + 2);
     return this.http
       .post(this.playersUrl,
-        JSON.stringify({name: name, playerReady: playerReady, oprettet: dateStr, registeredRFIDTag: ''}),
+        JSON.stringify({name: name, playerReady: playerReady, createdUtc: now}),
       {headers: this.headers, responseType: 'text'})
       .catch(this.handleError);
   }

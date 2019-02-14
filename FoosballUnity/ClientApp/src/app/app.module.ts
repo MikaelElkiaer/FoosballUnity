@@ -11,7 +11,6 @@ import { PreviousGamesComponent } from './previous-games/previous-games.componen
 import { RankingListComponent } from './ranking-list/ranking-list.component';
 import { FixedRankingListComponent } from './fixed-ranking-list/fixed-ranking-list.component';
 import { GamesOverviewComponent } from './games-overview/games-overview.component';
-import { RfidRegistrationComponent } from './rfid-registration/rfid-registration.component';
 
 import { AlertModule } from 'ngx-bootstrap';
 import { ButtonsModule } from 'ngx-bootstrap';
@@ -19,7 +18,6 @@ import { TabsModule } from 'ngx-bootstrap';
 import { ProgressbarModule } from 'ngx-bootstrap';
 
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-import { TrainingOverviewComponent } from './training-overview/training-overview.component';
 
 @NgModule({
   declarations: [
@@ -30,9 +28,7 @@ import { TrainingOverviewComponent } from './training-overview/training-overview
     PreviousGamesComponent,
     RankingListComponent,
     FixedRankingListComponent,
-    GamesOverviewComponent,
-    TrainingOverviewComponent,
-    RfidRegistrationComponent
+    GamesOverviewComponent
   ],
   imports: [
     BrowserModule,

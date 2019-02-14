@@ -24,7 +24,6 @@ export class AvailablePlayersComponent {
   selectedPlayers: Player[];
   showingPlayers: Player[];
   newPlayer: Player;
-  rfidName: any;
   soundCheckin: any;
   soundCheckout: any;
   soundError: any;
@@ -103,33 +102,6 @@ export class AvailablePlayersComponent {
      let playerReady = this.players.filter((x) => x.playerReady)
      this.selectedPlayers = playerReady;
      this.sharedCommunicationService.informAboutSelectedPlayersChanged(this.selectedPlayers);
-   }
-
-   inverseSelectionForPlayer(player: Player): void {
-     if (player.registeredRFIDTag !== '') {
-       let found = false;
-       for (let tempPlayer of this.players) {
-         if (tempPlayer.name === player.name) {
-           found = true;
-           tempPlayer.playerReady = !tempPlayer.playerReady;
-           player.playerReady = tempPlayer.playerReady;
-           if (player.playerReady) {
-             this.soundCheckin.play();
-           } else {
-             this.soundCheckout.play();
-           }
-         }
-       }
-
-      this.changeRegisteredPlayer(player);
-
-      if (found === false) {
-         this.soundError.play();
-       } else {
-        this.countSelectedPlayers()
-       }
-     }
-
    }
 
    changeRegisteredPlayer(player: Player) {
@@ -215,7 +187,7 @@ export class AvailablePlayersComponent {
 
     newToday = yyyy + '/' + newMM + '/' + newDD + ' ' + newHOURS + ':' + newMINUTES + ':' + newSECONDS + '.' + today.getMilliseconds();
 
-    this.newPlayer = new Player(name, true, new Date(newToday), '');
+    this.newPlayer = new Player(name, true, new Date(newToday));
     console.log(`Adding Player ${name}`);
 
     this.playerService.create(name, true, new Date(newToday))

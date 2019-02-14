@@ -9,8 +9,6 @@ import { GameService } from '../services/game.service';
 
 import { Player } from '../model/player';
 
-import { TournamentGame } from '../model/tournament-game';
-
 import { ConfigurationItem } from '../model/configuration-item';
 
 import { TournamentGameRound } from '../model/tournament-game-round';

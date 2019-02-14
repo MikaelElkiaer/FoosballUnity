@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-import { TournamentGame } from '../model/tournament-game';
 import { TournamentGameRound } from '../model/tournament-game-round';
 
 //import { TOURNAMENTGAMES } from './mock.tournament-games';
