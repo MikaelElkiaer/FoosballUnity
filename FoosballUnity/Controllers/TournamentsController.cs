@@ -22,90 +22,39 @@ namespace FoosballUnity.Controllers
         [Route("roundrequest")]
         public async Task<ActionResult<TournamentGameRound[]>> RequestGames([FromBody]TournamentPostRequest request)
         {
-            var games = GenerateGames(request);
+            var games = await GenerateGames(request);
 
-            return (await games).ToArray();
+            return games.ToArray();
         }
 
         private Task<IEnumerable<TournamentGameRound>> GenerateGames(TournamentPostRequest game)
         {
             return Task.Factory.StartNew(() =>
             {
-
-                var result = new List<Game>();
+                if (!game.Players?.Any() ?? false)
+                    return null;
 
                 var namesOfAvailablePlayers = game.Players.Select(p => p.Name).ToList();
-
-
-                if (!game.Players?.Any() ?? false)
-                {
-                    return null;
-                }
                 int maxPlayersNeeded = 4 * game.NumberOfGames;
-                if (namesOfAvailablePlayers.Count >= 0 && namesOfAvailablePlayers.Count <= 3)
-                {
-                    maxPlayersNeeded = namesOfAvailablePlayers.Count;
-                }
-                else if (namesOfAvailablePlayers.Count <= 5)
-                {
-                    // If only players for 1 table
-                    if (maxPlayersNeeded > 4) maxPlayersNeeded = 4;
-                }
-                else if (namesOfAvailablePlayers.Count > 5 && namesOfAvailablePlayers.Count <= 7)
-                {
-                    maxPlayersNeeded = namesOfAvailablePlayers.Count;
-                }
-                else if (namesOfAvailablePlayers.Count <= 9)
-                {
-                    // If only players for 2 tables
-                    if (maxPlayersNeeded > 8) maxPlayersNeeded = 8;
-                }
-                else if (namesOfAvailablePlayers.Count > 9 && namesOfAvailablePlayers.Count <= 11)
-                {
-                    maxPlayersNeeded = namesOfAvailablePlayers.Count;
-                }
-                else if (namesOfAvailablePlayers.Count <= 13)
-                {
-                    // If only players for 3 tables
-                    if (maxPlayersNeeded > 12) maxPlayersNeeded = 12;
-                }
-
                 var newRealList = GenerateAwesomeList(maxPlayersNeeded, namesOfAvailablePlayers);
-
                 Stack<string> realList = new Stack<string>(newRealList);
-                int count = 0;
 
-                while (realList.Any() && count < game.NumberOfGames)
+                var games = new List<Game>();
+                for (int i = 0; realList.Any() && i < game.NumberOfGames; i++)
                 {
                     realList.TryPop(out string player_red_1);
-                    realList.TryPop(out string player_red_2);
                     realList.TryPop(out string player_blue_1);
+                    realList.TryPop(out string player_red_2);
                     realList.TryPop(out string player_blue_2);
 
-                    Game newGame = new Game(
-                            null,
-                            player_red_1,
-                            player_red_2,
-                            player_blue_1,
-                            player_blue_2,
-                            DateTime.UtcNow,
-                            "",
-                            -1,
-                            -1);
+                    Game newGame = new Game(null, player_red_1, player_red_2, player_blue_1, player_blue_2, DateTime.UtcNow, "", -1, -1);
 
                     // Don't return games, where there isn't at least 1 player on both teams
                     if (player_blue_1 != null)
-                    {
-                        result.Add(newGame);
-                    }
-                    count++;
+                        games.Add(newGame);
                 }
 
-                var resultAsArray = new List<TournamentGameRound>();
-                TournamentGameRound tournamentGameRound = new TournamentGameRound(result);
-                resultAsArray.Add(tournamentGameRound);
-
-                return resultAsArray.AsEnumerable();
+                return Enumerable.Repeat(new TournamentGameRound(games), 1);
             });
         }
 
@@ -114,7 +63,6 @@ namespace FoosballUnity.Controllers
             // So now we have the available players and the max result we should send back (which is the same as the precise result)
             // Get all matches 1 hour back
             var games = context.Games.Where(g => g.LastUpdatedUtc > DateTime.UtcNow.Subtract(TimeSpan.FromHours(1))).OrderByDescending(g => g.Id).ToArray();
-
 
             int maxNumberOfRoundsBack = 25;
             int foundNumberOfRoundsBack = 0;
@@ -131,7 +79,6 @@ namespace FoosballUnity.Controllers
                 }
 
                 double fromCurrentLastToThis = (currentLastUpdatedDate - gameLastUpdatedDate).TotalMilliseconds;
-                //logger.info("######################Der er " + fromCurrentLastToThis + " millisekunders forskel");
 
                 // Don't go futher, if there has been a long break
                 if (fromCurrentLastToThis < 30 * 60 * 1000)
