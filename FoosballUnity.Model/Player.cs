@@ -6,14 +6,14 @@ namespace FoosballUnity.Model
 {
     public class Player
     {
-        public Player(string name, bool playerReady, DateTime createdUtc)
+        public Player(string id, bool playerReady, DateTime createdUtc)
         {
-            Name = name;
+            Id = id;
             PlayerReady = playerReady;
             CreatedUtc = createdUtc;
         }
 
-        public string Name { get; private set; }
+        public string Id { get; private set; }
         public bool PlayerReady { get; private set; }
         public DateTime CreatedUtc { get; private set; }
     }

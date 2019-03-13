@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FoosballUnity.Data.Sqlite\FoosballUnity.Data.Sqlite.csproj" />
     <ProjectReference Include="..\FoosballUnity.Data\FoosballUnity.Data.csproj" />
     <ProjectReference Include="..\FoosballUnity.Model\FoosballUnity.Model.csproj" />
   </ItemGroup>

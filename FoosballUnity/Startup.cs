@@ -1,10 +1,12 @@
 using FoosballUnity.Data;
+using FoosballUnity.Data.Sqlite;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,7 +33,14 @@ namespace FoosballUnity2
             });
 
             string connectionString = Configuration["ConnectionStrings:DefaultConnectionString"];
-            services.AddDbContext<FoosballContext>(o => o.UseSqlite(connectionString));
+            services.AddDbContext<FoosballContext>(o =>
+            {
+                o.UseSqlite(connectionString, b => b.MigrationsAssembly("FoosballUnity.Data.Sqlite"));
+                var model = new ModelBuilder(new ConventionSet())
+                    .ApplyConfigurationsFromAssembly(typeof(GameConfiguration).Assembly)
+                    .FinalizeModel();
+                o.UseModel(model);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

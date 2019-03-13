@@ -34,7 +34,7 @@ namespace FoosballUnity.Controllers
                 if (!game.Players?.Any() ?? false)
                     return null;
 
-                var namesOfAvailablePlayers = game.Players.Select(p => p.Name).ToList();
+                var namesOfAvailablePlayers = game.Players.Select(p => p.Id).ToList();
                 int maxPlayersNeeded = 4 * game.NumberOfGames;
                 var newRealList = GenerateAwesomeList(maxPlayersNeeded, namesOfAvailablePlayers);
                 Stack<string> realList = new Stack<string>(newRealList);

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using FoosballUnity.Data;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,7 +26,7 @@ namespace FoosballUnity2
                 try
                 {
                     var context = scope.ServiceProvider.GetRequiredService<FoosballContext>();
-                    context.Database.EnsureCreated();
+                    context.Database.Migrate();
                 }
                 catch (Exception ex)
                 {

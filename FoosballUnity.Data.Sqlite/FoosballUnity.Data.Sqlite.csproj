@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FoosballUnity.Model\FoosballUnity.Model.csproj" />
+    <ProjectReference Include="..\FoosballUnity.Data\FoosballUnity.Data.csproj" />
   </ItemGroup>
 
 </Project>
